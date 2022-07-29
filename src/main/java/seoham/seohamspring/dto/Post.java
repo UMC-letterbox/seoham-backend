@@ -1,4 +1,4 @@
-package seoham.seohamspring.post;
+package seoham.seohamspring.dto;
 
 public class Post {
 
@@ -18,13 +18,6 @@ public class Post {
         this.postIdx = postIdx;
     }
 
-    public String getUserIdx() {
-        return userIdx;
-    }
-
-    public void setUserIdx(String userIdx) {
-        this.userIdx = userIdx;
-    }
 
     public String getSender() {
         return sender;
@@ -63,6 +56,17 @@ public class Post {
     }
 
     public void setLetterIdx(int letterIdx) {
+        this.letterIdx = letterIdx;
+    }
+
+
+    public Post(int postIdx, String sender, int date, String tagIdx, String content, int letterIdx) {
+        super();
+        this.postIdx = postIdx;
+        this.sender = sender;
+        this.date = date;
+        this.tagIdx = tagIdx;
+        this.content = content;
         this.letterIdx = letterIdx;
     }
 }
