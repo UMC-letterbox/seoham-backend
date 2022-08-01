@@ -35,6 +35,6 @@ public class PostController {
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String Post(PostRequest postRequest) throws Exception{
         postService.post(postRequest);
-        return "redirect";
+        return "redirect:/";
     }
 }
