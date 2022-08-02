@@ -1,37 +1,84 @@
 package seoham.seohamspring.repository;
 
-import seoham.seohamspring.domain.PostRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import seoham.seohamspring.domain.Post;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class PostRepositoryImpl implements PostRepository {
 
-    private static Map<Long, PostRequest> store = new HashMap<>();
-    private static long sequence = 0L;
+    private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    public PostRepositoryImpl(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
+
+    /**
+     * 게시물 저장
+    */
     @Override
-    public void save(PostRequest postRequest) {
-        store.put(postRequest.getPostIdx(), postRequest);
+    public void save(Post post) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        jdbcInsert.withTableName("post").usingGeneratedKeyColumns("postIdx");
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("sender", post.getSender());
+        parameters.put("date", post.getDate());
+        parameters.put("tagIdx", post.getTagIdx());
+        parameters.put("content", post.getContent());
+        parameters.put("letterIdx", post.getLetterIdx());
+
+
     }
 
     @Override
-    public PostRequest findByTag(int tagIdx) {
-        return store.get(tagIdx);
+    public void delete(int postIdx) {
+    }
+
+    /*
+    태그로 post 찾기
+     */
+    @Override
+    public Optional<Post> findByTag(int tagIdx) {
+        List<Post> result = jdbcTemplate.query("select * from post where tagIdx = ?", postRowMapper(), tagIdx);
+        return result.stream().findAny();
     }
 
     @Override
-    public PostRequest findByDate(int date) {
-        return store.get(date);
+    public Optional<Post> findByDate(int date) {
+        List<Post> result = jdbcTemplate.query("select * from post where date = ?", postRowMapper(), date);
+        return result.stream().findAny();
     }
 
     @Override
-    public PostRequest findBySender(String sender) {
-        return store.get(sender);
+    public Optional<Post> findBySender(String sender) {
+        return null;
     }
 
     @Override
-    public PostRequest findByPostId(int postIdx) {
-        return store.get(postIdx);
+    public Optional<Post> findByPostId(int postIdx) {
+        return null;
+    }
+
+    private RowMapper<Post> postRowMapper(){
+        return(rs, rowNum)->{
+            Post post = new Post();
+            post.setPostIdx(rs.getLong("postIdx"));
+            post.setSender(rs.getString("sender"));
+            post.setDate(rs.getInt("date"));
+            post.setTagIdx(rs.getInt("tagIdx"));
+            post.setContent(rs.getString("content"));
+            post.setLetterIdx(rs.getInt("letterIdx"));
+            return post;
+        };
     }
 }

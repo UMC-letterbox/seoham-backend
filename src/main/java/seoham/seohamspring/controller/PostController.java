@@ -2,39 +2,84 @@ package seoham.seohamspring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import seoham.seohamspring.domain.PostRequest;
-import seoham.seohamspring.repository.PostRepository;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import seoham.seohamspring.domain.Post;
 import seoham.seohamspring.service.PostService;
 
+import java.util.Optional;
+
 @Controller
-@RequestMapping("/posts/*")
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired
     private final PostService postService;
 
     @Autowired
-    private final PostRepository postRepository;
-
-    @Autowired
-    public PostController(PostService postService, PostRepository postRepository) {
+    public PostController(PostService postService) {
         this.postService = postService;
-        this.postRepository = postRepository;
     }
 
-    //편지 작성 페이지로 이동
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String getPost() throws Exception {
+
+    /**
+     * 편지 작성 페이지
+     */
+
+    @GetMapping("/new")
+    public String write(){
         return "posts/new";
     }
 
-    //편지 작성
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String Post(PostRequest postRequest) throws Exception{
-        postService.post(postRequest);
-        return "redirect:/";
+    //편지 작성을 한 후, Post Method로 DB에 저장
+    //그 이후 /post/tag로 리디렉션을 해준다.
+    @PostMapping("/new")
+    public String write(Post post) throws Exception{
+        postService.post(post);
+        return "redirect:/posts/tag";
+    }
+
+
+    /**
+     * 게시물 수정 페이지
+
+    @GetMapping("/edit/{postIdx}")
+    public String edit(@PathVariable("postIdx") int postIdx, Model model){
+        Post post = postService.findByPostIdx(postIdx);
+        return "success";
+    }
+     */
+
+
+    /**
+     * 게시물 삭제 페이지
+     */
+
+
+
+    @GetMapping("/posts/edit/{postIdx}")
+    public String edit(@PathVariable("postIdx") int postIdx, Model model) {
+        Optional<Post> post = postService.findByPostIdx(postIdx);
+
+        model.addAttribute("postDto", post);
+        return "posts/update";
+    }
+
+    // 위는 GET 메서드이며, PUT 메서드를 이용해 게시물 수정한 부분에 대해 적용
+
+    @PutMapping("/post/edit/{no}")
+    public String update(Post post) {
+        postService.post(post);
+
+        return "redirect:/posts/tag";
+    }
+
+    // 게시물 삭제는 deletePost 메서드를 사용하여 간단하게 삭제할 수 있다.
+
+    @DeleteMapping("/post/{postIdx}")
+    public String delete(@PathVariable("postIdx") int postIdx) {
+        postService.delete(postIdx);
+
+        return "redirect:/board/list";
     }
 }
