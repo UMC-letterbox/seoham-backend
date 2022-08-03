@@ -28,4 +28,20 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public int checkEmail(String email) throws BaseException{
+        try{
+            return userRepository.checkEmail(email);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkNickName(String nickName) throws BaseException{
+        try{
+            return userRepository.checkNickName(nickName);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

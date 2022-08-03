@@ -3,9 +3,6 @@ package seoham.seohamspring.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import seoham.seohamspring.domain.PostRequest;
-import seoham.seohamspring.repository.PostRepository;
-import seoham.seohamspring.service.PostService;
 
 @Controller
 @RequestMapping("/user")
@@ -29,7 +26,7 @@ public class UserController {
      */
     // Body
     @ResponseBody
-    @RequestMapping(value = "/join", method = RequestMethod.POST)
+    @PostMapping("/join")
     public BaseResponse<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
         if(createUserRequest.getEmail() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
@@ -41,5 +38,54 @@ public class UserController {
             //return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 이메일 중복검사 인증
+     * [POST] /check
+     *
+     */
+    // Body
+    @ResponseBody
+    @PostMapping("/check/{email}")
+    public BaseResponse<CreateUserResponse> createUser(@PathVariable("email")String email) {
+        if(email == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+        }
+        try{
+            int vaild = userService.checkEmail(email);
+            return new BaseResponse<>(createUserResponse);
+        } catch(BaseException exception){
+            //return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    /**
+     * 닉네임 중복검사
+     * [POST] /check
+     *
+     */
+    // Body
+    @ResponseBody
+    @PostMapping("/check/{nickname}")
+    public int checkNickName(@PathVariable("nickname")String nickName) {
+        if(nickName == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+        }
+        try{
+            int vaild = userService.checkEmail(nickName);
+            return vaild ;
+
+        } catch(BaseException exception){
+            //return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+
+
+
+
+
 
 }
