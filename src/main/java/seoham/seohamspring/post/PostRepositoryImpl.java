@@ -15,6 +15,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+
     @Autowired
     public PostRepositoryImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
