@@ -1,7 +1,7 @@
-package seoham.seohamspring.repository;
+package seoham.seohamspring.user;
 
 
-import seoham.seohamspring.domain.CreateUserRequest;
+import seoham.seohamspring.user.CreateUserRequest;
 
 public interface UserRepository {
 

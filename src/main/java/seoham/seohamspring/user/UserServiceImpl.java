@@ -1,11 +1,12 @@
-package seoham.seohamspring.service;
+package seoham.seohamspring.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import seoham.seohamspring.domain.CreateUserRequest;
-import seoham.seohamspring.domain.CreateUserResponse;
-import seoham.seohamspring.repository.UserRepository;
+import seoham.seohamspring.user.CreateUserRequest;
+import seoham.seohamspring.user.CreateUserResponse;
+import seoham.seohamspring.user.UserRepository;
+import seoham.seohamspring.user.UserService;
 
 public class UserServiceImpl implements UserService {
 

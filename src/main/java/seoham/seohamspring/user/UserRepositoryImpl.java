@@ -1,9 +1,7 @@
-package seoham.seohamspring.repository;
+package seoham.seohamspring.user;
 
-import seoham.seohamspring.domain.CreateUserRequest;
-
-import java.util.HashMap;
-import java.util.Map;
+import seoham.seohamspring.user.CreateUserRequest;
+import seoham.seohamspring.user.UserRepository;
 
 public class UserRepositoryImpl implements UserRepository {
 
