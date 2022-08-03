@@ -10,4 +10,13 @@ public interface UserService {
 
     public int checkEmail(String email);
     public int checkNickName(String nickName);
+
+    // 로그인
+    LoginUserResponse loginUser(LoginUserRequest loginUserRequest);
+
+
+
+
+    public String findEmail(String nickName);
+    public int findPassWord(String passWord);
 }

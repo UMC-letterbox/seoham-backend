@@ -9,4 +9,13 @@ public interface UserRepository {
 
     public int checkEmail(String email);
 
+    public int checkNickName(String nickName);
+
+
+    int loginUser(LoginUserRequest loginUserRequest);
+
+
+    public String findEmail(String nickName);
+    public int findPassword(String passWord);
+
 }
