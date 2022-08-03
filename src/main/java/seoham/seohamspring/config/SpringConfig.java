@@ -2,13 +2,15 @@ package seoham.seohamspring.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import seoham.seohamspring.repository.PostRepository;
-import seoham.seohamspring.repository.PostRepositoryImpl;
-import seoham.seohamspring.service.PostService;
-import seoham.seohamspring.service.PostServiceImpl;
+import org.springframework.context.annotation.Configuration;
+import seoham.seohamspring.post.PostRepository;
+import seoham.seohamspring.post.PostRepositoryImpl;
+import seoham.seohamspring.post.PostService;
+import seoham.seohamspring.post.PostServiceImpl;
 
 import javax.sql.DataSource;
 
+@Configuration
 public class SpringConfig {
 
     private DataSource dataSource;

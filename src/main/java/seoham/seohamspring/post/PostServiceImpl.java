@@ -1,8 +1,6 @@
-package seoham.seohamspring.service;
+package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import seoham.seohamspring.domain.Post;
-import seoham.seohamspring.repository.PostRepository;
 
 import java.util.Optional;
 
@@ -44,7 +42,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<Post> findByPostIdx(int postIdx) {
+    public Optional<Post> findByPostIdx(long postIdx) {
         return postRepository.findByPostId(postIdx);
     }
 }

@@ -1,10 +1,9 @@
-package seoham.seohamspring.repository;
+package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import seoham.seohamspring.domain.Post;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -18,15 +17,15 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Autowired
     public PostRepositoryImpl(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 
-    /**
+    /*
      * 게시물 저장
-    */
+     */
     @Override
-    public void save(Post post) {
+    public Post save(Post post) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("post").usingGeneratedKeyColumns("postIdx");
 
@@ -37,7 +36,7 @@ public class PostRepositoryImpl implements PostRepository {
         parameters.put("content", post.getContent());
         parameters.put("letterIdx", post.getLetterIdx());
 
-
+        return post;
     }
 
     @Override
@@ -65,8 +64,9 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Optional<Post> findByPostId(int postIdx) {
-        return null;
+    public Optional<Post> findByPostId(long postIdx) {
+        List<Post> result = jdbcTemplate.query("select * from post where postIdx = ?", postRowMapper(), postIdx);
+        return result.stream().findAny();
     }
 
     private RowMapper<Post> postRowMapper(){

@@ -1,11 +1,11 @@
-package seoham.seohamspring.controller;
+package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import seoham.seohamspring.domain.Post;
-import seoham.seohamspring.service.PostService;
+import seoham.seohamspring.post.Post;
+import seoham.seohamspring.post.PostService;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class PostController {
 
     @GetMapping("/new")
     public String write(){
-        return "posts/new";
+        return "posts/write";
     }
 
     //편지 작성을 한 후, Post Method로 DB에 저장
@@ -61,13 +61,13 @@ public class PostController {
     public String edit(@PathVariable("postIdx") int postIdx, Model model) {
         Optional<Post> post = postService.findByPostIdx(postIdx);
 
-        model.addAttribute("postDto", post);
+        model.addAttribute("post", post);
         return "posts/update";
     }
 
     // 위는 GET 메서드이며, PUT 메서드를 이용해 게시물 수정한 부분에 대해 적용
 
-    @PutMapping("/post/edit/{no}")
+    @PutMapping("/posts/edit/{postIdx}")
     public String update(Post post) {
         postService.post(post);
 

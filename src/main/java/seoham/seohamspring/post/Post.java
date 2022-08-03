@@ -1,4 +1,4 @@
-package seoham.seohamspring.domain;
+package seoham.seohamspring.post;
 
 import javax.persistence.*;
 
@@ -10,6 +10,8 @@ public class Post {
     private int tagIdx; //태그
     private String content; //편지 내용
     private int letterIdx; //편지지 번호
+
+
 
     public long getPostIdx() {
         return postIdx;

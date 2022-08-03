@@ -1,6 +1,4 @@
-package seoham.seohamspring.service;
-
-import seoham.seohamspring.domain.Post;
+package seoham.seohamspring.post;
 
 import java.util.Optional;
 
@@ -13,7 +11,7 @@ public interface PostService {
     Optional<Post> findByTag(int tagIdx);
     Optional<Post> findBySender(String sender);
     Optional<Post> findByDate(int date);
-    Optional<Post> findByPostIdx(int postIdx);
+    Optional<Post> findByPostIdx(long postIdx);
 
 
 
