@@ -15,4 +15,21 @@ public class UserRepositoryImpl implements UserRepository {
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
     }
 
+
+    public int checkEmail(String email){
+        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailParams = email;
+        return this.jdbcTemplate.queryForObject(checkEmailQuery,
+                int.class,
+                checkEmailParams);
+    }
+
+    public int checkNickName(String nickName){
+        String checkNickNameQuery = "select exists(select nickName from User where nickName = ?)";
+        String checkNickNameParams = nickName;
+        return this.jdbcTemplate.queryForObject(checkNickNameQuery,
+                int.class,
+                checkNickNameParams);
+    }
+
 }
