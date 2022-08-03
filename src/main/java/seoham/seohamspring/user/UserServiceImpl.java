@@ -44,4 +44,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    //로그인
+    public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) throws BaseException {
+        try{
+            int userIdx = userRepository.loginUser(loginUserRequest);
+            return new LoginUserResponse(userIdx);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+    public String findEmail(String nickName) throws BaseException{
+        try{
+            return userRepository.findEmail(nickName);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public int findPassWord(String passWord) throws BaseException{
+        try{
+            return userRepository.findPassWord(passWord);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

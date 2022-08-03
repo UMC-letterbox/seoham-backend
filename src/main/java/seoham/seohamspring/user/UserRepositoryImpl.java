@@ -32,4 +32,33 @@ public class UserRepositoryImpl implements UserRepository {
                 checkNickNameParams);
     }
 
+
+
+    public int loginUser(LoginUserRequest loginUserRequest){
+        String loginUserQuery = "";
+        Object[] loginUserParams = new Object[]{loginUserRequest.getEmail(), loginUserRequest.getPassWord()};
+        this.jdbcTemplate.update(loginUserQuery, loginUserParams);
+
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
+
+
+
+
+    public String findEmail(String nickName){
+        String findEmailQuery = "";
+        String findEmailParams = nickName;
+        return this.jdbcTemplate.queryForObject(findEmailQuery,
+                int.class,
+                findEmailParams);
+    }
+
+    public int findPassWord(String passWord){
+        String findPassWordQuery = "";
+        String findPassWordParams = passWord;
+        return this.jdbcTemplate.queryForObject(findPassWordQuery,
+                int.class,
+                findPassWordParams);
+    }
 }

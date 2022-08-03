@@ -19,11 +19,8 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    /**
-     * 회원가입 API
-     * [POST] /user
-     * @return BaseResponse<CreateUserResponse>
-     */
+
+    // 회원가입 API
     // Body
     @ResponseBody
     @PostMapping("/join")
@@ -39,11 +36,8 @@ public class UserController {
         }
     }
 
-    /**
-     * 이메일 중복검사 인증
-     * [POST] /check
-     *
-     */
+
+     //이메일 중복검사 인증
     // Body
     @ResponseBody
     @PostMapping("/check/{email}")
@@ -60,11 +54,8 @@ public class UserController {
     }
 
 
-    /**
-     * 닉네임 중복검사
-     * [POST] /check
-     *
-     */
+
+    //닉네임 중복검사
     // Body
     @ResponseBody
     @PostMapping("/check/{nickname}")
@@ -73,7 +64,7 @@ public class UserController {
             return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
         }
         try{
-            int vaild = userService.checkEmail(nickName);
+            int vaild = userService.checkNickName(nickName);
             return vaild ;
 
         } catch(BaseException exception){
@@ -82,8 +73,62 @@ public class UserController {
     }
 
 
+    // * 로그인 API
+    // Body
+    @ResponseBody
+    @PostMapping("/login")
+    public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
+        if(loginUserRequest.getEmail() == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+        }
+        if(loginUserRequest.getPassWord() == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+        }
+        try{
+            LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
+            return new BaseResponse<>(loginUserResponse);
+        } catch(BaseException exception){
+            //return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
+
+     // 닉네임찾기
+    // Body
+    @ResponseBody
+    @GetMapping("/find/{nickname}")
+    public String findEmail(@RequestParam("nickname")String nickName) {
+        if(nickName == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+        }
+        try{
+            String email = userService.findEmail(nickName);
+            return email ;
+
+        } catch(BaseException exception){
+            //return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+
+     // 비밀번호 수정
+    // Body
+    @ResponseBody
+    @PatchMapping("/find/{password}")//비밀번호 body로?
+    public int findEmail(@RequestParam("password")String passWord) {
+        if(passWord == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+        }
+        try{
+            int success = userService.findPassWord(passWord);
+            return success ;
+
+        } catch(BaseException exception){
+            //return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
 
