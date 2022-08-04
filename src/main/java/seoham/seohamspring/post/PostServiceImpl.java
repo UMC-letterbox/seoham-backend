@@ -2,6 +2,7 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -27,8 +28,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Tag> TagList() {
+        return postRepository.getTagList();
+    }
+
+    @Override
     public Optional<Post> findByTag(int tagIdx) {
         return postRepository.findByTag(tagIdx);
+    }
+
+    @Override
+    public Optional<Post> findByDate(int date) {
+        return postRepository.findByDate(date);
+    }
+
+    @Override
+    public List<Sender> SenderList() {
+        return postRepository.getSenderList();
     }
 
     @Override
@@ -36,10 +52,9 @@ public class PostServiceImpl implements PostService {
         return postRepository.findBySender(sender);
     }
 
-    @Override
-    public Optional<Post> findByDate(int date) {
-        return postRepository.findByDate(date);
-    }
+
+
+
 
     @Override
     public Optional<Post> findByPostIdx(long postIdx) {
