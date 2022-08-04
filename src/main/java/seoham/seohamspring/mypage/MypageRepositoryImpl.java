@@ -1,18 +1,22 @@
 package seoham.seohamspring.mypage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import seoham.seohamspring.mypage.domain.DeleteUserReq;
 import seoham.seohamspring.mypage.domain.PatchNicknameReq;
 import seoham.seohamspring.mypage.domain.PatchPasswordReq;
 
-public class MypageServiceImpl implements MypageService{
+import javax.sql.DataSource;
 
-    private final MypageRepository mypageRepository;
+public class MypageRepositoryImpl implements MypageRepository{
+
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public MypageServiceImpl(MypageRepository mypageRepository) {
-        this.mypageRepository = mypageRepository;
+    public MypageRepositoryImpl(DataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
 
     @Override
     public int chekcEmail(String email) {
