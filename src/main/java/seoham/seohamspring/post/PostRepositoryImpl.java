@@ -44,9 +44,28 @@ public class PostRepositoryImpl implements PostRepository {
     public void delete(int postIdx) {
     }
 
-    /*
-    태그로 post 찾기
-     */
+    @Override
+    public List<Tag> getTagList() {
+        return jdbcTemplate.query("select * " +
+                "from (select distinct `tagId` " +
+                "from post " +
+                "where `ueserId` = $`userId`) AS a" +
+                "left join tag AS b" +
+                "on a.`tagId` = b.`tagId`", tagRowMapper()
+        );
+    }
+
+    private RowMapper<Tag> tagRowMapper() {
+        return(rs, rowNum)->{
+            Tag tag = new Tag();
+            tag.setTagIdx(rs.getInt("tagIdx"));
+            tag.setTagName(rs.getString("tagName"));
+            tag.setTagColor(rs.getString("tagColor"));
+            return tag;
+        };
+    }
+
+
     @Override
     public Optional<Post> findByTag(int tagIdx) {
         List<Post> result = jdbcTemplate.query("select * from post where tagIdx = ?", postRowMapper(), tagIdx);
@@ -60,8 +79,26 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public List<Sender> getSenderList() {
+        return jdbcTemplate.query("select distinct `sender`" +
+                "from post" +
+                "where `ueserId` = $`userId`",
+                 senderRowMapper()
+        );
+    }
+
+    private RowMapper<Sender> senderRowMapper() {
+        return(rs, rowNum)->{
+            Sender sender = new Sender();
+            sender.setSender(rs.getString("sender"));
+            return sender;
+        };
+    }
+
+    @Override
     public Optional<Post> findBySender(String sender) {
-        return null;
+        List<Post> result = jdbcTemplate.query("select * from post where sender = ?", postRowMapper(), sender);
+        return result.stream().findAny();
     }
 
     @Override
@@ -82,4 +119,5 @@ public class PostRepositoryImpl implements PostRepository {
             return post;
         };
     }
+
 }
