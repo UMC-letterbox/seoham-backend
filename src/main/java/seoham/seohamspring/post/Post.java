@@ -1,7 +1,5 @@
 package seoham.seohamspring.post;
 
-import javax.persistence.*;
-
 public class Post {
 
     private long postIdx;

@@ -3,15 +3,20 @@ package seoham.seohamspring.post;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import seoham.seohamspring.config.SpringConfig;
 
 import javax.sql.DataSource;
 import java.util.Optional;
 
+@SpringBootTest
+@Transactional
 public class PostServiceTest {
 
-    /*PostService postService;
-    DataSource dataSource
+    @Autowired PostService postService;
+    @Autowired DataSource dataSource;
 
     @BeforeEach
     public void beforeEach(){
@@ -40,7 +45,6 @@ public class PostServiceTest {
         //then
         Assertions.assertThat(post).isEqualTo(post1);
     }
-    */
 
 }
 
