@@ -20,7 +20,8 @@ public class MypageRepositoryImpl implements MypageRepository{
 
     @Override
     public int chekcEmail(String email) {
-        return 0;
+        private String query_string = "select * from user where email = ?"
+        jdbcTemplate.query(query_string, email);
     }
 
     @Override
@@ -29,17 +30,24 @@ public class MypageRepositoryImpl implements MypageRepository{
     }
 
     @Override
-    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userId) {
+    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
         return null;
     }
 
     @Override
-    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userId) {
+    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
         return null;
     }
 
     @Override
-    public String deleteUser(DeleteUserReq deleteUserReq, int userId) {
+    public String deleteUser(DeleteUserReq deleteUserReq, int userIdx) {
+
         return null;
     }
+
+    private RowMapper<User> userRowMapper() {
+
+    }
+
 }
+

@@ -16,26 +16,28 @@ public class MypageServiceImpl implements MypageService{
 
     @Override
     public int chekcEmail(String email) {
-        return 0;
+        return mypageRepository.chekcEmail(email);
     }
 
     @Override
     public int checkPassword(String password) {
-        return 0;
+        return mypageRepository.checkPassword(password);
+
     }
 
     @Override
-    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userId) {
-        return null;
+    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
+        return mypageRepository.modifyNickname(patchNicknameReq, userIdx);
+
     }
 
     @Override
-    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userId) {
-        return null;
+    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
+        return mypageRepository.modifyPassword(patchPasswordReq, userIdx);
     }
 
     @Override
-    public String deleteUser(DeleteUserReq deleteUserReq, int userId) {
-        return null;
+    public String deleteUser(DeleteUserReq deleteUserReq, int userIdx) {
+        return mypageRepository.deleteUser(deleteUserReq, userIdx);
     }
 }

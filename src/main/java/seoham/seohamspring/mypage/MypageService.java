@@ -13,12 +13,12 @@ public interface MypageService {
     int checkPassword(String password);
 
     //닉네임 수정
-    String modifyNickname(PatchNicknameReq patchNicknameReq, int userId);
+    String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx);
 
     //비밀번호 수정
-    String modifyPassword(PatchPasswordReq patchPasswordReq, int userId);
+    String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx);
 
     //회원 탈퇴
-    String deleteUser(DeleteUserReq deleteUserReq, int userId);
+    String deleteUser(DeleteUserReq deleteUserReq, int userIdx);
 
 }
