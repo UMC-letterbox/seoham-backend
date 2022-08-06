@@ -21,12 +21,8 @@ public class MypageRepositoryImpl implements MypageRepository{
     @Override
     public int chekcEmail(String email) {
         String query_string = "select count(*) from user where email = ?";
-        Integer result = jdbcTemplate.queryForObject(query_string, Integer.class, email);
+        return jdbcTemplate.queryForObject(query_string, Integer.class, email);
 
-        if (result >= 1)
-            return 0;
-        else
-            return 1;
     }
 
     @Override
@@ -36,10 +32,8 @@ public class MypageRepositoryImpl implements MypageRepository{
 
     @Override
     public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
-        String query_string = "update user set email = ? where userIdx = ?";
-        Integer result = jdbcTemplate.queryForObject(query_string, Integer.class, patchNicknameReq.getNewNickname(), userIdx);
-
-        return null;
+        String query_string = "update user set nickName = ? where userIdx = ?";
+        return jdbcTemplate.queryForObject(query_string, String.class, patchNicknameReq.getNewNickname(), userIdx);
     }
 
     @Override
