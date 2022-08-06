@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-
 @Controller
 @RequestMapping("posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
 public class PostController {
