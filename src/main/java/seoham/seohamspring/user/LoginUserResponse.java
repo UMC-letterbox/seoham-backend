@@ -3,15 +3,15 @@ package seoham.seohamspring.user;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-public class User {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
+@AllArgsConstructor
+public class LoginUserResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userIdx;
 
-    private String email;
-
-    private String passWord;
-
-    private String nickName;
 }
