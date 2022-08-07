@@ -35,12 +35,9 @@ public class PostServiceTest {
         post.setSender("친구");
         post.setLetterIdx(1);
 
-
         //when
         postService.post(post);
         Optional<Post> post1 = postService.findByPostIdx(1L);
-
-
 
         //then
         Assertions.assertThat(post).isEqualTo(post1);

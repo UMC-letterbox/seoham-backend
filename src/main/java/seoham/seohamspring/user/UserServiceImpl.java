@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import seoham.seohamspring.user.CreateUserRequest;
 import seoham.seohamspring.user.CreateUserResponse;
 import seoham.seohamspring.user.UserRepository;
-import seoham.seohamspring.user.UserService;
+import seoham.seohamspring.user.UserService;f
 
 public class UserServiceImpl implements UserService {
 
