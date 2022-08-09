@@ -28,6 +28,7 @@ public class MypageRepositoryImpl implements MypageRepository{
         return jdbcTemplate.queryForObject(query, int.class, params);
     }
 
+
 //    비밀번호 확인
     @Override
     public int checkPassword(String password, int userIdx) {
