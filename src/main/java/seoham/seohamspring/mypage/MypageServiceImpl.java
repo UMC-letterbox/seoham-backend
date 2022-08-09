@@ -14,30 +14,72 @@ public class MypageServiceImpl implements MypageService{
         this.mypageRepository = mypageRepository;
     }
 
+
     @Override
-    public int chekcEmail(String email) {
-        return mypageRepository.chekcEmail(email);
+    public int chekcEmail(String email) throws BaseException{
+        int result;
+        try {
+            return mypageRepository.checkEmail(email);
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Override
-    public int checkPassword(String password) {
-        return mypageRepository.checkPassword(password);
+    public int checkPassword(String password, int userIdx) throws BaseException{
+        try {
+            return mypageRepository.checkPassword(password, userIdx);
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) throws BaseException{
+        int result;
+        try {
+            result = mypageRepository.modifyNickname(patchNicknameReq, userIdx);
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+        if (result == 0) {
+            throw new BaseException(FAIL_MODIFY_NICKNAME);
+        }
+
+        return "닉네임을 성공적으로 수정하였습니다.";
 
     }
 
     @Override
-    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
-        return mypageRepository.modifyNickname(patchNicknameReq, userIdx);
+    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) throws BaseException{
+        int result;
+        try {
+            result = mypageRepository.modifyPassword(patchPasswordReq, userIdx);
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_ERROR);
+        }
 
+        if (result == 0) {
+            throw new BaseException(FAIL_MODIFY_PASSWORD);
+        }
+
+        return "비밀번호를 성공적으로 수정하였습니다";
     }
 
     @Override
-    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
-        return mypageRepository.modifyPassword(patchPasswordReq, userIdx);
-    }
+    public String deleteUser(int userIdx) throws BaseException{
+        int result;
+        try {
+            mypageRepository.deleteUser(userIdx);
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_ERROR);
+        }
 
-    @Override
-    public String deleteUser(DeleteUserReq deleteUserReq, int userIdx) {
-        return mypageRepository.deleteUser(deleteUserReq, userIdx);
+        if (result == 1) {
+            throw new BaseException(FAIL_DELETE_USER);
+        }
+
+        return "유저 정보가 삭제되었습니다";
     }
 }

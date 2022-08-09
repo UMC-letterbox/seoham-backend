@@ -22,7 +22,7 @@ public class MypageRepositoryImpl implements MypageRepository{
 
 //    닉네임 중복검사
     @Override
-    public int chekcEmail(String email) {
+    public int checkEmail(String email) {
         String query = "select exists(select nickName from user where nickName = ?)";
         Object[] params = new Object[]{email};
         return jdbcTemplate.queryForObject(query, int.class, params);
@@ -55,18 +55,21 @@ public class MypageRepositoryImpl implements MypageRepository{
     }
 
     @Override
-    public int deleteUser(DeleteUserReq deleteUserReq, int userIdx) {
+    public int deleteUser(int userIdx) {
         String query = "delete u, p from user as u\n" +
                 "left join post as p\n" +
                 "on u.userIdx = p.userIdx\n" +
                 "where u.userIdx = ?";
         String fkCheck0 = "set foreign_key_checks = 0;";
         String fkCheck1 = "set foreign_key_checks = 1;";
+        String ex_query = "select exists(select userIdx from user where userIdx = ?)";
         Object[] params = new Object[]{userIdx};
 
         jdbcTemplate.queryForObject(fkCheck0, int.class);
-        Integer result = jdbcTemplate.queryForObject(query, int.class, params);
+        jdbcTemplate.queryForObject(query, int.class, params);
         jdbcTemplate.queryForObject(fkCheck1, int.class);
+        Integer result = jdbcTemplate.queryForObject(ex_query, int.class, params);
+
 
         return result;
     }

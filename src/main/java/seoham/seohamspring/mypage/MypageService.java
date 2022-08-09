@@ -10,7 +10,7 @@ public interface MypageService {
     int chekcEmail(String email);
 
     //비밀번호 확인
-    int checkPassword(String password);
+    int checkPassword(String password, int userIdx);
 
     //닉네임 수정
     String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx);
@@ -19,6 +19,6 @@ public interface MypageService {
     String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx);
 
     //회원 탈퇴
-    String deleteUser(DeleteUserReq deleteUserReq, int userIdx);
+    String deleteUser(int userIdx);
 
 }

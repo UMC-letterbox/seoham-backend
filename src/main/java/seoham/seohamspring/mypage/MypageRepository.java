@@ -7,7 +7,7 @@ import seoham.seohamspring.mypage.domain.PatchPasswordReq;
 public interface MypageRepository {
 
     //닉네임 중복검사
-    int chekcEmail(String email);
+    int checkEmail(String email);
 
     //비밀번호 확인
     int checkPassword(String password, int userIdx);
@@ -19,7 +19,7 @@ public interface MypageRepository {
     int modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx);
 
     //회원 탈퇴
-    int deleteUser(DeleteUserReq deleteUserReq, int userIdx);
+    int deleteUser(int userIdx);
 
 
 }
