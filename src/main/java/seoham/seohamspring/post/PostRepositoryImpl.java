@@ -110,7 +110,7 @@ public class PostRepositoryImpl implements PostRepository {
     private RowMapper<Post> postRowMapper(){
         return(rs, rowNum)->{
             Post post = new Post();
-            post.setPostIdx(rs.getLong("postIdx"));
+            post.setPostIdx(rs.getInt("postIdx"));
             post.setSender(rs.getString("sender"));
             post.setDate(rs.getInt("date"));
             post.setTagIdx(rs.getInt("tagIdx"));

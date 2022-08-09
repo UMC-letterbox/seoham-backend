@@ -2,7 +2,8 @@ package seoham.seohamspring.post;
 
 public class Post {
 
-    private long postIdx;
+    private int userIdx;
+    private int postIdx;
     private String sender; //보낸이
     private int date; //날짜
     private int tagIdx; //태그
@@ -10,14 +11,22 @@ public class Post {
     private int letterIdx; //편지지 번호
 
 
+    public int getUserIdx() {
+        return userIdx;
+    }
+
+    public void setUserIdx(int userIdx) {
+        this.userIdx = userIdx;
+    }
+
+    public void setPostIdx(int postIdx) {
+        this.postIdx = postIdx;
+    }
 
     public long getPostIdx() {
         return postIdx;
     }
 
-    public void setPostIdx(long postIdx) {
-        this.postIdx = postIdx;
-    }
 
     public String getSender() {
         return sender;
