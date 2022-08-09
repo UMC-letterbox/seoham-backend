@@ -2,9 +2,7 @@ package seoham.seohamspring.mypage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import seoham.seohamspring.mypage.domain.DeleteUserReq;
-import seoham.seohamspring.mypage.domain.PatchNicknameReq;
-import seoham.seohamspring.mypage.domain.PatchPasswordReq;
+import seoham.seohamspring.mypage.domain.*;
 
 import javax.sql.DataSource;
 
@@ -22,19 +20,19 @@ public class MypageRepositoryImpl implements MypageRepository{
 
 //    닉네임 중복검사
     @Override
-    public int checkEmail(String email) {
+    public int checkNickname(PostCheckNicknameReq postCheckNicknameReq) {
         String query = "select exists(select nickName from user where nickName = ?)";
-        Object[] params = new Object[]{email};
+        Object[] params = new Object[]{postCheckNicknameReq.getNewNickname()};
         return jdbcTemplate.queryForObject(query, int.class, params);
     }
 
 
 //    비밀번호 확인
     @Override
-    public int checkPassword(String password, int userIdx) {
+    public int checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx) {
         String query = "select exists(select userIdx, passWord from user\n" +
                 "where userIdx = ? and passWord = ?)";
-        Object[] params = new Object[]{userIdx, password};
+        Object[] params = new Object[]{userIdx, postCheckPasswordReq.getPassword()};
 
         return jdbcTemplate.queryForObject(query, int.class, params);
     }

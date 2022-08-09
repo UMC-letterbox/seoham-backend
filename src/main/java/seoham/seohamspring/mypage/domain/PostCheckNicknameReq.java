@@ -3,11 +3,11 @@ package seoham.seohamspring.mypage.domain;
 import lombok.Data;
 
 @Data
-public class GetCheckNicknameReq {
+public class PostCheckNicknameReq {
 
     private String newNickname;
 
-    public GetCheckNicknameReq(String newNickname) {
+    public PostCheckNicknameReq(String newNickname) {
         this.newNickname = newNickname;
     }
 

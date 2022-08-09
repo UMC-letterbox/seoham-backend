@@ -1,16 +1,14 @@
 package seoham.seohamspring.mypage;
 
-import seoham.seohamspring.mypage.domain.DeleteUserReq;
-import seoham.seohamspring.mypage.domain.PatchNicknameReq;
-import seoham.seohamspring.mypage.domain.PatchPasswordReq;
+import seoham.seohamspring.mypage.domain.*;
 
 public interface MypageRepository {
 
     //닉네임 중복검사
-    int checkEmail(String email);
+    int checkNickname(PostCheckNicknameReq postCheckNicknameReq);
 
     //비밀번호 확인
-    int checkPassword(String password, int userIdx);
+    int checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx);
 
     //닉네임 수정
     int modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx);

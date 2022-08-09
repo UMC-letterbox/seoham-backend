@@ -1,9 +1,7 @@
 package seoham.seohamspring.mypage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import seoham.seohamspring.mypage.domain.DeleteUserReq;
-import seoham.seohamspring.mypage.domain.PatchNicknameReq;
-import seoham.seohamspring.mypage.domain.PatchPasswordReq;
+import seoham.seohamspring.mypage.domain.*;
 
 public class MypageServiceImpl implements MypageService{
 
@@ -16,19 +14,19 @@ public class MypageServiceImpl implements MypageService{
 
 
     @Override
-    public int chekcEmail(String email) throws BaseException{
+    public int chekcNickname(PostCheckNicknameReq postCheckNicknameReq) throws BaseException{
         int result;
         try {
-            return mypageRepository.checkEmail(email);
+            return mypageRepository.checkEmail(postCheckNicknameReq);
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     @Override
-    public int checkPassword(String password, int userIdx) throws BaseException{
+    public int checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx) throws BaseException{
         try {
-            return mypageRepository.checkPassword(password, userIdx);
+            return mypageRepository.checkPassword(postCheckPasswordReq, userIdx);
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }

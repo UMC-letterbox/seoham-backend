@@ -3,11 +3,11 @@ package seoham.seohamspring.mypage.domain;
 import lombok.Data;
 
 @Data
-public class GetCheckPasswordReq {
+public class PostCheckPasswordReq {
 
     private int password;
 
-    public GetCheckPasswordReq(int password) {
+    public PostCheckPasswordReq(int password) {
         this.password = password;
     }
 
