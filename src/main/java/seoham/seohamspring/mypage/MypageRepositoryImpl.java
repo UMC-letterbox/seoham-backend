@@ -18,33 +18,56 @@ public class MypageRepositoryImpl implements MypageRepository{
     }
 
 
+
+
+//    닉네임 중복검사
     @Override
     public int chekcEmail(String email) {
-        String query_string = "select count(*) from user where email = ?";
-        return jdbcTemplate.queryForObject(query_string, Integer.class, email);
+        String query = "select exists(select nickName from user where nickName = ?)";
+        Object[] params = new Object[]{email};
+        return jdbcTemplate.queryForObject(query, int.class, params);
+    }
+
+//    비밀번호 확인
+    @Override
+    public int checkPassword(String password, int userIdx) {
+        String query = "select exists(select userIdx, passWord from user\n" +
+                "where userIdx = ? and passWord = ?)";
+        Object[] params = new Object[]{userIdx, password};
+
+        return jdbcTemplate.queryForObject(query, int.class, params);
+    }
+
+    @Override
+    public int modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
+        String query = "update user set nickName = ? where userIdx = ?";
+        Object[] params = new Object[]{patchNicknameReq.getNewNickname(), userIdx};
+        return jdbcTemplate.update(query);
+    }
+
+    @Override
+    public int modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
+        String query = "update user set passWord = ? where userIdx = ?";
+        Object[] params = new Object[]{patchPasswordReq.getNewPassword(), userIdx};
+        return jdbcTemplate.update(query);
 
     }
 
     @Override
-    public int checkPassword(String password) {
-        return 0;
-    }
+    public int deleteUser(DeleteUserReq deleteUserReq, int userIdx) {
+        String query = "delete u, p from user as u\n" +
+                "left join post as p\n" +
+                "on u.userIdx = p.userIdx\n" +
+                "where u.userIdx = ?";
+        String fkCheck0 = "set foreign_key_checks = 0;";
+        String fkCheck1 = "set foreign_key_checks = 1;";
+        Object[] params = new Object[]{userIdx};
 
-    @Override
-    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
-        String query_string = "update user set nickName = ? where userIdx = ?";
-        return jdbcTemplate.queryForObject(query_string, String.class, patchNicknameReq.getNewNickname(), userIdx);
-    }
+        jdbcTemplate.queryForObject(fkCheck0, int.class);
+        Integer result = jdbcTemplate.queryForObject(query, int.class, params);
+        jdbcTemplate.queryForObject(fkCheck1, int.class);
 
-    @Override
-    public String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
-        return null;
-    }
-
-    @Override
-    public String deleteUser(DeleteUserReq deleteUserReq, int userIdx) {
-
-        return null;
+        return result;
     }
 
 

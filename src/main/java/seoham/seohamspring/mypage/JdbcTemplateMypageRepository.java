@@ -16,7 +16,7 @@ public class JdbcTemplateMypageRepository implements MypageRepository{
     }
 
     @Override
-    public String modifyNickname(PatchNicknameReq patchNicknameReq, int userId) {
+    public int modifyNickname(PatchNicknameReq patchNicknameReq, int userId) {
         return null;
     }
 
