@@ -18,6 +18,8 @@ public class PostController {
     @Autowired
     private final PostService postService;
 
+    private final JwtService jwtService;
+
 
     @Autowired
     public PostController(PostService postService) {
@@ -32,12 +34,11 @@ public class PostController {
     //그 이후 /post/tag로 리디렉션을 해준다.
     @ResponseBody
     @PostMapping("/new")
-    public ResponseEntity<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
+    public BaseResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
         try{
-            CreatePostResponse createPostResponse = postService.createPost(createPostRequest);
-            return new ResponseEntity<>(createPostResponse, HttpStatus.OK);
+            return new BaseResponse<>(postService.createPost(createPostRequest));
         }catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new BaseResponse<>(e.getStatus());
         }
     }
 

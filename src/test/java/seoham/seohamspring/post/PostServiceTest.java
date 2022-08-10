@@ -30,6 +30,8 @@ public class PostServiceTest {
         //given
         /*
         Post post = new Post();
+
+        post.setUserIdx(1);
         post.setDate(20190429);
         post.setContent("안녕은서야");
         post.setTagIdx(1);
@@ -38,7 +40,7 @@ public class PostServiceTest {
 
         //when
         postService.post(post);
-        Optional<Post> post1 = postService.findByPostIdx(1L);
+        Optional<Post> post1 = postService.findByPostIdx(1);
 
         //then
         Assertions.assertThat(post).isEqualTo(post1);
