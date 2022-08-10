@@ -1,8 +1,10 @@
 package seoham.seohamspring.post;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public interface PostService {
 
     //게시물 작성

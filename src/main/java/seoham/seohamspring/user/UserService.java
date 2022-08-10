@@ -2,9 +2,10 @@ package seoham.seohamspring.user;
 
 
 
+import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.user.domain.*;
-
+@Service
 public interface UserService {
     //회원가입
     CreateUserResponse createUser(CreateUserRequest createUserRequest) throws BaseException;

@@ -4,12 +4,13 @@ package seoham.seohamspring.user;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.user.domain.*;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
-
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
             int userIdx = userRepository.createUser(createUserRequest);
             return new CreateUserResponse(userIdx);
         } catch (Exception exception) {
-            //System.out.println(exception);
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

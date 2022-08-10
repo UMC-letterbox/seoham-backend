@@ -1,5 +1,5 @@
 package seoham.seohamspring.mypage;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import seoham.seohamspring.mypage.domain.*;
 
@@ -81,3 +81,4 @@ public class MypageServiceImpl implements MypageService{
         return "유저 정보가 삭제되었습니다";
     }
 }
+*/

@@ -1,5 +1,5 @@
 package seoham.seohamspring.mypage;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -106,3 +106,4 @@ public class MypageController {
 
 
 }
+*/

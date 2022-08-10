@@ -1,10 +1,11 @@
 package seoham.seohamspring.user;
 
 
+import org.springframework.stereotype.Repository;
 import seoham.seohamspring.user.domain.CreateUserRequest;
 import seoham.seohamspring.user.domain.LoginUserRequest;
 
-
+@Repository
 public interface UserRepository {
 
     int createUser(CreateUserRequest createUserRequest);

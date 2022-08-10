@@ -1,15 +1,5 @@
 package seoham.seohamspring.user;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import seoham.seohamspring.config.BaseException;
-import seoham.seohamspring.config.SpringConfig;
-import seoham.seohamspring.user.domain.*;
-
-import javax.sql.DataSource;
-import java.util.Optional;
 /*
 public class UserServiceTest {
 

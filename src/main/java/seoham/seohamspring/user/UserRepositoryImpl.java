@@ -3,11 +3,12 @@ package seoham.seohamspring.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import seoham.seohamspring.user.domain.CreateUserRequest;
 import seoham.seohamspring.user.domain.LoginUserRequest;
 
 import javax.sql.DataSource;
-
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private JdbcTemplate jdbcTemplate;
