@@ -1,5 +1,6 @@
 package seoham.seohamspring.post;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
 
@@ -10,8 +11,10 @@ public interface PostService {
 
     //게시물 작성
     CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException;
+    //게시물 수정
+    void modifyPost(int userIdx,int postIdx,  PatchPostRequest patchPostRequest) throws BaseException;
     //게시물 삭제
-    void delete(int postIdx);
+    void deletePost(int postIdx) throws BaseException;
     /*
     List<Tag> TagList();
     Optional<Post> findByTag(int tagIdx);

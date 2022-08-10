@@ -4,8 +4,10 @@ import seoham.seohamspring.post.domain.*;
 
 public interface PostRepository {
 
-    int save(int userIdx, CreatePostRequest createPostRequest);
-    void delete(int postIdx);
+    int savePost(int userIdx, CreatePostRequest createPostRequest);
+    int updatePost(int postIdx, PatchPostRequest patchPostRequest);
+    int checkPostExist(int postIdx);
+    int deletePost(int postIdx);
     /*
     List<Tag> getTagList();
     Optional<Post> findByTag(int tagIdx);

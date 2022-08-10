@@ -8,6 +8,8 @@ import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
 
+import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
+
 @Controller
 @RequestMapping("/posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
 public class PostController {
@@ -27,8 +29,6 @@ public class PostController {
      * 편지 작성 페이지
      */
 
-    //편지 작성을 한 후, Post Method로 DB에 저장
-    //그 이후 /post/tag로 리디렉션을 해준다.
     @ResponseBody
     @PostMapping("/new")
     public BaseResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
@@ -45,40 +45,41 @@ public class PostController {
     }
 
     /*
-    게시물 수정 페이지
+    편지 수정 페이지
      */
-    /*
-    @GetMapping("/edit/{postIdx}")
-    public String edit(@PathVariable("postIdx") Long postIdx, Model model) {
-        Optional<Post> post = postService.findByPostIdx(postIdx);
+    @ResponseBody
+    @PatchMapping("/edit/{postIdx}")
+    public BaseResponse<String> modifyPost(@PathVariable ("postIdx") int postIdx, PatchPostRequest patchPostRequest){
+        try{
+            if (patchPostRequest.getContent().length() >450) {//게시물 길이
+                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENT);
 
-        model.addAttribute("post", post);
-        return "posts/update";
+            }
+
+            postService.modifyPost(patchPostRequest.getUserIdx(),postIdx,patchPostRequest);
+            String result = "편지 수정을 완료하였습니다.";
+            return new BaseResponse<>(result);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
-     */
-
-    // 위는 GET 메서드이며, PUT 메서드를 이용해 게시물 수정한 부분에 대해 적용
-    /*
-    @PutMapping("/edit/{postIdx}")
-    public String update(PatchPostReq patchPostReq) {
-        postService.(post);
-
-        return "redirect:/posts/tag";
-    }
-
-     */
 
 
 
     /*
-     * 게시물 삭제 페이지
+     * 편지 삭제 페이지
      */
-    @DeleteMapping("/{postIdx}")
-    public String delete(@PathVariable("postIdx") int postIdx) {
-        postService.delete(postIdx);
-
-        return "redirect:/posts/tag";
+    @ResponseBody
+    @DeleteMapping("/delete/{postIdx}")
+    public BaseResponse<String> deletePost(@PathVariable ("postIdx") int postIdx){
+        try{
+            postService.deletePost(postIdx);
+            String result = "편지 삭제를 완료하였습니다.";
+            return new BaseResponse<>(result);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
     }
 
     /*
