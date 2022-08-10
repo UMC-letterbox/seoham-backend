@@ -1,4 +1,5 @@
 package seoham.seohamspring.user.domain;
+
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

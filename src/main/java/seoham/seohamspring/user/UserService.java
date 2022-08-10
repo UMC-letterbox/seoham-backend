@@ -1,6 +1,7 @@
 package seoham.seohamspring.user;
 
 
+
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.user.domain.*;
 
@@ -16,7 +17,7 @@ public interface UserService {
 
 
 
-
     public FindEmailResponse findEmail(String nickName) throws BaseException;
     public FindPassWordResponse findPassWord(String passWord) throws BaseException;
+
 }

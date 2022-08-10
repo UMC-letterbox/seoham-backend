@@ -9,9 +9,11 @@ import seoham.seohamspring.user.domain.*;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private final UserService userService;
 
@@ -35,7 +37,6 @@ public class UserController {
         }catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
-
     }
 
 
@@ -119,6 +120,7 @@ public class UserController {
     // Body
     @ResponseBody
     @PatchMapping("/find/{password}")//비밀번호 body로?
+
     public BaseResponse<FindPassWordResponse> findPassWord(@RequestParam("password")String passWord) {
         if(passWord == null){
             return new BaseResponse<>(USER_EMPTY_PASSWORD);

@@ -3,6 +3,7 @@ package seoham.seohamspring.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.user.domain.*;
 
@@ -15,6 +16,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository){
+
         this.userRepository = userRepository;
     }
 
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
         try{
             int possible = userRepository.checkEmail(email);
             return new CheckEmailResponse(possible);
+
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -75,7 +78,6 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
     /*
     비밀번호 찾기
      */
@@ -87,4 +89,5 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 }
