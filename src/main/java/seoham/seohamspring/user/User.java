@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-package seoham.seohamspring.user;
-
-public class User {
-
-
-
-
-}
-=======
 package seoham.seohamspring.user;
 
 import javax.persistence.GeneratedValue;
@@ -25,4 +15,3 @@ public class User {
 
     private String nickName;
 }
->>>>>>> main

@@ -2,15 +2,15 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class PostRepositoryImpl implements PostRepository {
 
@@ -27,22 +27,24 @@ public class PostRepositoryImpl implements PostRepository {
      * 게시물 저장
      */
     @Override
-    public int save(CreatePostRequest createPostRequest) {
+    public int save(int userIdx, CreatePostRequest createPostRequest) {
 
-        String createUserQuery = "insert into Post (userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
-        Object[] createUserParams = new Object[]{createPostRequest.getUserIdx(),
-                createPostRequest.getSender(), createPostRequest.getDate(), createPostRequest.getTagIdx(),
-                createPostRequest.getContent(), createPostRequest.getLetterIdx()};
-        this.jdbcTemplate.update(createUserQuery, createUserParams);
+        String saveQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?)";
+        Object [] saveParams = new Object[]{userIdx, createPostRequest.getDate(), createPostRequest.getTagIdx(),
+        createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
 
+        this.jdbcTemplate.update(saveQuery, saveParams);
 
-        return this.jdbcTemplate.queryForInt("select count(*) from users");
+        String lastSavePostIdxQuery = "select last_save_postIdx()";
+        return this.jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
+
     }
 
     @Override
     public void delete(int postIdx) {
     }
 
+    /*
     @Override
     public List<Tag> getTagList() {
         return jdbcTemplate.query("select * " +
@@ -54,12 +56,10 @@ public class PostRepositoryImpl implements PostRepository {
         );
     }
 
+
     private RowMapper<Tag> tagRowMapper() {
         return(rs, rowNum)->{
-            Tag tag = new Tag();
-            tag.setTagIdx(rs.getInt("tagIdx"));
-            tag.setTagName(rs.getString("tagName"));
-            tag.setTagColor(rs.getString("tagColor"));
+
             return tag;
         };
     }
@@ -118,5 +118,7 @@ public class PostRepositoryImpl implements PostRepository {
             return post;
         };
     }
+
+     */
 
 }

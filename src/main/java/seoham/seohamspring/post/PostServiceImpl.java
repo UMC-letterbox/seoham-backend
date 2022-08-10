@@ -1,6 +1,8 @@
 package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
 
 import java.util.List;
@@ -19,12 +21,12 @@ public class PostServiceImpl implements PostService {
 
     //게시물 작성
     @Override
-    public CreatePostResponse createPost(CreatePostRequest createPostRequest){
+    public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
         try{
-            int postIdx = postRepository.save(createPostRequest);
-            return new CreatePostResponse;
+            int postIdx = postRepository.save(userIdx, createPostRequest);
+            return new CreatePostResponse(postIdx);
         }catch (Exception exception){
-            //
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 
@@ -33,6 +35,7 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(postIdx);
     }
 
+    /*
     @Override
     public List<Tag> TagList() {
         return postRepository.getTagList();
@@ -66,4 +69,6 @@ public class PostServiceImpl implements PostService {
     public Optional<Post> findByPostIdx(long postIdx) {
         return postRepository.findByPostId(postIdx);
     }
+
+     */
 }

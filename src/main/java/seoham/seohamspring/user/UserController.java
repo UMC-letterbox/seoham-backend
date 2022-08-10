@@ -3,6 +3,10 @@ package seoham.seohamspring.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.config.BaseResponse;
+
+import static seoham.seohamspring.config.BaseResponseStatus.POST_USERS_EMPTY_EMAIL;
 
 @Controller
 @RequestMapping("/user")

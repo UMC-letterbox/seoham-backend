@@ -28,7 +28,7 @@ public class PostServiceTest {
     void 등록확인() {
 
         //given
-        /*
+
         Post post = new Post();
 
         post.setUserIdx(1);
@@ -45,7 +45,7 @@ public class PostServiceTest {
         //then
         Assertions.assertThat(post).isEqualTo(post1);
 
-         */
+
     }
 
 }
