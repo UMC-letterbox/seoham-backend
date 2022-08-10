@@ -3,15 +3,19 @@ package seoham.seohamspring.user;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.SpringConfig;
+import seoham.seohamspring.user.domain.*;
 
 import javax.sql.DataSource;
 import java.util.Optional;
 
 public class UserServiceTest {
 
-    /*UserService userService;
-    DataSource dataSource
+    UserService userService;
+    @Autowired
+    DataSource dataSource;
 
     @BeforeEach
     public void beforeEach(){
@@ -20,27 +24,21 @@ public class UserServiceTest {
     }
 
     @Test
-    void 등록확인() {
+    void createUser1() throws BaseException {
 
         //given
-        Post post = new Post();
-        post.setDate(20190429);
-        post.setContent("안녕은서야");
-        post.setTagIdx(1);
-        post.setSender("친구");
-        post.setLetterIdx(1);
+        //User user = new User(0,"dh@gmail.com","123456","dhdhdh");
 
 
         //when
-        postService.post(post);
-        Optional<Post> post1 = postService.findByPostIdx(1L);
+        CreateUserRequest user1 = new CreateUserRequest("dh@gmail.com","123456","dhdhdh");
+        userService.createUser(user1);
 
 
 
         //then
-        Assertions.assertThat(post).isEqualTo(post1);
     }
-    */
+
 
 }
 
