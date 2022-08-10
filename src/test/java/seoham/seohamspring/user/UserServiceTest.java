@@ -10,7 +10,7 @@ import seoham.seohamspring.user.domain.*;
 
 import javax.sql.DataSource;
 import java.util.Optional;
-
+/*
 public class UserServiceTest {
 
     UserService userService;
@@ -42,3 +42,4 @@ public class UserServiceTest {
 
 }
 
+*/
