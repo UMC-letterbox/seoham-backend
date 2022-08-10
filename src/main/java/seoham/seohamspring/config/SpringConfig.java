@@ -18,6 +18,7 @@ import seoham.seohamspring.user.UserServiceImpl;
 
 import javax.sql.DataSource;
 
+
 @Configuration
 public class SpringConfig {
 
@@ -46,12 +47,12 @@ public class SpringConfig {
     public PostRepository postRepository(){
         return new PostRepositoryImpl(dataSource);
     }
-/*
+
     @Bean
     public MypageService mypageService() { return new MypageServiceImpl(mypageRepository()); }
 
     @Bean
     public MypageRepository mypageRepository() { return new MypageRepositoryImpl(dataSource); }
-*/
+
 
 }
