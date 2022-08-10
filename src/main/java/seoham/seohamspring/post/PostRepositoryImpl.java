@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -26,18 +27,16 @@ public class PostRepositoryImpl implements PostRepository {
      * 게시물 저장
      */
     @Override
-    public Post save(Post post) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("post").usingGeneratedKeyColumns("postIdx");
+    public int save(CreatePostRequest createPostRequest) {
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("sender", post.getSender());
-        parameters.put("date", post.getDate());
-        parameters.put("tagIdx", post.getTagIdx());
-        parameters.put("content", post.getContent());
-        parameters.put("letterIdx", post.getLetterIdx());
+        String createUserQuery = "insert into Post (userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{createPostRequest.getUserIdx(),
+                createPostRequest.getSender(), createPostRequest.getDate(), createPostRequest.getTagIdx(),
+                createPostRequest.getContent(), createPostRequest.getLetterIdx()};
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
 
-        return post;
+
+        return this.jdbcTemplate.queryForInt("select count(*) from users");
     }
 
     @Override

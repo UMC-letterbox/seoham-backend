@@ -1,11 +1,13 @@
 package seoham.seohamspring.post;
 
+import seoham.seohamspring.post.domain.*;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository {
 
-    Post save(Post post);
+    CreatePostResponse save(CreatePostRequest createPostRequest);
     void delete(int postIdx);
     List<Tag> getTagList();
     Optional<Post> findByTag(int tagIdx);

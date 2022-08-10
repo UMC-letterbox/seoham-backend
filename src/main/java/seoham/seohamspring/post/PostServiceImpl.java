@@ -1,6 +1,7 @@
 package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import seoham.seohamspring.post.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +19,13 @@ public class PostServiceImpl implements PostService {
 
     //게시물 작성
     @Override
-    public void post(Post post) {
-        postRepository.save(post);
+    public CreatePostResponse createPost(CreatePostRequest createPostRequest){
+        try{
+            int postIdx = postRepository.save(createPostRequest);
+            return new CreatePostResponse;
+        }catch (Exception exception){
+            //
+        }
     }
 
     @Override

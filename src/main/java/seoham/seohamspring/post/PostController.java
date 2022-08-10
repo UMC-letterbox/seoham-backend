@@ -1,18 +1,23 @@
 package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import seoham.seohamspring.post.domain.*;
+
 import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
+@RequestMapping("/posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
 public class PostController {
 
     @Autowired
     private final PostService postService;
+
 
     @Autowired
     public PostController(PostService postService) {
@@ -23,19 +28,18 @@ public class PostController {
      * 편지 작성 페이지
      */
 
-    @GetMapping("/new")
-    public String write(){
-        return "posts/write"; //PostMaping("/posts/new") write 메소드로 연결된다.
-    }
-
     //편지 작성을 한 후, Post Method로 DB에 저장
     //그 이후 /post/tag로 리디렉션을 해준다.
+    @ResponseBody
     @PostMapping("/new")
-    public String write(Post post) throws Exception{
-        postService.post(post);
-        return "redirect:/posts/tag";
+    public ResponseEntity<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
+        try{
+            CreatePostResponse createPostResponse = postService.createPost(createPostRequest);
+            return new ResponseEntity<>(createPostResponse, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
 
     /*
     게시물 수정 페이지
