@@ -1,10 +1,23 @@
 package seoham.seohamspring.user;
 
-import seoham.seohamspring.user.CreateUserRequest;
-import seoham.seohamspring.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import seoham.seohamspring.user.domain.CreateUserRequest;
+import seoham.seohamspring.user.domain.LoginUserRequest;
+
+import javax.sql.DataSource;
 
 public class UserRepositoryImpl implements UserRepository {
 
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    //public void setDataSource(DataSource dataSource){
+    //    this.jdbcTemplate = new JdbcTemplate(dataSource);
+    //}
+    public UserRepositoryImpl(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
     @Override
     public int createUser(CreateUserRequest createUserRequest){
         String createUserQuery = "insert into User (email, passWord, nickName) VALUES (?,?,?)";
@@ -14,7 +27,6 @@ public class UserRepositoryImpl implements UserRepository {
         String lastInserIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
     }
-
 
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select email from User where email = ?)";
@@ -31,9 +43,7 @@ public class UserRepositoryImpl implements UserRepository {
                 int.class,
                 checkNickNameParams);
     }
-
-
-
+    
     public int loginUser(LoginUserRequest loginUserRequest){
         String loginUserQuery = "";
         Object[] loginUserParams = new Object[]{loginUserRequest.getEmail(), loginUserRequest.getPassWord()};
@@ -43,14 +53,11 @@ public class UserRepositoryImpl implements UserRepository {
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
     }
 
-
-
-
     public String findEmail(String nickName){
         String findEmailQuery = "";
         String findEmailParams = nickName;
         return this.jdbcTemplate.queryForObject(findEmailQuery,
-                int.class,
+                String.class,
                 findEmailParams);
     }
 

@@ -1,7 +1,8 @@
 package seoham.seohamspring.user;
 
 
-import seoham.seohamspring.user.CreateUserRequest;
+import seoham.seohamspring.user.domain.CreateUserRequest;
+import seoham.seohamspring.user.domain.LoginUserRequest;
 
 public interface UserRepository {
 
@@ -16,6 +17,6 @@ public interface UserRepository {
 
 
     public String findEmail(String nickName);
-    public int findPassword(String passWord);
+    public int findPassWord(String passWord);
 
 }

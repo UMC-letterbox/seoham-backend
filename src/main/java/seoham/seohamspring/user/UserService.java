@@ -1,22 +1,22 @@
 package seoham.seohamspring.user;
 
 
-import seoham.seohamspring.user.CreateUserRequest;
-import seoham.seohamspring.user.CreateUserResponse;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.user.domain.*;
 
 public interface UserService {
     //회원가입
-    CreateUserResponse createUser(CreateUserRequest createUserRequest);
+    CreateUserResponse createUser(CreateUserRequest createUserRequest) throws BaseException;
 
-    public int checkEmail(String email);
-    public int checkNickName(String nickName);
+    public CheckEmailResponse checkEmail(String email) throws BaseException;
+    public CheckNickNameResponse checkNickName(String nickName)throws BaseException;
 
     // 로그인
-    LoginUserResponse loginUser(LoginUserRequest loginUserRequest);
+    LoginUserResponse loginUser(LoginUserRequest loginUserRequest) throws BaseException;
 
 
 
 
-    public String findEmail(String nickName);
-    public int findPassWord(String passWord);
+    public FindEmailResponse findEmail(String nickName) throws BaseException;
+    public FindPassWordResponse findPassWord(String passWord) throws BaseException;
 }

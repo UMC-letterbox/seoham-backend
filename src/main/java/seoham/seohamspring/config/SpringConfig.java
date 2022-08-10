@@ -7,6 +7,10 @@ import seoham.seohamspring.post.PostRepository;
 import seoham.seohamspring.post.PostRepositoryImpl;
 import seoham.seohamspring.post.PostService;
 import seoham.seohamspring.post.PostServiceImpl;
+import seoham.seohamspring.user.UserRepository;
+import seoham.seohamspring.user.UserRepositoryImpl;
+import seoham.seohamspring.user.UserService;
+import seoham.seohamspring.user.UserServiceImpl;
 
 import javax.sql.DataSource;
 
@@ -18,6 +22,15 @@ public class SpringConfig {
     @Autowired
     public SpringConfig(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    @Bean
+    public UserService userService(){
+        return new UserServiceImpl(userRepository());
+    }
+    @Bean
+    public UserRepository userRepository(){
+        return new UserRepositoryImpl(dataSource);
     }
 
     @Bean

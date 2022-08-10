@@ -1,4 +1,4 @@
-package seoham.seohamspring.user;
+package seoham.seohamspring.user.domain;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
