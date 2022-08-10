@@ -2,16 +2,24 @@ package seoham.seohamspring.post;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
+=======
+import org.springframework.stereotype.Service;
+>>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 
 import java.util.List;
 import java.util.Optional;
 
+<<<<<<< HEAD
 import static seoham.seohamspring.config.BaseResponseStatus.MODIFY_FAIL_POST;
 
 
+=======
+@Service
+>>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 public class PostServiceImpl implements PostService {
 
 

@@ -5,8 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
+<<<<<<< HEAD
 
 import static seoham.seohamspring.config.BaseResponseStatus.POST_USERS_EMPTY_EMAIL;
+=======
+import seoham.seohamspring.user.domain.*;
+
+import static seoham.seohamspring.config.BaseResponseStatus.*;
+
+>>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 
 @Controller
 @RequestMapping("/user")
@@ -14,13 +21,10 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
-    @Autowired
-    private final UserRepository userRepository;
 
-    @Autowired
-    public UserController(UserService userService, UserRepository userRepository) {
+    //@Autowired
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
 
@@ -30,13 +34,13 @@ public class UserController {
     @PostMapping("/join")
     public BaseResponse<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
         if(createUserRequest.getEmail() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(USER_EMPTY_EMAIL);
         }
-        try{
+        try {
             CreateUserResponse createUserResponse = userService.createUser(createUserRequest);
             return new BaseResponse<>(createUserResponse);
-        } catch(BaseException exception){
-            //return new BaseResponse<>((exception.getStatus()));
+        }catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -45,15 +49,15 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("/check/{email}")
-    public BaseResponse<CreateUserResponse> createUser(@PathVariable("email")String email) {
+    public BaseResponse<CheckEmailResponse> checkEmail(@PathVariable("email")String email) {
         if(email == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(USER_EMPTY_EMAIL);
         }
         try{
-            int vaild = userService.checkEmail(email);
-            return new BaseResponse<>(createUserResponse);
+            CheckEmailResponse checkEmailResponse = userService.checkEmail(email);
+            return new BaseResponse<>(checkEmailResponse);
         } catch(BaseException exception){
-            //return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -63,16 +67,16 @@ public class UserController {
     // Body
     @ResponseBody
     @PostMapping("/check/{nickname}")
-    public int checkNickName(@PathVariable("nickname")String nickName) {
+    public BaseResponse<CheckNickNameResponse> checkNickName(@PathVariable("nickname")String nickName) {
         if(nickName == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+            return new BaseResponse<>(USER_EMPTY_NICKNAME);
         }
         try{
-            int vaild = userService.checkNickName(nickName);
-            return vaild ;
+            CheckNickNameResponse checkNickNameResponse = userService.checkNickName(nickName);
+            return new BaseResponse<>(checkNickNameResponse);
 
         } catch(BaseException exception){
-            //return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -83,16 +87,16 @@ public class UserController {
     @PostMapping("/login")
     public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
         if(loginUserRequest.getEmail() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(USER_EMPTY_EMAIL);
         }
         if(loginUserRequest.getPassWord() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+            return new BaseResponse<>(USER_EMPTY_PASSWORD);
         }
         try{
             LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
             return new BaseResponse<>(loginUserResponse);
         } catch(BaseException exception){
-            //return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -102,16 +106,16 @@ public class UserController {
     // Body
     @ResponseBody
     @GetMapping("/find/{nickname}")
-    public String findEmail(@RequestParam("nickname")String nickName) {
+    public BaseResponse<FindEmailResponse> findEmail(@RequestParam("nickname")String nickName) {
         if(nickName == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+            return new BaseResponse<>(USER_EMPTY_NICKNAME);
         }
         try{
-            String email = userService.findEmail(nickName);
-            return email ;
+            FindEmailResponse findEmailResponse = userService.findEmail(nickName);
+            return new BaseResponse<>(findEmailResponse);
 
         } catch(BaseException exception){
-            //return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -121,20 +125,17 @@ public class UserController {
     // Body
     @ResponseBody
     @PatchMapping("/find/{password}")//비밀번호 body로?
-    public int findEmail(@RequestParam("password")String passWord) {
+
+    public BaseResponse<FindPassWordResponse> findPassWord(@RequestParam("password")String passWord) {
         if(passWord == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+            return new BaseResponse<>(USER_EMPTY_PASSWORD);
         }
         try{
-            int success = userService.findPassWord(passWord);
-            return success ;
+            FindPassWordResponse findPassWordResponse = userService.findPassWord(passWord);
+            return new BaseResponse<>(findPassWordResponse);
 
         } catch(BaseException exception){
-            //return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-
-
-
 }

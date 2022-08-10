@@ -1,8 +1,11 @@
 package seoham.seohamspring.user;
 
 
-import seoham.seohamspring.user.CreateUserRequest;
+import org.springframework.stereotype.Repository;
+import seoham.seohamspring.user.domain.CreateUserRequest;
+import seoham.seohamspring.user.domain.LoginUserRequest;
 
+@Repository
 public interface UserRepository {
 
     int createUser(CreateUserRequest createUserRequest);
@@ -16,6 +19,7 @@ public interface UserRepository {
 
 
     public String findEmail(String nickName);
-    public int findPassword(String passWord);
+
+    public int findPassWord(String passWord);
 
 }

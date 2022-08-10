@@ -3,18 +3,29 @@ package seoham.seohamspring.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+<<<<<<< HEAD
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.user.CreateUserRequest;
 import seoham.seohamspring.user.CreateUserResponse;
 import seoham.seohamspring.user.UserRepository;
 import seoham.seohamspring.user.UserService;
+=======
+>>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 
+import org.springframework.stereotype.Service;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.user.domain.*;
+
+import static seoham.seohamspring.config.BaseResponseStatus.*;
+
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
     @Autowired
-    private UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository){
+
         this.userRepository = userRepository;
     }
 
@@ -29,17 +40,25 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public int checkEmail(String email) throws BaseException{
+    /*
+    이메일 중복검사
+     */
+    public CheckEmailResponse checkEmail(String email) throws BaseException{
         try{
-            return userRepository.checkEmail(email);
+            int possible = userRepository.checkEmail(email);
+            return new CheckEmailResponse(possible);
+
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
-    public int checkNickName(String nickName) throws BaseException{
+    /*
+    닉네임 중복검사
+     */
+    public CheckNickNameResponse checkNickName(String nickName) throws BaseException{
         try{
-            return userRepository.checkNickName(nickName);
+            int possible = userRepository.checkNickName(nickName);
+            return new CheckNickNameResponse(possible);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -52,22 +71,29 @@ public class UserServiceImpl implements UserService {
             int userIdx = userRepository.loginUser(loginUserRequest);
             return new LoginUserResponse(userIdx);
         } catch (Exception exception) {
-            System.out.println(exception);
+            //System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-
-    public String findEmail(String nickName) throws BaseException{
+    /*
+    이메일 찾기
+     */
+    public FindEmailResponse findEmail(String nickName) throws BaseException{
         try{
-            return userRepository.findEmail(nickName);
+            String email = userRepository.findEmail(nickName);
+            return new FindEmailResponse(email);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public int findPassWord(String passWord) throws BaseException{
+    /*
+    비밀번호 찾기
+     */
+    public FindPassWordResponse findPassWord(String passWord) throws BaseException{
         try{
-            return userRepository.findPassWord(passWord);
+            int success = userRepository.findPassWord(passWord);
+            return new FindPassWordResponse(success);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
