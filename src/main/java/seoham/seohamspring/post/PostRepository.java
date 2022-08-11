@@ -1,6 +1,6 @@
 package seoham.seohamspring.post;
 
-
+import org.springframework.stereotype.Repository;
 import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Repository;
 

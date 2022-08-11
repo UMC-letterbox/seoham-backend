@@ -2,6 +2,7 @@ package seoham.seohamspring.mypage;
 
 import seoham.seohamspring.mypage.domain.*;
 
+/*
 public interface MypageRepository {
 
     //닉네임 중복검사
@@ -21,3 +22,5 @@ public interface MypageRepository {
 
 
 }
+
+ */
