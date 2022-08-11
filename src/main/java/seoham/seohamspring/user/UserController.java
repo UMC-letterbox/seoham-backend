@@ -43,8 +43,8 @@ public class UserController {
      //이메일 중복검사 인증
     // Body
     @ResponseBody
-    @PostMapping("/check/{email}")
-    public BaseResponse<CheckEmailResponse> checkEmail(@PathVariable("email")String email) {
+    @GetMapping("/check-email")
+    public BaseResponse<CheckEmailResponse> checkEmail(@RequestParam String email) {
         if(email == null){
             return new BaseResponse<>(USER_EMPTY_EMAIL);
         }
@@ -61,8 +61,8 @@ public class UserController {
     //닉네임 중복검사
     // Body
     @ResponseBody
-    @PostMapping("/check/{nickname}")
-    public BaseResponse<CheckNickNameResponse> checkNickName(@PathVariable("nickname")String nickName) {
+    @GetMapping("/check-nickname")
+    public BaseResponse<CheckNickNameResponse> checkNickName(@RequestParam String nickName) {
         if(nickName == null){
             return new BaseResponse<>(USER_EMPTY_NICKNAME);
         }
@@ -97,11 +97,11 @@ public class UserController {
 
 
 
-     // 닉네임찾기
+     //  이메일 찾기
     // Body
     @ResponseBody
-    @GetMapping("/find/{nickname}")
-    public BaseResponse<FindEmailResponse> findEmail(@RequestParam("nickname")String nickName) {
+    @GetMapping("/find-email")
+    public BaseResponse<FindEmailResponse> findEmail(@RequestParam String nickName) {
         if(nickName == null){
             return new BaseResponse<>(USER_EMPTY_NICKNAME);
         }
@@ -119,14 +119,16 @@ public class UserController {
      // 비밀번호 수정
     // Body
     @ResponseBody
-    @PatchMapping("/find/{password}")//비밀번호 body로?
-
-    public BaseResponse<FindPassWordResponse> findPassWord(@RequestParam("password")String passWord) {
-        if(passWord == null){
+    @PatchMapping("/find-password")//비밀번호 body로
+    public BaseResponse<FindPassWordResponse> findPassWord(@RequestBody FindPassWordRequest findPassWordRequest) {
+        if(findPassWordRequest.getEmail() == null){
+            return new BaseResponse<>(USER_EMPTY_EMAIL);
+        }
+        if(findPassWordRequest.getPassWord() == null){
             return new BaseResponse<>(USER_EMPTY_PASSWORD);
         }
         try{
-            FindPassWordResponse findPassWordResponse = userService.findPassWord(passWord);
+            FindPassWordResponse findPassWordResponse = userService.findPassWord(findPassWordRequest);
             return new BaseResponse<>(findPassWordResponse);
 
         } catch(BaseException exception){

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import seoham.seohamspring.user.domain.CreateUserRequest;
+import seoham.seohamspring.user.domain.FindPassWordRequest;
 import seoham.seohamspring.user.domain.LoginUserRequest;
 
 import javax.sql.DataSource;
@@ -23,7 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int createUser(CreateUserRequest createUserRequest){
-        String createUserQuery = "insert into User (email, passWord, nickName) VALUES (?,?,?)";
+        String createUserQuery = "insert into user (email, passWord, nickName) VALUES (?,?,?)";
         Object[] createUserParams = new Object[]{createUserRequest.getEmail(), createUserRequest.getPassWord(), createUserRequest.getNickName()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
@@ -31,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
         return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
     }
     public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailQuery = "select exists(select email from user where email = ?)";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
@@ -39,7 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public int checkNickName(String nickName){
-        String checkNickNameQuery = "select exists(select nickName from User where nickName = ?)";
+        String checkNickNameQuery = "select exists(select nickName from user where nickName = ?)";
         String checkNickNameParams = nickName;
         return this.jdbcTemplate.queryForObject(checkNickNameQuery,
                 int.class,
@@ -57,18 +58,20 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     public String findEmail(String nickName){
-        String findEmailQuery = "";
+        String findEmailQuery = "SELECT u.email as email\n" +
+                "        FROM user as u\n" +
+                "        WHERE u.nickName = ?;";
         String findEmailParams = nickName;
         return this.jdbcTemplate.queryForObject(findEmailQuery,
                 String.class,
                 findEmailParams);
     }
 
-    public int findPassWord(String passWord){
-        String findPassWordQuery = "";
-        String findPassWordParams = passWord;
-        return this.jdbcTemplate.queryForObject(findPassWordQuery,
-                int.class,
-                findPassWordParams);
+    public int findPassWord(FindPassWordRequest findPassWordRequest){
+        String findPassWordQuery = "UPDATE user set passWord = ? where email = ?;";
+        Object[] findPassWordParams = new Object[]{findPassWordRequest.getPassWord(), findPassWordRequest.getEmail()};
+        //System.out.println(findPassWordParams[0]);
+        //System.out.println(findPassWordParams[1]);
+        return this.jdbcTemplate.update(findPassWordQuery,findPassWordParams);
     }
 }

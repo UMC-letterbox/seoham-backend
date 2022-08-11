@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class FindPassWordResponse {
-    private int success;
+    private boolean success;
 }

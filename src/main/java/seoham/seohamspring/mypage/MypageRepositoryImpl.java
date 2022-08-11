@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import seoham.seohamspring.mypage.domain.*;
 
 import javax.sql.DataSource;
-
+/*
 public class MypageRepositoryImpl implements MypageRepository{
 
     private final JdbcTemplate jdbcTemplate;
@@ -75,3 +75,4 @@ public class MypageRepositoryImpl implements MypageRepository{
 
 }
 
+*/
