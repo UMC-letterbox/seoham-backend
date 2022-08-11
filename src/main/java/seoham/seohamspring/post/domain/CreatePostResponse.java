@@ -1,19 +1,19 @@
-package seoham.seohamspring.user.domain;
+package seoham.seohamspring.post.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+
 @Getter
 @Setter
 @AllArgsConstructor
+public class CreatePostResponse {
 
-public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userIdx;
-
+    private int postIdx;
 }

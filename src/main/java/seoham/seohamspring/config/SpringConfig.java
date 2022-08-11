@@ -48,11 +48,16 @@ public class SpringConfig {
         return new PostRepositoryImpl(dataSource);
     }
 
-    //@Bean
-    //public MypageService mypageService() { return new MypageServiceImpl(mypageRepository()); }
+    /*
+    @Bean
+    public MypageService mypageService() { return new MypageServiceImpl(mypageRepository()); }
+>>>>>>> 51b7e8ddbcedc1b98ea30f4c6aa0354229fd1a97
 
     //@Bean
     //public MypageRepository mypageRepository() { return new MypageRepositoryImpl(dataSource); }
+
+
+     */
 
 
 }

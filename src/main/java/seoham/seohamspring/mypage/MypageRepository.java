@@ -1,6 +1,7 @@
 package seoham.seohamspring.mypage;
 
 import seoham.seohamspring.mypage.domain.*;
+
 /*
 public interface MypageRepository {
 
@@ -21,4 +22,6 @@ public interface MypageRepository {
 
 
 }
+<<<<<<< HEAD
 */
+

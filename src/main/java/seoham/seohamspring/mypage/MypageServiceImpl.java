@@ -1,8 +1,15 @@
 package seoham.seohamspring.mypage;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import seoham.seohamspring.mypage.domain.*;
 /*
+import org.springframework.beans.factory.annotation.Autowired;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.mypage.domain.*;
+<<<<<<< HEAD
+/*
+=======
+
+import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
+
+>>>>>>> 51b7e8ddbcedc1b98ea30f4c6aa0354229fd1a97
 public class MypageServiceImpl implements MypageService{
 
     private final MypageRepository mypageRepository;
@@ -82,3 +89,4 @@ public class MypageServiceImpl implements MypageService{
     }
 }
 */
+

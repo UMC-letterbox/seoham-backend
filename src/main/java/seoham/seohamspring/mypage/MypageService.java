@@ -1,5 +1,5 @@
 package seoham.seohamspring.mypage;
-
+/*
 import seoham.seohamspring.mypage.domain.*;
 /*
 public interface MypageService {
@@ -20,4 +20,5 @@ public interface MypageService {
     String deleteUser(int userIdx);
 
 }
+<<<<<<< HEAD
 */

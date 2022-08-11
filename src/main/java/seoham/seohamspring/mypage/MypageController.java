@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.mypage.domain.PatchNicknameReq;
 import seoham.seohamspring.mypage.domain.PatchPasswordReq;
 import seoham.seohamspring.mypage.domain.PostCheckNicknameReq;
@@ -106,4 +107,5 @@ public class MypageController {
 
 
 }
+<<<<<<< HEAD
 */
