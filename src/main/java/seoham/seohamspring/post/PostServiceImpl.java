@@ -1,12 +1,20 @@
 package seoham.seohamspring.post;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.config.BaseResponseStatus;
+import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
 
+import static seoham.seohamspring.config.BaseResponseStatus.MODIFY_FAIL_POST;
+
 @Service
+
 public class PostServiceImpl implements PostService {
 
 
@@ -19,15 +27,42 @@ public class PostServiceImpl implements PostService {
 
     //게시물 작성
     @Override
-    public void post(Post post) {
-        postRepository.save(post);
+    public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
+        try{
+            int postIdx = postRepository.savePost(userIdx, createPostRequest);
+            return new CreatePostResponse(postIdx);
+        }catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
     }
 
     @Override
-    public void delete(int postIdx) {
-        postRepository.delete(postIdx);
+    public void modifyPost(int userIdx,int postIdx, PatchPostRequest patchPostRequest) throws BaseException {
+
+        try{
+            int result = postRepository.updatePost(userIdx, patchPostRequest);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_POST);
+            }
+        }catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+
     }
 
+    @Override
+    public void deletePost(int postIdx) throws BaseException {
+        try{
+            int result = postRepository.deletePost(postIdx);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_POST);
+            }
+        }catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    /*
     @Override
     public List<Tag> TagList() {
         return postRepository.getTagList();
@@ -61,4 +96,6 @@ public class PostServiceImpl implements PostService {
     public Optional<Post> findByPostIdx(long postIdx) {
         return postRepository.findByPostId(postIdx);
     }
+
+     */
 }

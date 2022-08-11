@@ -2,6 +2,11 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import seoham.seohamspring.post.domain.*;
+
+import javax.sql.DataSource;
+
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -27,24 +32,46 @@ public class PostRepositoryImpl implements PostRepository {
      * 게시물 저장
      */
     @Override
-    public Post save(Post post) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("post").usingGeneratedKeyColumns("postIdx");
+    public int savePost(int userIdx, CreatePostRequest createPostRequest) {
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("sender", post.getSender());
-        parameters.put("date", post.getDate());
-        parameters.put("tagIdx", post.getTagIdx());
-        parameters.put("content", post.getContent());
-        parameters.put("letterIdx", post.getLetterIdx());
+        String saveQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?)";
+        Object [] saveParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getDate(),
+        createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
 
-        return post;
+        this.jdbcTemplate.update(saveQuery, saveParams);
+
+        String lastSavePostIdxQuery = "select last_save_postIdx()";
+        return this.jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
+
     }
 
     @Override
-    public void delete(int postIdx) {
+    public int updatePost(int postIdx, PatchPostRequest patchPostRequest) {
+        String updateQuery = "UPDATE post SET sender=?, date=?, tagIdx=?, content=?, letterIdx=?) WHERE postIdx = ?";
+        Object [] updateParams = new Object[]{patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
+                patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
+
+        return this.jdbcTemplate.update(updateQuery, updateParams);
     }
 
+    @Override
+    public int checkPostExist(int postIdx) {
+        String checkPostExistQuery = "SELECT EXISTS(SELECT postIdx from post where postIdx = ?)";
+        int checkPostExistParams = postIdx;
+        return this.jdbcTemplate.queryForObject(checkPostExistQuery,
+                int.class,
+                checkPostExistParams);
+    }
+
+    @Override
+    public int deletePost(int postIdx) {
+        String deleteQuery = "DELETE FROM post WHERE postIdx = ?";
+        Object [] deleteParams = new Object[]{postIdx};
+
+        return this.jdbcTemplate.update(deleteQuery, deleteParams);
+    }
+
+    /*
     @Override
     public List<Tag> getTagList() {
         return jdbcTemplate.query("select * " +
@@ -56,12 +83,10 @@ public class PostRepositoryImpl implements PostRepository {
         );
     }
 
+
     private RowMapper<Tag> tagRowMapper() {
         return(rs, rowNum)->{
-            Tag tag = new Tag();
-            tag.setTagIdx(rs.getInt("tagIdx"));
-            tag.setTagName(rs.getString("tagName"));
-            tag.setTagColor(rs.getString("tagColor"));
+
             return tag;
         };
     }
@@ -120,5 +145,7 @@ public class PostRepositoryImpl implements PostRepository {
             return post;
         };
     }
+
+     */
 
 }
