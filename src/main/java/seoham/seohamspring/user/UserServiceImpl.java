@@ -3,14 +3,6 @@ package seoham.seohamspring.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-<<<<<<< HEAD
-import seoham.seohamspring.config.BaseException;
-import seoham.seohamspring.user.CreateUserRequest;
-import seoham.seohamspring.user.CreateUserResponse;
-import seoham.seohamspring.user.UserRepository;
-import seoham.seohamspring.user.UserService;
-=======
->>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 
 import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;

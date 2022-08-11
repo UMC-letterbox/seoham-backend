@@ -5,15 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
-<<<<<<< HEAD
 
-import static seoham.seohamspring.config.BaseResponseStatus.POST_USERS_EMPTY_EMAIL;
-=======
 import seoham.seohamspring.user.domain.*;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
->>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 
 @Controller
 @RequestMapping("/user")

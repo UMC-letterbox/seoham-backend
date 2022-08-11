@@ -2,14 +2,11 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-<<<<<<< HEAD
-
 import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
 
 
-=======
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -20,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @Repository
->>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 public class PostRepositoryImpl implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;

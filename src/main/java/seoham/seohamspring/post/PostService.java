@@ -1,12 +1,10 @@
 package seoham.seohamspring.post;
 
-<<<<<<< HEAD
+
 import com.fasterxml.jackson.databind.ser.Serializers;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
-=======
 import org.springframework.stereotype.Service;
->>>>>>> 5a12ce1c2bd7eef06011995f838c5ba941d0d21e
 
 import java.util.List;
 import java.util.Optional;
