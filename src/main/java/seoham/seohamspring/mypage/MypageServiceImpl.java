@@ -1,7 +1,10 @@
 package seoham.seohamspring.mypage;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
+import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.mypage.domain.*;
+
+import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
 
 public class MypageServiceImpl implements MypageService{
 
@@ -81,3 +84,5 @@ public class MypageServiceImpl implements MypageService{
         return "유저 정보가 삭제되었습니다";
     }
 }
+
+ */

@@ -12,14 +12,16 @@ import javax.persistence.Id;
 @Setter
 @AllArgsConstructor
 public class CreatePostRequest {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int postIdx;
+
     private int userIdx;
     private String sender; //보낸이
     private int date; //날짜
     private int tagIdx; //태그
     private String content; //편지 내용
     private int letterIdx; //편지지 번호
+
+    public CreatePostRequest(){
+
+    }
 
 }
