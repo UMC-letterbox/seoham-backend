@@ -26,6 +26,8 @@ public interface PostService {
     Optional<Post> findByPostIdx(long postIdx);
 
      */
+    CreateTagResponse createTag(CreateTagRequest createTagRequest) throws BaseException;
+    PatchTagResponse modifyTag(int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
 
 
 

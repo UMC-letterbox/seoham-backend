@@ -38,7 +38,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PatchPostResponse modifyPost(int userIdx,int postIdx, PatchPostRequest patchPostRequest) throws BaseException {
-
+        if(postRepository.checkPostExist(postIdx) == 0){
+            throw new BaseException(POST_EMPTY_POST_IDX);
+        }
         try{
             int success = postRepository.updatePost(postIdx, patchPostRequest);
             if(success == 0){
@@ -53,6 +55,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public DeletePostResponse deletePost(int postIdx) throws BaseException {
+        if(postRepository.checkPostExist(postIdx) == 0){
+            throw new BaseException(POST_EMPTY_POST_IDX);
+        }
         try{
             int success = postRepository.deletePost(postIdx);
             if(success == 0){
@@ -62,6 +67,37 @@ public class PostServiceImpl implements PostService {
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    @Override
+    public CreateTagResponse createTag(CreateTagRequest createTagRequest) throws BaseException {
+        //태그 정보 추가시, 태그 중복 확인함.
+        if(postRepository.checkTagExist(createTagRequest.getTagName()) == 1){
+            throw new BaseException(POST_TAGS_EXIST);
+        }
+        try{
+            int tagIdx = postRepository.saveTag(createTagRequest);
+            return new CreateTagResponse(tagIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public PatchTagResponse modifyTag(int tagIdx, PatchTagRequest patchTagRequest) throws BaseException {
+        if(postRepository.checkTagExist(patchTagRequest.getTagName()) == 1){
+            throw new BaseException(POST_TAGS_EXIST);
+        }
+        try{
+            int success = postRepository.updateTag(tagIdx, patchTagRequest);
+            if(success == 0){
+                throw new BaseException(MODIFY_FAIL_TAG);
+            }
+            return new PatchTagResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
     }
 
     /*

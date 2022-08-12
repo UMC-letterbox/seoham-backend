@@ -8,8 +8,7 @@ import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
 
-import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
-import static seoham.seohamspring.config.BaseResponseStatus.POST_POSTS_INVALID_CONTENT;
+import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Controller
 @RequestMapping("/posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
@@ -156,6 +155,35 @@ public class PostController {
 
      */
 
+    /*
+    태그 정보 추가
+     */
+    @ResponseBody
+    @PostMapping("/tags/new")
+    public BaseResponse<CreateTagResponse> createTag(@RequestBody CreateTagRequest createTagRequest){
+        if (createTagRequest.getTagName().length() >10) {//태그 길이
+            return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
+        }
+        try{
+            CreateTagResponse createTagResponse = postService.createTag(createTagRequest);
+            return new BaseResponse<>(createTagResponse);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
+    @ResponseBody
+    @PatchMapping("/tags/edit/{tagIdx}")
+    public BaseResponse<PatchTagResponse> modifyTag(@PathVariable ("tagIdx") int tagIdx, @RequestBody PatchTagRequest patchTagRequest){
+        if (patchTagRequest.getTagName().length() >10) {//게시물 길이
+            return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
+        }
+        try{
+            PatchTagResponse patchTagResponse = postService.modifyTag(tagIdx,patchTagRequest);
+            return new BaseResponse<>(patchTagResponse);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
 }
