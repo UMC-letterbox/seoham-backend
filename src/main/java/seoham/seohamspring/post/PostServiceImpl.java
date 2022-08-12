@@ -70,9 +70,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public CreateTagResponse createTag(CreateTagRequest createTagRequest) throws BaseException {
+    public CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException {
         //태그 정보 추가시, 태그 중복 확인함.
-        if(postRepository.checkTagExist(createTagRequest.getTagName()) == 1){
+        if(postRepository.checkTagExist(userIdx, createTagRequest.getTagName()) == 1){
             throw new BaseException(POST_TAGS_EXIST);
         }
         try{
@@ -84,8 +84,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PatchTagResponse modifyTag(int tagIdx, PatchTagRequest patchTagRequest) throws BaseException {
-        if(postRepository.checkTagExist(patchTagRequest.getTagName()) == 1){
+    public PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException {
+        if(postRepository.checkTagExist(userIdx, patchTagRequest.getTagName()) == 1){
             throw new BaseException(POST_TAGS_EXIST);
         }
         try{

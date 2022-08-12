@@ -161,11 +161,11 @@ public class PostController {
     @ResponseBody
     @PostMapping("/tags/new")
     public BaseResponse<CreateTagResponse> createTag(@RequestBody CreateTagRequest createTagRequest){
-        if (createTagRequest.getTagName().length() >10) {//태그 길이
+        if (createTagRequest.getTagName().length() > 20) {//태그 길이
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            CreateTagResponse createTagResponse = postService.createTag(createTagRequest);
+            CreateTagResponse createTagResponse = postService.createTag(createTagRequest.getUserIdx(), createTagRequest);
             return new BaseResponse<>(createTagResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -175,12 +175,23 @@ public class PostController {
     @ResponseBody
     @PatchMapping("/tags/edit/{tagIdx}")
     public BaseResponse<PatchTagResponse> modifyTag(@PathVariable ("tagIdx") int tagIdx, @RequestBody PatchTagRequest patchTagRequest){
-        if (patchTagRequest.getTagName().length() >10) {//게시물 길이
+        if (patchTagRequest.getTagName().length() >20) {//게시물 길이
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            PatchTagResponse patchTagResponse = postService.modifyTag(tagIdx,patchTagRequest);
+            PatchTagResponse patchTagResponse = postService.modifyTag(patchTagRequest.getUserIdx(),tagIdx,patchTagRequest);
             return new BaseResponse<>(patchTagResponse);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @DeleteMapping("/tags/delete/{tagIdx}")
+    public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx){
+        try{
+            DeleteTagResponse deleteTagResponse = postService.deleteTag(tagIdx);
+            return new BaseResponse<>(deleteTagResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
