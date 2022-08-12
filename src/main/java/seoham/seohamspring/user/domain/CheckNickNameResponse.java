@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CheckNickNameResponse {
-    private int vaild;
+    private boolean vaild;
 }

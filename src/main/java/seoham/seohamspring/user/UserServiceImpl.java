@@ -37,8 +37,12 @@ public class UserServiceImpl implements UserService {
      */
     public CheckEmailResponse checkEmail(String email) throws BaseException{
         try{
-            int possible = userRepository.checkEmail(email);
-            return new CheckEmailResponse(possible);
+            boolean vaild = true;
+            int exist = userRepository.checkEmail(email);
+            if (exist != 0){
+                vaild = false;
+            }
+            return new CheckEmailResponse(vaild);
 
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -49,8 +53,12 @@ public class UserServiceImpl implements UserService {
      */
     public CheckNickNameResponse checkNickName(String nickName) throws BaseException{
         try{
-            int possible = userRepository.checkNickName(nickName);
-            return new CheckNickNameResponse(possible);
+            boolean vaild  = true;
+            int exist = userRepository.checkNickName(nickName);
+            if (exist != 0){
+                vaild = false;
+            }
+            return new CheckNickNameResponse(vaild);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -76,17 +84,23 @@ public class UserServiceImpl implements UserService {
             String email = userRepository.findEmail(nickName);
             return new FindEmailResponse(email);
         } catch (Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
     /*
     비밀번호 찾기
      */
-    public FindPassWordResponse findPassWord(String passWord) throws BaseException{
+    public FindPassWordResponse findPassWord(FindPassWordRequest findPassWordRequest) throws BaseException{
         try{
-            int success = userRepository.findPassWord(passWord);
+            boolean success = true;
+            int result = userRepository.findPassWord(findPassWordRequest);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_USERNAME);
+            }
             return new FindPassWordResponse(success);
         } catch (Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

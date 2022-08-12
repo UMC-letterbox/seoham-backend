@@ -1,7 +1,7 @@
 package seoham.seohamspring.mypage;
 /*
 import seoham.seohamspring.mypage.domain.*;
-
+/*
 public interface MypageService {
 
     //닉네임 중복검사
@@ -20,5 +20,5 @@ public interface MypageService {
     String deleteUser(int userIdx);
 
 }
-
- */
+<<<<<<< HEAD
+*/

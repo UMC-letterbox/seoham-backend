@@ -13,5 +13,5 @@ public class LoginUserResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userIdx;
-
+    //private String jwt;
 }

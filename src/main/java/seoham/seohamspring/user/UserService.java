@@ -19,6 +19,6 @@ public interface UserService {
 
 
     public FindEmailResponse findEmail(String nickName) throws BaseException;
-    public FindPassWordResponse findPassWord(String passWord) throws BaseException;
+    public FindPassWordResponse findPassWord(FindPassWordRequest findPassWordRequest) throws BaseException;
 
 }
