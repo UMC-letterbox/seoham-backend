@@ -17,6 +17,13 @@ public interface PostService {
     PatchPostResponse modifyPost(int userIdx,int postIdx,  PatchPostRequest patchPostRequest) throws BaseException;
     //게시물 삭제
     DeletePostResponse deletePost(int postIdx) throws BaseException;
+    //태그 정보 추가
+    CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException;
+    //태그 정보 수정
+    PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
+    DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
+
+
     /*
     List<Tag> TagList();
     Optional<Post> findByTag(int tagIdx);
@@ -26,9 +33,6 @@ public interface PostService {
     Optional<Post> findByPostIdx(long postIdx);
 
      */
-    CreateTagResponse createTag(CreateTagRequest createTagRequest) throws BaseException;
-    PatchTagResponse modifyTag(int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
-
 
 
 }

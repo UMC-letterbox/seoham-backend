@@ -16,7 +16,7 @@ public interface PostRepository {
     int saveTag(CreateTagRequest createTagRequest);
     int updateTag(int tagIdx, PatchTagRequest patchTagRequest);
     int deleteTag(int tagIdx);
-    int checkTagExist(String tagName);
+    int checkTagExist(int userIdx, String tagName);
     /*
     List<Tag> getTagList();
     Optional<Post> findByTag(int tagIdx);

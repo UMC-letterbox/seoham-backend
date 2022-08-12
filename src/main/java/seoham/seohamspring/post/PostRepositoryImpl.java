@@ -71,8 +71,8 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int saveTag(CreateTagRequest createTagRequest) {
-        String saveTagQuery = "INSERT INTO tag(tagName, tagColor) VALUES (?,?)";
-        Object [] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor()};
+        String saveTagQuery = "INSERT INTO tag(tagName, tagColor,userIdx) VALUES (?,?,?)";
+        Object [] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor(), createTagRequest.getUserIdx()};
         this.jdbcTemplate.update(saveTagQuery, saveTagParams);
 
         String lastSaveTagIdxQuery = "select last_insert_id()";
@@ -93,9 +93,11 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int checkTagExist(String tagName) {
-        String checkTagExistQuery = "select exists(select tagIdx from tag where tagName =?)";
-        String checkTagExistParams = tagName;
+    public int checkTagExist(int userIdx, String tagName) {
+        String checkTagExistQuery = "select exists(select tagIdx from tag where tagName =? AND userIdx = ?)";
+        Object [] checkTagExistParams = new Object[]{tagName, userIdx};
+
+
         return this.jdbcTemplate.queryForObject(checkTagExistQuery, int.class, checkTagExistParams);
     }
 
