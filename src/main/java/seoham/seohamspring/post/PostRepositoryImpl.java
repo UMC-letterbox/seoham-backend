@@ -32,28 +32,28 @@ public class PostRepositoryImpl implements PostRepository {
      * 게시물 저장
      */
     @Override
-    public int savePost(int userIdx, CreatePostRequest createPostRequest) {
-
-        String saveQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?)";
-        Object [] saveParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getDate(),
+    public int savePost(CreatePostRequest createPostRequest) {
+        String saveQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
+        Object [] saveParams = new Object[]{createPostRequest.getUserIdx(), createPostRequest.getSender(), createPostRequest.getDate(),
         createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
-
         this.jdbcTemplate.update(saveQuery, saveParams);
 
-        String lastSavePostIdxQuery = "select last_save_postIdx()";
+        String lastSavePostIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
 
     }
 
     @Override
     public int updatePost(int postIdx, PatchPostRequest patchPostRequest) {
-        String updateQuery = "UPDATE post SET sender=?, date=?, tagIdx=?, content=?, letterIdx=?) WHERE postIdx = ?";
-        Object [] updateParams = new Object[]{patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
+        String updateQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
+        Object [] updateParams = new Object[]{patchPostRequest.getUserIdx(), patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
 
         return this.jdbcTemplate.update(updateQuery, updateParams);
+        //return this.jdbcTemplate.queryForObject(updateQuery, int.class, updateParams);
     }
 
+    /*
     @Override
     public int checkPostExist(int postIdx) {
         String checkPostExistQuery = "SELECT EXISTS(SELECT postIdx from post where postIdx = ?)";
@@ -62,6 +62,8 @@ public class PostRepositoryImpl implements PostRepository {
                 int.class,
                 checkPostExistParams);
     }
+
+     */
 
     @Override
     public int deletePost(int postIdx) {

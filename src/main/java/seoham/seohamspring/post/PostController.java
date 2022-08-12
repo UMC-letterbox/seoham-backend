@@ -9,6 +9,7 @@ import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
 
 import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
+import static seoham.seohamspring.config.BaseResponseStatus.POST_POSTS_INVALID_CONTENT;
 
 @Controller
 @RequestMapping("/posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
@@ -32,12 +33,12 @@ public class PostController {
     @ResponseBody
     @PostMapping("/new")
     public BaseResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
-        try{
-            if (createPostRequest.getContent().length() >450) {//게시물 길이
-                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENT);
+        if (createPostRequest.getContent().length() >450) {//게시물 길이
+            return new BaseResponse<>(POST_POSTS_INVALID_CONTENT);
 
-            }
-            CreatePostResponse createPostResponse = postService.createPost(createPostRequest.getUserIdx(), createPostRequest);
+        }
+        try{
+            CreatePostResponse createPostResponse = postService.createPost(createPostRequest);
             return new BaseResponse<>(createPostResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -49,16 +50,13 @@ public class PostController {
      */
     @ResponseBody
     @PatchMapping("/edit/{postIdx}")
-    public BaseResponse<String> modifyPost(@PathVariable ("postIdx") int postIdx, PatchPostRequest patchPostRequest){
+    public BaseResponse<PatchPostResponse> modifyPost(@PathVariable ("postIdx") int postIdx, @RequestBody PatchPostRequest patchPostRequest){
+        if (patchPostRequest.getContent().length() >450) {//게시물 길이
+            return new BaseResponse<>(POST_POSTS_INVALID_CONTENT);
+        }
         try{
-            if (patchPostRequest.getContent().length() >450) {//게시물 길이
-                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENT);
-
-            }
-
-            postService.modifyPost(patchPostRequest.getUserIdx(),postIdx,patchPostRequest);
-            String result = "편지 수정을 완료하였습니다.";
-            return new BaseResponse<>(result);
+            PatchPostResponse patchPostResponse = postService.modifyPost(patchPostRequest.getUserIdx(),postIdx,patchPostRequest);
+            return new BaseResponse<>(patchPostResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
@@ -72,11 +70,10 @@ public class PostController {
      */
     @ResponseBody
     @DeleteMapping("/delete/{postIdx}")
-    public BaseResponse<String> deletePost(@PathVariable ("postIdx") int postIdx){
+    public BaseResponse<DeletePostResponse> deletePost(@PathVariable ("postIdx") int postIdx){
         try{
-            postService.deletePost(postIdx);
-            String result = "편지 삭제를 완료하였습니다.";
-            return new BaseResponse<>(result);
+            DeletePostResponse deletePostResponse = postService.deletePost(postIdx);
+            return new BaseResponse<>(deletePostResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }

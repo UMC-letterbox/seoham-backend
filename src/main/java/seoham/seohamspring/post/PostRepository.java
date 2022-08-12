@@ -9,9 +9,9 @@ import java.util.Optional;
 @Repository
 public interface PostRepository {
 
-    int savePost(int userIdx, CreatePostRequest createPostRequest);
+    int savePost(CreatePostRequest createPostRequest);
     int updatePost(int postIdx, PatchPostRequest patchPostRequest);
-    int checkPostExist(int postIdx);
+    //int checkPostExist(int postIdx);
     int deletePost(int postIdx);
     /*
     List<Tag> getTagList();

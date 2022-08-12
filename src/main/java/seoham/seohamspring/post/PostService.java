@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface PostService {
 
     //게시물 작성
-    CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException;
+    CreatePostResponse createPost(CreatePostRequest createPostRequest) throws BaseException;
     //게시물 수정
-    void modifyPost(int userIdx,int postIdx,  PatchPostRequest patchPostRequest) throws BaseException;
+    PatchPostResponse modifyPost(int userIdx,int postIdx,  PatchPostRequest patchPostRequest) throws BaseException;
     //게시물 삭제
-    void deletePost(int postIdx) throws BaseException;
+    DeletePostResponse deletePost(int postIdx) throws BaseException;
     /*
     List<Tag> TagList();
     Optional<Post> findByTag(int tagIdx);
