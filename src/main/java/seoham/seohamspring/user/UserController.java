@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
-
+import seoham.seohamspring.util.*;
 import seoham.seohamspring.user.domain.*;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
+import static seoham.seohamspring.util.ValidationRegex.isRegexEmail;
+import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
 
 
 @Controller
@@ -29,8 +31,14 @@ public class UserController {
     @ResponseBody
     @PostMapping("/join")
     public BaseResponse<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
-        if(createUserRequest.getEmail() == null){
-            return new BaseResponse<>(USER_EMPTY_EMAIL);
+        if(createUserRequest.getEmail() == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
+            return new BaseResponse<>(CREATE_USER_EMPTY_EMAIL);
+        }
+        if(createUserRequest.getPassWord() == ""){
+            return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
+        }
+        if(createUserRequest.getNickName() == ""){
+            return new BaseResponse<>(CREATE_USER_EMPTY_NICKNAME);
         }
         try {
             CreateUserResponse createUserResponse = userService.createUser(createUserRequest);
@@ -41,13 +49,16 @@ public class UserController {
     }
 
 
-     //이메일 중복검사 인증
+     //이메일 중복검사
     // Body
     @ResponseBody
     @GetMapping("/check-email")
     public BaseResponse<CheckEmailResponse> checkEmail(@RequestParam String email) {
-        if(email == null){
-            return new BaseResponse<>(USER_EMPTY_EMAIL);
+        if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
+            return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
+        }
+        if(!isRegexEmail(email)){
+            return new BaseResponse<>(CHECK_USER_INVALID_EMAIL);
         }
         try{
             CheckEmailResponse checkEmailResponse = userService.checkEmail(email);
@@ -64,8 +75,11 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-nickname")
     public BaseResponse<CheckNickNameResponse> checkNickName(@RequestParam String nickName) {
-        if(nickName == null){
-            return new BaseResponse<>(USER_EMPTY_NICKNAME);
+        if(nickName == ""){
+            return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
+        }
+        if(!isRegexNickName(nickName)){
+            return new BaseResponse<>(CHECK_USER_INVALID_NICKNAME);
         }
         try{
             CheckNickNameResponse checkNickNameResponse = userService.checkNickName(nickName);
@@ -83,10 +97,10 @@ public class UserController {
     @PostMapping("/login")
     public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
         if(loginUserRequest.getEmail() == null){
-            return new BaseResponse<>(USER_EMPTY_EMAIL);
+            return new BaseResponse<>(CREATE_USER_EMPTY_EMAIL);
         }
         if(loginUserRequest.getPassWord() == null){
-            return new BaseResponse<>(USER_EMPTY_PASSWORD);
+            return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
         }
         try{
             LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
@@ -104,7 +118,10 @@ public class UserController {
     @GetMapping("/find-email")
     public BaseResponse<FindEmailResponse> findEmail(@RequestParam String nickName) {
         if(nickName == null){
-            return new BaseResponse<>(USER_EMPTY_NICKNAME);
+            return new BaseResponse<>(FIND_USER_EMPTY_NICKNAME);
+        }
+        if(!isRegexNickName(nickName)){
+            return new BaseResponse<>(FIND_USER_INVALID_NICKNAME);
         }
         try{
             FindEmailResponse findEmailResponse = userService.findEmail(nickName);
@@ -123,10 +140,13 @@ public class UserController {
     @PatchMapping("/find-password")//비밀번호 body로
     public BaseResponse<FindPassWordResponse> findPassWord(@RequestBody FindPassWordRequest findPassWordRequest) {
         if(findPassWordRequest.getEmail() == null){
-            return new BaseResponse<>(USER_EMPTY_EMAIL);
+            return new BaseResponse<>(FIND_USER_EMPTY_EMAIL);
+        }
+        if(!isRegexEmail(findPassWordRequest.getEmail())){
+            return new BaseResponse<>(FIND_USER_INVALID_EMAIL);
         }
         if(findPassWordRequest.getPassWord() == null){
-            return new BaseResponse<>(USER_EMPTY_PASSWORD);
+            return new BaseResponse<>(FIND_USER_EMPTY_PASSWORD);
         }
         try{
             FindPassWordResponse findPassWordResponse = userService.findPassWord(findPassWordRequest);
