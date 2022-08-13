@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.user.domain.*;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
@@ -37,12 +38,12 @@ public class UserServiceImpl implements UserService {
      */
     public CheckEmailResponse checkEmail(String email) throws BaseException{
         try{
-            boolean vaild = true;
+            boolean valid = true;
             int exist = userRepository.checkEmail(email);
             if (exist != 0){
-                vaild = false;
+                valid = false;
             }
-            return new CheckEmailResponse(vaild);
+            return new CheckEmailResponse(valid);
 
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -53,12 +54,12 @@ public class UserServiceImpl implements UserService {
      */
     public CheckNickNameResponse checkNickName(String nickName) throws BaseException{
         try{
-            boolean vaild  = true;
+            boolean valid  = true;
             int exist = userRepository.checkNickName(nickName);
             if (exist != 0){
-                vaild = false;
+                valid = false;
             }
-            return new CheckNickNameResponse(vaild);
+            return new CheckNickNameResponse(valid);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -80,6 +81,9 @@ public class UserServiceImpl implements UserService {
     이메일 찾기
      */
     public FindEmailResponse findEmail(String nickName) throws BaseException{
+        if(userRepository.checkNickName(nickName) != 1){
+            throw new BaseException(FIND_USER_NO_NICKNAME);
+        }
         try{
             String email = userRepository.findEmail(nickName);
             return new FindEmailResponse(email);
@@ -92,6 +96,9 @@ public class UserServiceImpl implements UserService {
     비밀번호 찾기
      */
     public FindPassWordResponse findPassWord(FindPassWordRequest findPassWordRequest) throws BaseException{
+        if(userRepository.checkEmail(findPassWordRequest.getEmail()) != 1){
+            throw new BaseException(FIND_USER_NO_EMAIL);
+        }
         try{
             boolean success = true;
             int result = userRepository.findPassWord(findPassWordRequest);
