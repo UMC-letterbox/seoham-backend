@@ -70,7 +70,11 @@ public enum BaseResponseStatus {
 
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
+    //posts
     POST_POSTS_INVALID_CONTENT(false, 2018, "내용의 글자수를 확인해주세요"),
+    POST_TAGS_INVALID_CONTENT(false,2019,"태그의 글자수를 확인해주세요"),
+    POST_TAGS_EXIST(false,2020,"이미 존재하는 태그 입니다."),
+    POST_EMPTY_POST_IDX(false, 2021,"게시물 아이디 값을 확인해주세요."),
 
 
 
@@ -85,8 +89,11 @@ public enum BaseResponseStatus {
     FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
 
 
+    // posts
     MODIFY_FAIL_POST(false, 3020, "편지 수정을 실패하였습니다."),
     DELETE_FAIL_POST( false, 3021, "편지 삭제를 실패하였습니다. "),
+    MODIFY_FAIL_TAG(false,3022,"태그 정보 수정을 실패하였습니다."),
+    DELETE_FAIL_TAG(false,3023,"태그 정보 삭제를 실패하였습니다."),
 
 
 

@@ -14,4 +14,8 @@ public class PatchPostRequest {
     private int tagIdx; //태그
     private String content; //편지 내용
     private int letterIdx; //편지지 번호
+
+    public PatchPostRequest(){
+
+    }
 }

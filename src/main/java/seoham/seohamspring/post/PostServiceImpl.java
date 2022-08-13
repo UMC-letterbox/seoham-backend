@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static seoham.seohamspring.config.BaseResponseStatus.MODIFY_FAIL_POST;
+import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Service
 
@@ -27,39 +27,77 @@ public class PostServiceImpl implements PostService {
 
     //게시물 작성
     @Override
-    public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
+    public CreatePostResponse createPost(CreatePostRequest createPostRequest) throws BaseException {
         try{
-            int postIdx = postRepository.savePost(userIdx, createPostRequest);
+            int postIdx = postRepository.savePost(createPostRequest);
             return new CreatePostResponse(postIdx);
         }catch (Exception exception){
-            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
     @Override
-    public void modifyPost(int userIdx,int postIdx, PatchPostRequest patchPostRequest) throws BaseException {
-
+    public PatchPostResponse modifyPost(int userIdx,int postIdx, PatchPostRequest patchPostRequest) throws BaseException {
+        if(postRepository.checkPostExist(postIdx) == 0){
+            throw new BaseException(POST_EMPTY_POST_IDX);
+        }
         try{
-            int result = postRepository.updatePost(userIdx, patchPostRequest);
-            if(result == 0){
+            int success = postRepository.updatePost(postIdx, patchPostRequest);
+            if(success == 0){
                 throw new BaseException(MODIFY_FAIL_POST);
             }
+            return new PatchPostResponse(success);
         }catch (Exception exception){
-            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+            throw new BaseException(DATABASE_ERROR);
         }
 
     }
 
     @Override
-    public void deletePost(int postIdx) throws BaseException {
-        try{
-            int result = postRepository.deletePost(postIdx);
-            if(result == 0){
-                throw new BaseException(MODIFY_FAIL_POST);
-            }
-        }catch (Exception exception){
-            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+    public DeletePostResponse deletePost(int postIdx) throws BaseException {
+        if(postRepository.checkPostExist(postIdx) == 0){
+            throw new BaseException(POST_EMPTY_POST_IDX);
         }
+        try{
+            int success = postRepository.deletePost(postIdx);
+            if(success == 0){
+                throw new BaseException(DELETE_FAIL_POST);
+            }
+            return new DeletePostResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException {
+        //태그 정보 추가시, 태그 중복 확인함.
+        if(postRepository.checkTagExist(userIdx, createTagRequest.getTagName()) == 1){
+            throw new BaseException(POST_TAGS_EXIST);
+        }
+        try{
+            int tagIdx = postRepository.saveTag(createTagRequest);
+            return new CreateTagResponse(tagIdx);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException {
+        if(postRepository.checkTagExist(userIdx, patchTagRequest.getTagName()) == 1){
+            throw new BaseException(POST_TAGS_EXIST);
+        }
+        try{
+            int success = postRepository.updateTag(tagIdx, patchTagRequest);
+            if(success == 0){
+                throw new BaseException(MODIFY_FAIL_TAG);
+            }
+            return new PatchTagResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
     }
 
     /*
