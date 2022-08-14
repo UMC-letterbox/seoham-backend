@@ -21,7 +21,7 @@ public interface PostService {
     CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException;
     //태그 정보 수정
     PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
-    DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
+    //DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
 
 
     /*

@@ -21,6 +21,12 @@ dependencies {
 	implementation 'mysql:mysql-connector-java' // MySql
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor('org.projectlombok:lombok')
+
+
+	// Security, Authentication
+	implementation('org.springframework.boot:spring-boot-starter-security')
+	compile(group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1')
+	compile('io.jsonwebtoken:jjwt:0.9.1')
 }
 
 tasks.named('test') {

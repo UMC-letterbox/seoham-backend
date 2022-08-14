@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import seoham.seohamspring.user.domain.CreateUserRequest;
 import seoham.seohamspring.user.domain.FindPassWordRequest;
 import seoham.seohamspring.user.domain.LoginUserRequest;
+import seoham.seohamspring.user.domain.User;
 
 import javax.sql.DataSource;
 @Repository
@@ -73,5 +74,19 @@ public class UserRepositoryImpl implements UserRepository {
         //System.out.println(findPassWordParams[0]);
         //System.out.println(findPassWordParams[1]);
         return this.jdbcTemplate.update(findPassWordQuery,findPassWordParams);
+    }
+
+
+    public User getUser(LoginUserRequest loginUserRequest){
+        String getPwdQuery = "SELECT userIdx,email , passWord,nickName FROM User WHERE email=?";
+        String getPwdParam = loginUserRequest.getEmail();
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs,rowNum) -> new User(
+                        rs.getInt("userIdx"),
+                        rs.getString("email"),
+                        rs.getString("passWord"),
+                        rs.getString("nickName")
+                ),
+                getPwdParam);
     }
 }

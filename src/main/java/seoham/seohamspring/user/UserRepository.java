@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import seoham.seohamspring.user.domain.CreateUserRequest;
 import seoham.seohamspring.user.domain.FindPassWordRequest;
 import seoham.seohamspring.user.domain.LoginUserRequest;
+import seoham.seohamspring.user.domain.User;
 
 @Repository
 public interface UserRepository {
@@ -22,5 +23,7 @@ public interface UserRepository {
     public String findEmail(String nickName);
 
     public int findPassWord(FindPassWordRequest findPassWordRequest);
+
+    public User getUser(LoginUserRequest loginUserRequest);
 
 }

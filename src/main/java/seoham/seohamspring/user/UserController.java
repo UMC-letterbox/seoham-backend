@@ -11,7 +11,7 @@ import seoham.seohamspring.user.domain.*;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 import static seoham.seohamspring.util.ValidationRegex.isRegexEmail;
 import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
-
+import static seoham.seohamspring.util.JwtService;
 
 @Controller
 @RequestMapping("/user")
@@ -20,9 +20,13 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private final JwtService jwtService;
+
     //@Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
 
@@ -91,25 +95,6 @@ public class UserController {
     }
 
 
-    // * 로그인 API
-    // Body
-    @ResponseBody
-    @PostMapping("/login")
-    public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
-        if(loginUserRequest.getEmail() == null){
-            return new BaseResponse<>(CREATE_USER_EMPTY_EMAIL);
-        }
-        if(loginUserRequest.getPassWord() == null){
-            return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
-        }
-        try{
-            LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
-            return new BaseResponse<>(loginUserResponse);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
-
 
 
      //  이메일 찾기
@@ -154,6 +139,31 @@ public class UserController {
 
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /*
+    로그인
+     */
+
+    @ResponseBody
+    @PostMapping("/login")
+    public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest){
+        try{
+            if(loginUserRequest.getEmail() == ""){
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            if(!isRegexEmail(loginUserRequest.getEmail())){
+                return new BaseResponse<>(CREATE_USER_INVALID_EMAIL);
+            }
+
+            if(loginUserRequest.getPassWord()==""){
+                return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
+            }
+            LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
+            return new BaseResponse<>(loginUserResponse);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 }

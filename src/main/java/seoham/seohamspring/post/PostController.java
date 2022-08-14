@@ -185,7 +185,7 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
+    /*
     @ResponseBody
     @DeleteMapping("/tags/delete/{tagIdx}")
     public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx){
@@ -196,5 +196,7 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+     */
 
 }
