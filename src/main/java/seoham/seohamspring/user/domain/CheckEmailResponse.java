@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CheckEmailResponse {
-    private boolean vaild;
+    private boolean valid;
 }
