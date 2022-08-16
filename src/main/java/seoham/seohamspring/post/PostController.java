@@ -172,6 +172,9 @@ public class PostController {
         }
     }
 
+    /*
+    태그 정보 수정
+     */
     @ResponseBody
     @PatchMapping("/tags/edit/{tagIdx}")
     public BaseResponse<PatchTagResponse> modifyTag(@PathVariable ("tagIdx") int tagIdx, @RequestBody PatchTagRequest patchTagRequest){
@@ -186,6 +189,9 @@ public class PostController {
         }
     }
 
+    /*
+    태그 정보 삭제
+     */
     @ResponseBody
     @DeleteMapping("/tags/delete/{tagIdx}")
     public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx){
@@ -197,4 +203,25 @@ public class PostController {
         }
     }
 
+    /*
+    보낸이 정보 수정
+     */
+    @ResponseBody
+    @PatchMapping("/senders/edit/{sender}")
+    public BaseResponse<PatchSenderResponse> modifySender(@PathVariable ("sender") String originalSender,@RequestBody PatchSenderRequest patchSenderRequest){
+        if (patchSenderRequest.getChangedSender().length() >20) {//게시물 길이
+            return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
+        }
+        try{
+            PatchSenderResponse patchSenderResponse = postService.modifySender(patchSenderRequest.getUserIdx(),originalSender,patchSenderRequest);
+            return new BaseResponse<>(patchSenderResponse);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+    /*
+    보낸이 정보 삭제
+     */
 }

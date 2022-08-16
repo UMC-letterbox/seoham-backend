@@ -7,15 +7,8 @@ import seoham.seohamspring.post.domain.*;
 import javax.sql.DataSource;
 
 
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 
@@ -89,7 +82,16 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int deleteTag(int tagIdx) {
-        return 0;
+        //기존 post 테이블에서 tagIdx = 0으로 update
+        String changePostTagQuery = "UPDATE post SET tagIdx = 0 where tagIdx = ?";
+        int changePostTagParmas = tagIdx;
+        this.jdbcTemplate.update(changePostTagQuery, changePostTagParmas);
+
+        //태그 삭제
+        String deleteTagQuery = "DELETE FROM tag WHERE tagIdx = ?";
+        int deleteTagParams = tagIdx;
+
+        return this.jdbcTemplate.update(deleteTagQuery, deleteTagParams);
     }
 
     @Override
@@ -99,6 +101,32 @@ public class PostRepositoryImpl implements PostRepository {
 
 
         return this.jdbcTemplate.queryForObject(checkTagExistQuery, int.class, checkTagExistParams);
+    }
+
+    @Override
+    public int checkTagNotExist(int postIdx) {
+        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =?)";
+        int checkTagNotExistParams = postIdx;
+
+
+        return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
+    }
+
+    @Override
+    public int updateSender(String originalSender, PatchSenderRequest patchSenderRequest) {
+        String updateSenderQuery = "UPDATE post SET sender = ? where userIdx = ? AND sender =?";
+        Object [] updateSenderParams = new Object[]{patchSenderRequest.getChangedSender(), patchSenderRequest.getUserIdx(), originalSender};
+
+        return this.jdbcTemplate.update(updateSenderQuery, updateSenderParams);
+
+    }
+
+    @Override
+    public int checkSenderExist(int userIdx, String sender) {
+        String checkSenderExistQuery = "select exists(select postIdx from post where userIdx = ? AND sender = ?)";
+        Object [] checkSenderExistParams = new Object[]{userIdx, sender};
+
+        return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
     }
 
 

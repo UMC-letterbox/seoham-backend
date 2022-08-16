@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DeleteTagResponse {
+public class PatchSenderRequest {
 
-    private int success;
+    private String changedSender;
+    private int userIdx;
+
+    public PatchSenderRequest(){}
 }

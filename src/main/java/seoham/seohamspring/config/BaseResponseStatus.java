@@ -75,6 +75,9 @@ public enum BaseResponseStatus {
     POST_TAGS_INVALID_CONTENT(false,2019,"태그의 글자수를 확인해주세요"),
     POST_TAGS_EXIST(false,2020,"이미 존재하는 태그 입니다."),
     POST_EMPTY_POST_IDX(false, 2021,"게시물 아이디 값을 확인해주세요."),
+    POST_EMPTY_TAG_IDX(false,2022,"태그 아이디 값을 확인해주세요."),
+    POST_SENDER_INVALID_CONTENT(false, 2023,"보낸이 글자수를 확인해주세요"),
+    POST_EMPTY_SENDER(false,2024,"보낸이 아이디 값을 확인해주세요."),
 
 
 
@@ -94,6 +97,7 @@ public enum BaseResponseStatus {
     DELETE_FAIL_POST( false, 3021, "편지 삭제를 실패하였습니다. "),
     MODIFY_FAIL_TAG(false,3022,"태그 정보 수정을 실패하였습니다."),
     DELETE_FAIL_TAG(false,3023,"태그 정보 삭제를 실패하였습니다."),
+    MODIFY_FAIL_SENDER(false, 3024,"보낸이 정보 수정을 실패하였습니다."),
 
 
 
