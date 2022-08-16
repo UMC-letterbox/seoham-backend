@@ -41,6 +41,7 @@ public enum BaseResponseStatus {
     POST_TAGS_INVALID_CONTENT(false,2019,"태그의 글자수를 확인해주세요"),
     POST_TAGS_EXIST(false,2020,"이미 존재하는 태그 입니다."),
     POST_EMPTY_POST_IDX(false, 2021,"게시물 아이디 값을 확인해주세요."),
+    POST_EMPTY_TAG_IDX(false,2022,"태그 아이디 값을 확인해주세요."),
 
 
 

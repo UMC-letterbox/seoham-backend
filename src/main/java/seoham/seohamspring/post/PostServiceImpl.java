@@ -100,6 +100,22 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
+    public DeleteTagResponse deleteTag(int tagIdx) throws BaseException {
+        if(postRepository.checkTagNotExist(tagIdx)==0){
+            throw new BaseException(POST_EMPTY_TAG_IDX);
+        }
+        try{
+            int success = postRepository.deleteTag(tagIdx);
+            if(success == 0){
+                throw new BaseException(DELETE_FAIL_TAG);
+            }
+            return new DeleteTagResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     /*
     @Override
     public List<Tag> TagList() {

@@ -89,7 +89,16 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int deleteTag(int tagIdx) {
-        return 0;
+        //기존 post 테이블에서 tagIdx = 0으로 update
+        String changePostTagQuery = "UPDATE post SET tagIdx = 0 where tagIdx = ?";
+        int changePostTagParmas = tagIdx;
+        this.jdbcTemplate.update(changePostTagQuery, changePostTagParmas);
+
+        //태그 삭제
+        String deleteTagQuery = "DELETE FROM tag WHERE tagIdx = ?";
+        int deleteTagParams = tagIdx;
+
+        return this.jdbcTemplate.update(deleteTagQuery, deleteTagParams);
     }
 
     @Override
@@ -99,6 +108,15 @@ public class PostRepositoryImpl implements PostRepository {
 
 
         return this.jdbcTemplate.queryForObject(checkTagExistQuery, int.class, checkTagExistParams);
+    }
+
+    @Override
+    public int checkTagNotExist(int postIdx) {
+        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =?)";
+        int checkTagNotExistParams = postIdx;
+
+
+        return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
     }
 
 
