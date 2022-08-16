@@ -1,15 +1,10 @@
 package seoham.seohamspring.post;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import seoham.seohamspring.config.BaseException;
-import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Service;
 
-
-import java.util.List;
-import java.util.Optional;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
@@ -127,6 +122,22 @@ public class PostServiceImpl implements PostService {
                 throw new BaseException(MODIFY_FAIL_SENDER);
             }
             return new PatchSenderResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public DeleteSenderResponse deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) throws BaseException {
+        if(postRepository.checkSenderExist(deleteSenderRequest.getUserIdx(), sender)==0){
+            throw new BaseException(POST_EMPTY_SENDER);
+        }
+        try{
+            int success = postRepository.deleteSender(sender, deleteSenderRequest);
+            if(success == 0){
+                throw new BaseException(DELETE_FAIL_SENDER);
+            }
+            return new DeleteSenderResponse(success);
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

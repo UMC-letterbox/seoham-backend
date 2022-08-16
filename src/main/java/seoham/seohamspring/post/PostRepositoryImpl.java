@@ -129,6 +129,14 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
     }
 
+    @Override
+    public int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) {
+        //기존 post 테이블에서 tagIdx = 0으로 update
+        String changeSenderQuery = "UPDATE post SET sender= \"someone\" where userIdx= ? AND sender = ?";
+        Object [] changeSenderParmas = new Object[]{deleteSenderRequest.getUserIdx(), sender};
+        return this.jdbcTemplate.update(changeSenderQuery, changeSenderParmas);
+    }
+
 
 
     /*

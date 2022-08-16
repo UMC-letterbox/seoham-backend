@@ -224,4 +224,14 @@ public class PostController {
     /*
     보낸이 정보 삭제
      */
+    @ResponseBody
+    @DeleteMapping("/senders/delete/{sender}")
+    public BaseResponse<DeleteSenderResponse> deleteSender(@PathVariable ("sender") String sender, @RequestBody DeleteSenderRequest deleteSenderRequest){
+        try{
+            DeleteSenderResponse deleteSenderResponse = postService.deleteSender(sender, deleteSenderRequest);
+            return new BaseResponse<>(deleteSenderResponse);
+        }catch (BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 }
