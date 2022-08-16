@@ -98,6 +98,7 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_TAG(false,3022,"태그 정보 수정을 실패하였습니다."),
     DELETE_FAIL_TAG(false,3023,"태그 정보 삭제를 실패하였습니다."),
     MODIFY_FAIL_SENDER(false, 3024,"보낸이 정보 수정을 실패하였습니다."),
+    DELETE_FAIL_SENDER(false,3025,"보낸이 정보 삭제를 실패하였습니다."),
 
 
 

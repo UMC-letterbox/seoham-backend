@@ -1,13 +1,10 @@
 package seoham.seohamspring.post;
 
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 @Service
 public interface PostService {
 
@@ -25,6 +22,7 @@ public interface PostService {
     DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
     //보낸이 정보 수정
     PatchSenderResponse modifySender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) throws BaseException;
+    DeleteSenderResponse deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) throws BaseException;
 
 
     /*
