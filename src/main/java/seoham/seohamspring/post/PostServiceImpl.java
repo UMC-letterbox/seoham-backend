@@ -116,6 +116,22 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    public PatchSenderResponse modifySender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) throws BaseException {
+        if(postRepository.checkSenderExist(userIdx, originalSender)==0){
+            throw new BaseException(POST_EMPTY_SENDER);
+        }
+        try{
+            int success = postRepository.updateSender(originalSender, patchSenderRequest);
+            if(success == 0){
+                throw new BaseException(MODIFY_FAIL_SENDER);
+            }
+            return new PatchSenderResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     /*
     @Override
     public List<Tag> TagList() {

@@ -7,15 +7,8 @@ import seoham.seohamspring.post.domain.*;
 import javax.sql.DataSource;
 
 
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 
@@ -117,6 +110,23 @@ public class PostRepositoryImpl implements PostRepository {
 
 
         return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
+    }
+
+    @Override
+    public int updateSender(String originalSender, PatchSenderRequest patchSenderRequest) {
+        String updateSenderQuery = "UPDATE post SET sender = ? where userIdx = ? AND sender =?";
+        Object [] updateSenderParams = new Object[]{patchSenderRequest.getChangedSender(), patchSenderRequest.getUserIdx(), originalSender};
+
+        return this.jdbcTemplate.update(updateSenderQuery, updateSenderParams);
+
+    }
+
+    @Override
+    public int checkSenderExist(int userIdx, String sender) {
+        String checkSenderExistQuery = "select exists(select postIdx from post where userIdx = ? AND sender = ?)";
+        Object [] checkSenderExistParams = new Object[]{userIdx, sender};
+
+        return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
     }
 
 
