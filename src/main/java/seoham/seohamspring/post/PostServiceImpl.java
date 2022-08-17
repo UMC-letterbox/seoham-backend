@@ -6,6 +6,8 @@ import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
+
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Service
@@ -143,40 +145,67 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+
+
+    @Override
+    public List<GetTagListResponse> readTagList(int userIdx) throws BaseException {
+        try{
+            List<GetTagListResponse> getTagList = postRepository.selectTagList(userIdx);
+            System.out.println(getTagList.size());
+
+            return getTagList;
+        }catch (Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public List<GetPostResponse> readPostByTag(int tagIdx) throws BaseException {
+        try{
+            List<GetPostResponse> getPostResponse = postRepository.selectPostByTag(tagIdx);
+            return getPostResponse;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+    @Override
+    public List<GetPostResponse> readPostByDate(int userIdx) throws BaseException {
+        try{
+            List<GetPostResponse> getPostResponse = postRepository.selectPostByDate(userIdx);
+            return getPostResponse;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
     /*
+
     @Override
-    public List<Tag> TagList() {
-        return postRepository.getTagList();
+    public List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException {
+        try{
+            List<GetSenderListResponse> getSenderList = postRepository.selectSenderList(userIdx);
+            /*
+            System.out.println(getTagList.size());
+            if(getTagList.size()== 0){
+                throw new BaseException(SELECT_FAIL_TAG_LIST);
+            }
+
+            return getSenderList;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Override
-    public Optional<Post> findByTag(int tagIdx) {
-        return postRepository.findByTag(tagIdx);
+    public List<GetPostResponse> readPostBySender(String sender) throws BaseException {
+        return null;
     }
-
-    @Override
-    public Optional<Post> findByDate(int date) {
-        return postRepository.findByDate(date);
-    }
-
-    @Override
-    public List<Sender> SenderList() {
-        return postRepository.getSenderList();
-    }
-
-    @Override
-    public Optional<Post> findBySender(String sender) {
-        return postRepository.findBySender(sender);
-    }
+    */
 
 
 
-
-
-    @Override
-    public Optional<Post> findByPostIdx(long postIdx) {
-        return postRepository.findByPostId(postIdx);
-    }
-
-     */
 }

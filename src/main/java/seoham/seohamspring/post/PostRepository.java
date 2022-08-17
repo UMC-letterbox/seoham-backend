@@ -21,13 +21,14 @@ public interface PostRepository {
     int updateSender(String sender, PatchSenderRequest patchSenderRequest);
     int checkSenderExist(int userIdx, String sender);
     int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest);
+    List<GetTagListResponse> selectTagList(int userIdx);
+    List<GetPostResponse> selectPostByTag(int tagIdx);
+    List<GetPostResponse> selectPostByDate(int userIdx);
     /*
-    List<Tag> getTagList();
-    Optional<Post> findByTag(int tagIdx);
-    Optional<Post> findByDate(int date);
-    List<Sender> getSenderList();
-    Optional<Post> findBySender(String sender);
-    Optional<Post> findByPostId(long postIdx);
+    List<GetPostResponse> selectPostByDate(int userIdx);
+    List<GetSenderListResponse> selectSenderList(int userIdx);
+    List<GetPostResponse> selectPostBySender(int userIdx,String sender);
 
      */
+
 }
