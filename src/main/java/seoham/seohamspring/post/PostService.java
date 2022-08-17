@@ -31,9 +31,9 @@ public interface PostService {
     List<GetTagListResponse> readTagList(int userIdx) throws BaseException;
     //태그별 편지 조회
     List<GetPostResponse> readPostByTag(int tagIdx) throws BaseException;
+    //날짜별 편지조회
+    List<GetPostResponse> readPostByDate(int userIdx) throws BaseException;
     /*
-    //날짜별 편지 조회
-    List<GetPostResponse> readPostByDate() throws BaseException;
     //보낸이 목록 조회
     //List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException;
     //보낸이별 편지 조회

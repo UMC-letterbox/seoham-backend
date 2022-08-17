@@ -130,13 +130,17 @@ public class PostController {
     /*
     날짜별 편지 조회
      */
-    /*
+    @ResponseBody
     @GetMapping("/date")
-    public String listBydate(){
-        return null;
-    }
+    public BaseResponse<List<GetPostResponse>> getPostByDate(@RequestParam int userIdx) {
+        try{
+            List<GetPostResponse> getPostResponse = postService.readPostByDate(userIdx);
+            return new BaseResponse<>(getPostResponse);
 
-     */
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     /*
     게시물 보낸이 목록 조회 페이지

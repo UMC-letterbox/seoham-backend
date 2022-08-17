@@ -23,6 +23,7 @@ public interface PostRepository {
     int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest);
     List<GetTagListResponse> selectTagList(int userIdx);
     List<GetPostResponse> selectPostByTag(int tagIdx);
+    List<GetPostResponse> selectPostByDate(int userIdx);
     /*
     List<GetPostResponse> selectPostByDate(int userIdx);
     List<GetSenderListResponse> selectSenderList(int userIdx);

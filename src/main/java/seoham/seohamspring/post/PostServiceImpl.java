@@ -151,14 +151,11 @@ public class PostServiceImpl implements PostService {
     public List<GetTagListResponse> readTagList(int userIdx) throws BaseException {
         try{
             List<GetTagListResponse> getTagList = postRepository.selectTagList(userIdx);
-            /*
             System.out.println(getTagList.size());
-            if(getTagList.size()== 0){
-                throw new BaseException(SELECT_FAIL_TAG_LIST);
-            }
-             */
+
             return getTagList;
         }catch (Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -173,11 +170,19 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    /*
+
     @Override
-    public List<GetPostResponse> readPostByDate() throws BaseException {
-        return null;
+    public List<GetPostResponse> readPostByDate(int userIdx) throws BaseException {
+        try{
+            List<GetPostResponse> getPostResponse = postRepository.selectPostByDate(userIdx);
+            return getPostResponse;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
+
+
+    /*
 
     @Override
     public List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException {

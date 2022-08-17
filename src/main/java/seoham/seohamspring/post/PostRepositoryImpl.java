@@ -154,23 +154,46 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<GetPostResponse> selectPostByTag(int tagIdx) {
-        String selectPostByTagQuery = "SELECT * FROM post WHERE tagIdx =?";
+        String selectPostByTagQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
+                "from (select *\n" +
+                "      from post\n" +
+                "      where tagIdx=?) as a\n" +
+                "left join tag as b\n" +
+                "on a.tagIdx = b.tagIdx";
         return this.jdbcTemplate.query(selectPostByTagQuery,
                 (rs,rowNum) -> new GetPostResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
-                        rs.getInt("date"),
+                        rs.getTimestamp("date"),
                         rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor"),
                         rs.getInt("letterIdx")
                 ), tagIdx);
     }
 
-    /*
+
     @Override
     public List<GetPostResponse> selectPostByDate(int userIdx) {
-        return null;
+        String selectPostBySenderQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
+                "from (select *\n" +
+                "      from post\n" +
+                "      where userIdx=?) as a\n" +
+                "left join tag as b\n" +
+                "on a.tagIdx = b.tagIdx;\n";
+        return this.jdbcTemplate.query(selectPostBySenderQuery,
+                (rs,rowNum) -> new GetPostResponse(
+                        rs.getInt("postIdx"),
+                        rs.getString("sender"),
+                        rs.getTimestamp("date"),
+                        rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor"),
+                        rs.getInt("letterIdx")
+                ), userIdx);
     }
 
+    /*
     @Override
     public List<GetSenderListResponse> selectSenderList(int userIdx) {
         String selectSenderListQuery = "SELECT distinct sender FROM post WHERE userIdx =?";
