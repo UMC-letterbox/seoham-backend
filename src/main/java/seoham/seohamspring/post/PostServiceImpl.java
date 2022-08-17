@@ -193,6 +193,7 @@ public class PostServiceImpl implements PostService {
 
             return getSenderList;
         }catch (Exception exception){
+
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -208,7 +209,16 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-
+    @Override
+    public GetPostContextResponse readPost(int postIdx) throws BaseException {
+        try {
+            GetPostContextResponse getPostContextResponse = postRepository.selectPost(postIdx);
+            return getPostContextResponse;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 
 }

@@ -37,6 +37,8 @@ public interface PostService {
     List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException;
     //보낸이별 편지 조회
     List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException;
+    //편지 조회
+    GetPostContextResponse readPost(int postIdx) throws BaseException;
 
 
 

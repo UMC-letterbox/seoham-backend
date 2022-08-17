@@ -19,5 +19,6 @@ public class GetPostContextResponse {
     private String tagName;
     private String tagColor;
     private int letterIdx; //편지지 번호
+    private String content;
 
 }

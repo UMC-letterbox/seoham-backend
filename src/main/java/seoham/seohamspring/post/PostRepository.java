@@ -26,5 +26,6 @@ public interface PostRepository {
     List<GetPostResponse> selectPostByDate(int userIdx);
     List<GetSenderListResponse> selectSenderList(int userIdx);
     List<GetPostResponse> selectPostBySender(String sender, int userIdx);
+    GetPostContextResponse selectPost(int postIdx);
 
 }

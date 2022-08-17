@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -30,8 +29,8 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int savePost(CreatePostRequest createPostRequest) {
         String savePostQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
-        Object [] savePostParams = new Object[]{createPostRequest.getUserIdx(), createPostRequest.getSender(), createPostRequest.getDate(),
-        createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
+        Object[] savePostParams = new Object[]{createPostRequest.getUserIdx(), createPostRequest.getSender(), createPostRequest.getDate(),
+                createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
         this.jdbcTemplate.update(savePostQuery, savePostParams);
 
         String lastSavePostIdxQuery = "select last_insert_id()";
@@ -42,7 +41,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int updatePost(int postIdx, PatchPostRequest patchPostRequest) {
         String updatePostQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
-        Object [] updatePostParams = new Object[]{patchPostRequest.getUserIdx(), patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
+        Object[] updatePostParams = new Object[]{patchPostRequest.getUserIdx(), patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
 
         return this.jdbcTemplate.update(updatePostQuery, updatePostParams);
@@ -56,11 +55,10 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
 
-
     @Override
     public int deletePost(int postIdx) {
         String deletePostQuery = "DELETE FROM post WHERE postIdx = ?";
-        Object [] deletePostParams = new Object[]{postIdx};
+        Object[] deletePostParams = new Object[]{postIdx};
 
         return this.jdbcTemplate.update(deletePostQuery, deletePostParams);
     }
@@ -68,7 +66,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int saveTag(CreateTagRequest createTagRequest) {
         String saveTagQuery = "INSERT INTO tag(tagName, tagColor,userIdx) VALUES (?,?,?)";
-        Object [] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor(), createTagRequest.getUserIdx()};
+        Object[] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor(), createTagRequest.getUserIdx()};
         this.jdbcTemplate.update(saveTagQuery, saveTagParams);
 
         String lastSaveTagIdxQuery = "select last_insert_id()";
@@ -78,7 +76,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int updateTag(int tagIdx, PatchTagRequest patchTagRequest) {
         String updateTagQuery = "UPDATE tag SET tagName = ?, tagColor = ? where tagIdx = ?";
-        Object [] updateTagParams = new Object[]{patchTagRequest.getTagName(), patchTagRequest.getTagColor(), tagIdx};
+        Object[] updateTagParams = new Object[]{patchTagRequest.getTagName(), patchTagRequest.getTagColor(), tagIdx};
 
         return this.jdbcTemplate.update(updateTagQuery, updateTagParams);
     }
@@ -100,7 +98,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int checkTagExist(int userIdx, String tagName) {
         String checkTagExistQuery = "select exists(select tagIdx from tag where tagName =? AND userIdx = ?)";
-        Object [] checkTagExistParams = new Object[]{tagName, userIdx};
+        Object[] checkTagExistParams = new Object[]{tagName, userIdx};
 
 
         return this.jdbcTemplate.queryForObject(checkTagExistQuery, int.class, checkTagExistParams);
@@ -109,7 +107,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int checkTagNotExist(int userIdx, int tagIdx) {
         String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
-        Object [] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
+        Object[] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
 
 
         return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
@@ -118,7 +116,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int updateSender(String originalSender, PatchSenderRequest patchSenderRequest) {
         String updateSenderQuery = "UPDATE post SET sender = ? where userIdx = ? AND sender =?";
-        Object [] updateSenderParams = new Object[]{patchSenderRequest.getChangedSender(), patchSenderRequest.getUserIdx(), originalSender};
+        Object[] updateSenderParams = new Object[]{patchSenderRequest.getChangedSender(), patchSenderRequest.getUserIdx(), originalSender};
 
         return this.jdbcTemplate.update(updateSenderQuery, updateSenderParams);
 
@@ -127,7 +125,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int checkSenderExist(int userIdx, String sender) {
         String checkSenderExistQuery = "select exists(select postIdx from post where userIdx = ? AND sender = ?)";
-        Object [] checkSenderExistParams = new Object[]{userIdx, sender};
+        Object[] checkSenderExistParams = new Object[]{userIdx, sender};
 
         return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
     }
@@ -136,7 +134,7 @@ public class PostRepositoryImpl implements PostRepository {
     public int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) {
         //기존 post 테이블에서 tagIdx = 0으로 update
         String changeSenderQuery = "UPDATE post SET sender= \"someone\" where userIdx= ? AND sender = ?";
-        Object [] changeSenderParmas = new Object[]{deleteSenderRequest.getUserIdx(), sender};
+        Object[] changeSenderParmas = new Object[]{deleteSenderRequest.getUserIdx(), sender};
         return this.jdbcTemplate.update(changeSenderQuery, changeSenderParmas);
     }
 
@@ -145,7 +143,7 @@ public class PostRepositoryImpl implements PostRepository {
         String selectTagListQuery = "SELECT * FROM tag WHERE userIdx =?";
 
         return this.jdbcTemplate.query(selectTagListQuery,
-                (rs,rowNum) -> new GetTagListResponse(
+                (rs, rowNum) -> new GetTagListResponse(
                         rs.getInt("tagIdx"),
                         rs.getString("tagName"),
                         rs.getString("tagColor")
@@ -161,7 +159,7 @@ public class PostRepositoryImpl implements PostRepository {
                 "left join tag as b\n" +
                 "on a.tagIdx = b.tagIdx";
         return this.jdbcTemplate.query(selectPostByTagQuery,
-                (rs,rowNum) -> new GetPostResponse(
+                (rs, rowNum) -> new GetPostResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
@@ -182,7 +180,7 @@ public class PostRepositoryImpl implements PostRepository {
                 "left join tag as b\n" +
                 "on a.tagIdx = b.tagIdx;\n";
         return this.jdbcTemplate.query(selectPostBySenderQuery,
-                (rs,rowNum) -> new GetPostResponse(
+                (rs, rowNum) -> new GetPostResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
@@ -194,9 +192,6 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
 
-
-
-
     @Override
     public List<GetSenderListResponse> selectSenderList(int userIdx) {
         String selectSenderListQuery = "select sender, count(*) as count\n" +
@@ -205,13 +200,11 @@ public class PostRepositoryImpl implements PostRepository {
                 "group by sender;";
 
         return this.jdbcTemplate.query(selectSenderListQuery,
-                (rs,rowNum) -> new GetSenderListResponse(
+                (rs, rowNum) -> new GetSenderListResponse(
                         rs.getString("sender"),
                         rs.getInt("count")
                 ), userIdx);
     }
-
-
 
 
     @Override
@@ -223,7 +216,7 @@ public class PostRepositoryImpl implements PostRepository {
                 "left join tag as b\n" +
                 "on a.tagIdx = b.tagIdx";
         return this.jdbcTemplate.query(selectPostBySenderQuery,
-                (rs,rowNum) -> new GetPostResponse(
+                (rs, rowNum) -> new GetPostResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
@@ -234,4 +227,35 @@ public class PostRepositoryImpl implements PostRepository {
                 ), sender, userIdx);
     }
 
+    @Override
+    public GetPostContextResponse selectPost(int postIdx) {
+
+        String selectPostQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx, a.content\n" +
+                "from (select *\n" +
+                "      from post\n" +
+                "      where postIdx = ?) as a\n" +
+                "left join tag as b\n" +
+                "on a.tagIdx = b.tagIdx";
+
+        int selectPostParams = postIdx;
+
+
+        return this.jdbcTemplate.queryForObject(selectPostQuery,
+                (rs, rowNum) -> new GetPostContextResponse(
+                        rs.getInt("postIdx"),
+                        rs.getString("sender"),
+                        rs.getTimestamp("date"),
+                        rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor"),
+                        rs.getInt("letterIdx"),
+                        rs.getString("content")
+                ),selectPostParams);
+
+    }
 }
+
+
+
+
+

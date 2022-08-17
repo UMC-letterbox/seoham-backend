@@ -82,16 +82,17 @@ public class PostController {
     /*
     *편지 조회
      */
-    /*
+    @ResponseBody
     @GetMapping("/{postIdx}")
-    public String detail(@PathVariable("postIdx") int postIdx, Model model) {
-        Optional<Post> post = postService.findByPostIdx(postIdx);
-        model.addAttribute("post", post);
+    public BaseResponse<GetPostContextResponse> getPost(@PathVariable("postIdx") int postIdx) {
+        try{
+            GetPostContextResponse getPostContextResponse = postService.readPost(postIdx);
+            return new BaseResponse<>(getPostContextResponse);
 
-        return "posts/detail";
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
-
-     */
 
     /*
     태그 목록 조회 페이지
