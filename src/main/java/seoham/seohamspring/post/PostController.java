@@ -12,7 +12,7 @@ import java.util.List;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Controller
-@RequestMapping("/posts") // /posts 경로로 들어오는 경우 아래의 Method들로 분기될 수 있도록 설정
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired
@@ -29,13 +29,14 @@ public class PostController {
     /*
      * 편지 작성 페이지
      */
-
     @ResponseBody
     @PostMapping("/new")
     public BaseResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
         if (createPostRequest.getContent().length() >450) {//게시물 길이
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENT);
-
+        }
+        if (createPostRequest.getSender().length() >20) {//보낸이 길이
+            return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
         }
         try{
             CreatePostResponse createPostResponse = postService.createPost(createPostRequest);
@@ -54,6 +55,9 @@ public class PostController {
         if (patchPostRequest.getContent().length() >450) {//게시물 길이
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENT);
         }
+        if (patchPostRequest.getSender().length() >20) {//보낸이 길이
+            return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
+        }
         try{
             PatchPostResponse patchPostResponse = postService.modifyPost(patchPostRequest.getUserIdx(),postIdx,patchPostRequest);
             return new BaseResponse<>(patchPostResponse);
@@ -61,8 +65,6 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
-
 
 
     /*
