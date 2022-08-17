@@ -25,6 +25,9 @@ public class PostServiceImpl implements PostService {
     //게시물 작성
     @Override
     public CreatePostResponse createPost(CreatePostRequest createPostRequest) throws BaseException {
+        if(postRepository.checkTagNotExist(createPostRequest.getUserIdx(),createPostRequest.getTagIdx())==0){
+            throw new BaseException(POST_EMPTY_TAG_IDX);
+        }
         try{
             int postIdx = postRepository.savePost(createPostRequest);
             return new CreatePostResponse(postIdx);
@@ -98,8 +101,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public DeleteTagResponse deleteTag(int tagIdx) throws BaseException {
-        if(postRepository.checkTagNotExist(tagIdx)==0){
+    public DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws BaseException {
+        if(postRepository.checkTagNotExist(userIdx, tagIdx)==0){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         try{
@@ -182,30 +185,40 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    /*
 
     @Override
     public List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException {
         try{
             List<GetSenderListResponse> getSenderList = postRepository.selectSenderList(userIdx);
-            /*
-            System.out.println(getTagList.size());
-            if(getTagList.size()== 0){
-                throw new BaseException(SELECT_FAIL_TAG_LIST);
-            }
 
             return getSenderList;
         }catch (Exception exception){
+
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+    @Override
+    public List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException {
+        try {
+            List<GetPostResponse> getPostResponse = postRepository.selectPostBySender(sender, userIdx);
+            return getPostResponse;
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     @Override
-    public List<GetPostResponse> readPostBySender(String sender) throws BaseException {
-        return null;
+    public GetPostContextResponse readPost(int postIdx) throws BaseException {
+        try {
+            GetPostContextResponse getPostContextResponse = postRepository.selectPost(postIdx);
+            return getPostContextResponse;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
-    */
-
 
 
 }

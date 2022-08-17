@@ -82,16 +82,17 @@ public class PostController {
     /*
     *편지 조회
      */
-    /*
+    @ResponseBody
     @GetMapping("/{postIdx}")
-    public String detail(@PathVariable("postIdx") int postIdx, Model model) {
-        Optional<Post> post = postService.findByPostIdx(postIdx);
-        model.addAttribute("post", post);
+    public BaseResponse<GetPostContextResponse> getPost(@PathVariable("postIdx") int postIdx) {
+        try{
+            GetPostContextResponse getPostContextResponse = postService.readPost(postIdx);
+            return new BaseResponse<>(getPostContextResponse);
 
-        return "posts/detail";
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
-
-     */
 
     /*
     태그 목록 조회 페이지
@@ -125,8 +126,6 @@ public class PostController {
     }
 
 
-
-
     /*
     날짜별 편지 조회
      */
@@ -145,27 +144,36 @@ public class PostController {
     /*
     게시물 보낸이 목록 조회 페이지
      */
-    /*
+
+    @ResponseBody
     @GetMapping("/senders")
-    public String senderList(Model model) {
-        List<Sender> senders = postService.SenderList();
-        model.addAttribute("senders",senders);
-        return "posts/senderList";
+    public BaseResponse<List<GetSenderListResponse>> getSenderList(@RequestParam int userIdx) {
+        try{
+            List<GetSenderListResponse> getSenderListResponse = postService.readSenderList(userIdx);
+            return new BaseResponse<>(getSenderListResponse);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
 
-     */
+
+
 
     /*
     보낸이별 편지 조회
      */
-    /*
-    @GetMapping("/tags/{sender}")
-    public String listBySender(@PathVariable("sender") String sender,Model model){
-        Optional<Post> postsBySender = postService.findBySender(sender);
-        return "posts/listBySender";
-    }
+    @ResponseBody
+    @GetMapping("/senders/{sender}")
+    public BaseResponse<List<GetPostResponse>> getPostBySender(@PathVariable("sender") String sender, @RequestParam int userIdx) {
+        try{
+            List<GetPostResponse> getPostResponse = postService.readPostBySender(sender, userIdx);
+            return new BaseResponse<>(getPostResponse);
 
-     */
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     /*
     태그 정보 추가
@@ -206,9 +214,9 @@ public class PostController {
      */
     @ResponseBody
     @DeleteMapping("/tags/delete/{tagIdx}")
-    public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx){
+    public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx, @RequestParam int userIdx){
         try{
-            DeleteTagResponse deleteTagResponse = postService.deleteTag(tagIdx);
+            DeleteTagResponse deleteTagResponse = postService.deleteTag(userIdx, tagIdx);
             return new BaseResponse<>(deleteTagResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());

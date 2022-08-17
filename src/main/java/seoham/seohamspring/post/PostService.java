@@ -22,7 +22,7 @@ public interface PostService {
     //태그 정보 수정
     PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
     //태그 정보 삭제
-    DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
+    DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws  BaseException;
     //보낸이 정보 수정
     PatchSenderResponse modifySender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) throws BaseException;
     //보낸이 정보 삭제
@@ -33,13 +33,13 @@ public interface PostService {
     List<GetPostResponse> readPostByTag(int tagIdx) throws BaseException;
     //날짜별 편지조회
     List<GetPostResponse> readPostByDate(int userIdx) throws BaseException;
-    /*
     //보낸이 목록 조회
-    //List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException;
+    List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException;
     //보낸이별 편지 조회
-    List<GetPostResponse> readPostBySender(String sender) throws BaseException;
+    List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException;
+    //편지 조회
+    GetPostContextResponse readPost(int postIdx) throws BaseException;
 
-     */
 
 
 }

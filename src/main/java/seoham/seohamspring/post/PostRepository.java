@@ -17,18 +17,15 @@ public interface PostRepository {
     int updateTag(int tagIdx, PatchTagRequest patchTagRequest);
     int deleteTag(int tagIdx);
     int checkTagExist(int userIdx, String tagName);
-    int checkTagNotExist(int tagIdx);
+    int checkTagNotExist(int userIdx,int tagIdx);
     int updateSender(String sender, PatchSenderRequest patchSenderRequest);
     int checkSenderExist(int userIdx, String sender);
     int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest);
     List<GetTagListResponse> selectTagList(int userIdx);
     List<GetPostResponse> selectPostByTag(int tagIdx);
     List<GetPostResponse> selectPostByDate(int userIdx);
-    /*
-    List<GetPostResponse> selectPostByDate(int userIdx);
     List<GetSenderListResponse> selectSenderList(int userIdx);
-    List<GetPostResponse> selectPostBySender(int userIdx,String sender);
-
-     */
+    List<GetPostResponse> selectPostBySender(String sender, int userIdx);
+    GetPostContextResponse selectPost(int postIdx);
 
 }
