@@ -11,5 +11,5 @@ import lombok.Setter;
 public class GetSenderListResponse {
 
     private String sender;
-    private GetLetterCountResponse count;
+    private int count;
 }

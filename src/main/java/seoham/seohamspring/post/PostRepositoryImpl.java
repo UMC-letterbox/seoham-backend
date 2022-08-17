@@ -107,9 +107,9 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int checkTagNotExist(int tagIdx) {
-        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =?)";
-        int checkTagNotExistParams = tagIdx;
+    public int checkTagNotExist(int userIdx, int tagIdx) {
+        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
+        Object [] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
 
 
         return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
@@ -193,93 +193,45 @@ public class PostRepositoryImpl implements PostRepository {
                 ), userIdx);
     }
 
-    /*
+
+
+
+
     @Override
     public List<GetSenderListResponse> selectSenderList(int userIdx) {
-        String selectSenderListQuery = "SELECT distinct sender FROM post WHERE userIdx =?";
-        int countOfLetter = this.jdbcTemplate.queryForInt("select count(*) from post where sender = ?", "Joe");
-
+        String selectSenderListQuery = "select sender, count(*) as count\n" +
+                "from post\n" +
+                "where userIdx = ?\n" +
+                "group by sender;";
 
         return this.jdbcTemplate.query(selectSenderListQuery,
                 (rs,rowNum) -> new GetSenderListResponse(
-                        rs.getString("sender");
+                        rs.getString("sender"),
+                        rs.getInt("count")
                 ), userIdx);
     }
 
-    @Override
-    public List<GetPostResponse> selectPostBySender(int userIdx, String sender) {
-        return null;
-    }
-
-     */
-
-
-
-
-
-
-
-
-    /*
-    @Override
-    public List<Tag> getTagList() {
-        return jdbcTemplate.query("select * " +
-                "from (select distinct `tagId` " +
-                "from post " +
-                "where `ueserId` = $`userId`) AS a" +
-                "left join tag AS b" +
-                "on a.`tagId` = b.`tagId`", tagRowMapper()
-        );
-    }
-
-
-    private RowMapper<Tag> tagRowMapper() {
-        return(rs, rowNum)->{
-
-            return tag;
-        };
-    }
-
-
-    @Override
-    public Optional<Post> findByTag(int tagIdx) {
-        List<Post> result = jdbcTemplate.query("select * from post where tagIdx = ?", postRowMapper(), tagIdx);
-        return result.stream().findAny();
-    }
-
-    @Override
-    public Optional<Post> findByDate(int date) {
-        List<Post> result = jdbcTemplate.query("select * from post where date = ?", postRowMapper(), date);
-        return result.stream().findAny();
-    }
 
 
 
     @Override
-    public Optional<Post> findBySender(String sender) {
-        List<Post> result = jdbcTemplate.query("select * from post where sender = ?", postRowMapper(), sender);
-        return result.stream().findAny();
+    public List<GetPostResponse> selectPostBySender(String sender, int userIdx) {
+        String selectPostBySenderQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
+                "from (select *\n" +
+                "      from post\n" +
+                "      where sender=? AND userIdx= ?) as a\n" +
+                "left join tag as b\n" +
+                "on a.tagIdx = b.tagIdx";
+        return this.jdbcTemplate.query(selectPostBySenderQuery,
+                (rs,rowNum) -> new GetPostResponse(
+                        rs.getInt("postIdx"),
+                        rs.getString("sender"),
+                        rs.getTimestamp("date"),
+                        rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor"),
+                        rs.getInt("letterIdx")
+                ), sender, userIdx);
     }
-
-    @Override
-    public Optional<Post> findByPostId(long postIdx) {
-        List<Post> result = jdbcTemplate.query("select * from post where postIdx = ?", postRowMapper(), postIdx);
-        return result.stream().findAny();
-    }
-
-    private RowMapper<Post> postRowMapper(){
-        return(rs, rowNum)->{
-            Post post = new Post();
-            post.setPostIdx(rs.getInt("postIdx"));
-            post.setSender(rs.getString("sender"));
-            post.setDate(rs.getInt("date"));
-            post.setTagIdx(rs.getInt("tagIdx"));
-            post.setContent(rs.getString("content"));
-            post.setLetterIdx(rs.getInt("letterIdx"));
-            return post;
-        };
-    }
-
-     */
 
 }
