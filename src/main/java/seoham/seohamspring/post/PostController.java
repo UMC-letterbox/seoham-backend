@@ -5,8 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
-import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
+
+import java.util.List;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
@@ -79,7 +80,7 @@ public class PostController {
     }
 
     /*
-    *게시물 상세 조회 페이지
+    *편지 조회
      */
     /*
     @GetMapping("/{postIdx}")
@@ -93,30 +94,37 @@ public class PostController {
      */
 
     /*
-    게시물 태그 목록 조회 페이지
+    태그 목록 조회 페이지
      */
-    /*
-    @GetMapping("/tags")
-    public String tagList(Model model) {
-        List<Tag> tags = postService.TagList();
-        model.addAttribute("tags",tags);
-        return "posts/tagList";
-    }
 
-     */
+    @ResponseBody
+    @GetMapping("/tags")
+    public BaseResponse<List<GetTagListResponse>> getTagList(@RequestParam int userIdx) {
+        try{
+            List<GetTagListResponse> getTagListResponse = postService.readTagList(userIdx);
+            return new BaseResponse<>(getTagListResponse);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     /*
     태그별 편지 조회
      */
-    /*
+    @ResponseBody
     @GetMapping("/tags/{tagIdx}")
-    public String listByTag(@PathVariable("tagIdx") int tagIdx,Model model){
-        Optional<Post> postsByTag = postService.findByTag(tagIdx);
+    public BaseResponse<List<GetPostResponse>> getPostByTag(@PathVariable("tagIdx") int tagIdx) {
+        try{
+            List<GetPostResponse> getPostResponse = postService.readPostByTag(tagIdx);
+            return new BaseResponse<>(getPostResponse);
 
-        return "posts/listByTag";
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
 
-     */
+
 
 
     /*

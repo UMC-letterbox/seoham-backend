@@ -9,10 +9,13 @@ import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    //private final GetLetterCountResponse getLetterCountResponse;
 
 
     @Autowired
@@ -104,9 +107,9 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int checkTagNotExist(int postIdx) {
+    public int checkTagNotExist(int tagIdx) {
         String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =?)";
-        int checkTagNotExistParams = postIdx;
+        int checkTagNotExistParams = tagIdx;
 
 
         return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
@@ -136,6 +139,61 @@ public class PostRepositoryImpl implements PostRepository {
         Object [] changeSenderParmas = new Object[]{deleteSenderRequest.getUserIdx(), sender};
         return this.jdbcTemplate.update(changeSenderQuery, changeSenderParmas);
     }
+
+    @Override
+    public List<GetTagListResponse> selectTagList(int userIdx) {
+        String selectTagListQuery = "SELECT * FROM tag WHERE userIdx =?";
+
+        return this.jdbcTemplate.query(selectTagListQuery,
+                (rs,rowNum) -> new GetTagListResponse(
+                        rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor")
+                ), userIdx);
+    }
+
+    @Override
+    public List<GetPostResponse> selectPostByTag(int tagIdx) {
+        String selectPostByTagQuery = "SELECT * FROM post WHERE tagIdx =?";
+        return this.jdbcTemplate.query(selectPostByTagQuery,
+                (rs,rowNum) -> new GetPostResponse(
+                        rs.getInt("postIdx"),
+                        rs.getString("sender"),
+                        rs.getInt("date"),
+                        rs.getInt("tagIdx"),
+                        rs.getInt("letterIdx")
+                ), tagIdx);
+    }
+
+    /*
+    @Override
+    public List<GetPostResponse> selectPostByDate(int userIdx) {
+        return null;
+    }
+
+    @Override
+    public List<GetSenderListResponse> selectSenderList(int userIdx) {
+        String selectSenderListQuery = "SELECT distinct sender FROM post WHERE userIdx =?";
+        int countOfLetter = this.jdbcTemplate.queryForInt("select count(*) from post where sender = ?", "Joe");
+
+
+        return this.jdbcTemplate.query(selectSenderListQuery,
+                (rs,rowNum) -> new GetSenderListResponse(
+                        rs.getString("sender");
+                ), userIdx);
+    }
+
+    @Override
+    public List<GetPostResponse> selectPostBySender(int userIdx, String sender) {
+        return null;
+    }
+
+     */
+
+
+
+
+
 
 
 
@@ -172,22 +230,7 @@ public class PostRepositoryImpl implements PostRepository {
         return result.stream().findAny();
     }
 
-    @Override
-    public List<Sender> getSenderList() {
-        return jdbcTemplate.query("select distinct `sender`" +
-                "from post" +
-                "where `ueserId` = $`userId`",
-                 senderRowMapper()
-        );
-    }
 
-    private RowMapper<Sender> senderRowMapper() {
-        return(rs, rowNum)->{
-            Sender sender = new Sender();
-            sender.setSender(rs.getString("sender"));
-            return sender;
-        };
-    }
 
     @Override
     public Optional<Post> findBySender(String sender) {
