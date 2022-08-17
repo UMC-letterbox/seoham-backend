@@ -14,7 +14,6 @@ import java.util.List;
 public class PostRepositoryImpl implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    //private final GetLetterCountResponse getLetterCountResponse;
 
 
     @Autowired
@@ -24,7 +23,7 @@ public class PostRepositoryImpl implements PostRepository {
 
 
     /*
-     * 게시물 저장
+     * 편지 저장, 수정, 삭제
      */
     @Override
     public int savePost(CreatePostRequest createPostRequest) {
@@ -39,7 +38,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int updatePost(int postIdx, PatchPostRequest patchPostRequest) {
+    public int updatePost(int userIdx, int postIdx, PatchPostRequest patchPostRequest) {
         String updatePostQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
         Object[] updatePostParams = new Object[]{patchPostRequest.getUserIdx(), patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
@@ -47,12 +46,6 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.update(updatePostQuery, updatePostParams);
     }
 
-    @Override
-    public int checkPostExist(int postIdx) {
-        String checkPostExistQuery = "select exists(select postIdx from post where postIdx =?)";
-        int checkPostExistParams = postIdx;
-        return this.jdbcTemplate.queryForObject(checkPostExistQuery, int.class, checkPostExistParams);
-    }
 
 
     @Override
@@ -63,6 +56,8 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.update(deletePostQuery, deletePostParams);
     }
 
+
+    //태그 정보 저장, 수정, 삭제
     @Override
     public int saveTag(CreateTagRequest createTagRequest) {
         String saveTagQuery = "INSERT INTO tag(tagName, tagColor,userIdx) VALUES (?,?,?)";
@@ -95,24 +90,11 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.update(deleteTagQuery, deleteTagParams);
     }
 
-    @Override
-    public int checkTagExist(int userIdx, String tagName) {
-        String checkTagExistQuery = "select exists(select tagIdx from tag where tagName =? AND userIdx = ?)";
-        Object[] checkTagExistParams = new Object[]{tagName, userIdx};
 
 
-        return this.jdbcTemplate.queryForObject(checkTagExistQuery, int.class, checkTagExistParams);
-    }
-
-    @Override
-    public int checkTagNotExist(int userIdx, int tagIdx) {
-        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
-        Object[] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
-
-
-        return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
-    }
-
+    /*
+    보낸이 정보 수정, 삭제
+     */
     @Override
     public int updateSender(String originalSender, PatchSenderRequest patchSenderRequest) {
         String updateSenderQuery = "UPDATE post SET sender = ? where userIdx = ? AND sender =?";
@@ -122,13 +104,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     }
 
-    @Override
-    public int checkSenderExist(int userIdx, String sender) {
-        String checkSenderExistQuery = "select exists(select postIdx from post where userIdx = ? AND sender = ?)";
-        Object[] checkSenderExistParams = new Object[]{userIdx, sender};
 
-        return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
-    }
 
     @Override
     public int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) {
@@ -138,6 +114,10 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.update(changeSenderQuery, changeSenderParmas);
     }
 
+
+    /*
+    조건별 편지 조회
+     */
     @Override
     public List<GetTagListResponse> selectTagList(int userIdx) {
         String selectTagListQuery = "SELECT * FROM tag WHERE userIdx =?";
@@ -227,6 +207,10 @@ public class PostRepositoryImpl implements PostRepository {
                 ), sender, userIdx);
     }
 
+
+    /*
+    편지 조회
+     */
     @Override
     public GetPostContextResponse selectPost(int postIdx) {
 
@@ -252,6 +236,44 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getString("content")
                 ),selectPostParams);
 
+    }
+
+
+
+    /*
+    데이터 유무 확인
+     */
+    @Override
+    public int checkPostExist(int postIdx) {
+        String checkPostExistQuery = "select exists(select postIdx from post where postIdx =?)";
+        int checkPostExistParams = postIdx;
+        return this.jdbcTemplate.queryForObject(checkPostExistQuery, int.class, checkPostExistParams);
+    }
+
+    @Override
+    public int checkTagExist(int userIdx, String tagName) {
+        String checkTagExistQuery = "select exists(select tagIdx from tag where tagName =? AND userIdx = ?)";
+        Object[] checkTagExistParams = new Object[]{tagName, userIdx};
+
+
+        return this.jdbcTemplate.queryForObject(checkTagExistQuery, int.class, checkTagExistParams);
+    }
+
+    @Override
+    public int checkTagNotExist(int userIdx, int tagIdx) {
+        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
+        Object[] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
+
+
+        return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
+    }
+
+    @Override
+    public int checkSenderExist(int userIdx, String sender) {
+        String checkSenderExistQuery = "select exists(select postIdx from post where userIdx = ? AND sender = ?)";
+        Object[] checkSenderExistParams = new Object[]{userIdx, sender};
+
+        return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
     }
 }
 

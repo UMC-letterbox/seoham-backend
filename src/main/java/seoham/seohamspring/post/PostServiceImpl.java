@@ -41,8 +41,12 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
+        if(postRepository.checkTagNotExist(patchPostRequest.getUserIdx(),patchPostRequest.getTagIdx())==0){
+            throw new BaseException(POST_EMPTY_TAG_IDX);
+        }
+
         try{
-            int success = postRepository.updatePost(postIdx, patchPostRequest);
+            int success = postRepository.updatePost(userIdx, postIdx, patchPostRequest);
             if(success == 0){
                 throw new BaseException(MODIFY_FAIL_POST);
             }
@@ -58,6 +62,12 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
+        /*
+        if(postRepository.checkUser(postIdx) != jwtService.getUserIdx()){
+            throw new BaseException(INVALID_USER_JWT);
+        }
+
+         */
         try{
             int success = postRepository.deletePost(postIdx);
             if(success == 0){
