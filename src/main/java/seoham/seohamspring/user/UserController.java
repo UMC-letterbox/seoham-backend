@@ -25,6 +25,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @ResponseBody
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
+    }
+
 
     // 회원가입 API
     // Body
