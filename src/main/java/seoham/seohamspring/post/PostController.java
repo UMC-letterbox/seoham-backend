@@ -13,8 +13,8 @@ import java.util.List;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Controller
-@RequestMapping("/posts")
 @Api(tags = "post")
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired

@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @SpringBootApplication
-@EnableWebMvc
 public class SeohamSpringApplication {
 
 	public static void main(String[] args) {
