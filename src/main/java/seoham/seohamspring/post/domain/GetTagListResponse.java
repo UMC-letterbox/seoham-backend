@@ -7,7 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreatePostResponse {
 
-    private int postIdx;
+public class GetTagListResponse {
+
+    private int tagIdx;
+    private String tagName;
+    private String tagColor;
 }
+

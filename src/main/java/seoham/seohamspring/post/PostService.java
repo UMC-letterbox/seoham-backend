@@ -1,13 +1,11 @@
 package seoham.seohamspring.post;
 
-
-import com.fasterxml.jackson.databind.ser.Serializers;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 @Service
 public interface PostService {
 
@@ -21,18 +19,29 @@ public interface PostService {
     CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException;
     //태그 정보 수정
     PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
+<<<<<<< HEAD
     //DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
+=======
+    //태그 정보 삭제
+    DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws  BaseException;
+    //보낸이 정보 수정
+    PatchSenderResponse modifySender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) throws BaseException;
+    //보낸이 정보 삭제
+    DeleteSenderResponse deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) throws BaseException;
+    //태그 목록 조회
+    List<GetTagListResponse> readTagList(int userIdx) throws BaseException;
+    //태그별 편지 조회
+    List<GetPostResponse> readPostByTag(int tagIdx) throws BaseException;
+    //날짜별 편지조회
+    List<GetPostResponse> readPostByDate(int userIdx) throws BaseException;
+    //보낸이 목록 조회
+    List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException;
+    //보낸이별 편지 조회
+    List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException;
+    //편지 조회
+    GetPostContextResponse readPost(int postIdx) throws BaseException;
+>>>>>>> aa89a4477bdf53c297e6f7b8251f66d208055235
 
-
-    /*
-    List<Tag> TagList();
-    Optional<Post> findByTag(int tagIdx);
-    Optional<Post> findByDate(int date);
-    List<Sender> SenderList();
-    Optional<Post> findBySender(String sender);
-    Optional<Post> findByPostIdx(long postIdx);
-
-     */
 
 
 }

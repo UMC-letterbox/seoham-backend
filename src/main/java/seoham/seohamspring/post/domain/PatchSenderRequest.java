@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreatePostResponse {
+public class PatchSenderRequest {
 
-    private int postIdx;
+    private String changedSender;
+    private int userIdx;
+
+    public PatchSenderRequest(){}
 }

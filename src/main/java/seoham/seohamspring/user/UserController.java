@@ -1,5 +1,6 @@
 package seoham.seohamspring.user;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import static seoham.seohamspring.util.ValidationRegex.isRegexEmail;
 import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
 import seoham.seohamspring.util.JwtService;
 @Controller
+@Api(tags = "user")
 @RequestMapping("/user")
 public class UserController {
 
@@ -26,6 +28,12 @@ public class UserController {
     public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
         this.jwtService = jwtService;
+    }
+
+    @ResponseBody
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
     }
 
 

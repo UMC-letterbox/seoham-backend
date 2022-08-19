@@ -7,9 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Tag {
-
-    private int tagIdx;
-    private String tagName;
-    private String tagColor;
+public class DeleteSenderResponse {
+    private int success;
 }

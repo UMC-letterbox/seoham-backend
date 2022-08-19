@@ -1,15 +1,12 @@
 package seoham.seohamspring.post;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import seoham.seohamspring.config.BaseException;
-import seoham.seohamspring.config.BaseResponseStatus;
 import seoham.seohamspring.post.domain.*;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
@@ -28,6 +25,9 @@ public class PostServiceImpl implements PostService {
     //게시물 작성
     @Override
     public CreatePostResponse createPost(CreatePostRequest createPostRequest) throws BaseException {
+        if(postRepository.checkTagNotExist(createPostRequest.getUserIdx(),createPostRequest.getTagIdx())==0){
+            throw new BaseException(POST_EMPTY_TAG_IDX);
+        }
         try{
             int postIdx = postRepository.savePost(createPostRequest);
             return new CreatePostResponse(postIdx);
@@ -41,8 +41,12 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
+        if(postRepository.checkTagNotExist(patchPostRequest.getUserIdx(),patchPostRequest.getTagIdx())==0){
+            throw new BaseException(POST_EMPTY_TAG_IDX);
+        }
+
         try{
-            int success = postRepository.updatePost(postIdx, patchPostRequest);
+            int success = postRepository.updatePost(userIdx, postIdx, patchPostRequest);
             if(success == 0){
                 throw new BaseException(MODIFY_FAIL_POST);
             }
@@ -58,6 +62,12 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
+        /*
+        if(postRepository.checkUser(postIdx) != jwtService.getUserIdx()){
+            throw new BaseException(INVALID_USER_JWT);
+        }
+
+         */
         try{
             int success = postRepository.deletePost(postIdx);
             if(success == 0){
@@ -100,40 +110,125 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    /*
     @Override
-    public List<Tag> TagList() {
-        return postRepository.getTagList();
+    public DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws BaseException {
+        if(postRepository.checkTagNotExist(userIdx, tagIdx)==0){
+            throw new BaseException(POST_EMPTY_TAG_IDX);
+        }
+        try{
+            int success = postRepository.deleteTag(tagIdx);
+            if(success == 0){
+                throw new BaseException(DELETE_FAIL_TAG);
+            }
+            return new DeleteTagResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Override
-    public Optional<Post> findByTag(int tagIdx) {
-        return postRepository.findByTag(tagIdx);
+    public PatchSenderResponse modifySender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) throws BaseException {
+        if(postRepository.checkSenderExist(userIdx, originalSender)==0){
+            throw new BaseException(POST_EMPTY_SENDER);
+        }
+        try{
+            int success = postRepository.updateSender(originalSender, patchSenderRequest);
+            if(success == 0){
+                throw new BaseException(MODIFY_FAIL_SENDER);
+            }
+            return new PatchSenderResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Override
-    public Optional<Post> findByDate(int date) {
-        return postRepository.findByDate(date);
+    public DeleteSenderResponse deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) throws BaseException {
+        if(postRepository.checkSenderExist(deleteSenderRequest.getUserIdx(), sender)==0){
+            throw new BaseException(POST_EMPTY_SENDER);
+        }
+        try{
+            int success = postRepository.deleteSender(sender, deleteSenderRequest);
+            if(success == 0){
+                throw new BaseException(DELETE_FAIL_SENDER);
+            }
+            return new DeleteSenderResponse(success);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+
+    @Override
+    public List<GetTagListResponse> readTagList(int userIdx) throws BaseException {
+        try{
+            List<GetTagListResponse> getTagList = postRepository.selectTagList(userIdx);
+            System.out.println(getTagList.size());
+
+            return getTagList;
+        }catch (Exception exception){
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Override
-    public List<Sender> SenderList() {
-        return postRepository.getSenderList();
+    public List<GetPostResponse> readPostByTag(int tagIdx) throws BaseException {
+        try{
+            List<GetPostResponse> getPostResponse = postRepository.selectPostByTag(tagIdx);
+            return getPostResponse;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
-
-    @Override
-    public Optional<Post> findBySender(String sender) {
-        return postRepository.findBySender(sender);
-    }
-
-
-
 
 
     @Override
-    public Optional<Post> findByPostIdx(long postIdx) {
-        return postRepository.findByPostId(postIdx);
+    public List<GetPostResponse> readPostByDate(int userIdx) throws BaseException {
+        try{
+            List<GetPostResponse> getPostResponse = postRepository.selectPostByDate(userIdx);
+            return getPostResponse;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
-     */
+
+
+    @Override
+    public List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException {
+        try{
+            List<GetSenderListResponse> getSenderList = postRepository.selectSenderList(userIdx);
+
+            return getSenderList;
+        }catch (Exception exception){
+
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
+    @Override
+    public List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException {
+        try {
+            List<GetPostResponse> getPostResponse = postRepository.selectPostBySender(sender, userIdx);
+            return getPostResponse;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Override
+    public GetPostContextResponse readPost(int postIdx) throws BaseException {
+        try {
+            GetPostContextResponse getPostContextResponse = postRepository.selectPost(postIdx);
+            return getPostContextResponse;
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }

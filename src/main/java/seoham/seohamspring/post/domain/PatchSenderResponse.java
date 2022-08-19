@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreatePostResponse {
+public class PatchSenderResponse {
 
-    private int postIdx;
+    private int success;
 }

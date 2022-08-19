@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Sender {
+
+public class GetSenderListResponse {
 
     private String sender;
+    private int count;
 }

@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreatePostResponse {
+public class DeleteSenderRequest {
 
-    private int postIdx;
+    private int userIdx;
+
+    public DeleteSenderRequest(){}
 }
