@@ -21,6 +21,8 @@ dependencies {
 	implementation 'mysql:mysql-connector-java' // MySql
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor('org.projectlombok:lombok')
+
+
 }
 
 tasks.named('test') {
