@@ -65,14 +65,14 @@ public class UserServiceImpl implements UserService {
     /*
     이메일 중복검사
      */
-    public CheckEmailResponse checkEmail(String email) throws BaseException{
+    public boolean checkEmail(String email) throws BaseException{
         try{
             boolean valid = true;
             int exist = userRepository.checkEmail(email);
             if (exist != 0){
                 valid = false;
             }
-            return new CheckEmailResponse(valid);
+            return valid;
 
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -81,14 +81,14 @@ public class UserServiceImpl implements UserService {
     /*
     닉네임 중복검사
      */
-    public CheckNickNameResponse checkNickName(String nickName) throws BaseException{
+    public boolean checkNickName(String nickName) throws BaseException{
         try{
             boolean valid  = true;
             int exist = userRepository.checkNickName(nickName);
             if (exist != 0){
                 valid = false;
             }
-            return new CheckNickNameResponse(valid);
+            return valid;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

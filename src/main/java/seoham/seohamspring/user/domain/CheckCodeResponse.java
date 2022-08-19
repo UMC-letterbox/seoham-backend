@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CheckEmailResponse {
+public class CheckCodeResponse {
     private boolean valid;
 }
