@@ -11,8 +11,7 @@ import seoham.seohamspring.user.domain.*;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 import static seoham.seohamspring.util.ValidationRegex.isRegexEmail;
 import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
-import static seoham.seohamspring.util.JwtService;
-
+import seoham.seohamspring.util.JwtService;
 @Controller
 @RequestMapping("/user")
 public class UserController {

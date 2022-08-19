@@ -12,7 +12,7 @@ import seoham.seohamspring.util.JwtService;
 import seoham.seohamspring.util.SHA256;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
-import static seoham.seohamspring.util.JwtService;
+import seoham.seohamspring.util.JwtService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -146,6 +146,7 @@ public class UserServiceImpl implements UserService {
         }
         if(user.getPassWord().equals(encryptPwd)){
             int userIdx=user.getUserIdx();
+            System.out.println(userIdx);
             String jwt =jwtService.createJwt(userIdx);
             return new LoginUserResponse(userIdx,jwt);
         }
