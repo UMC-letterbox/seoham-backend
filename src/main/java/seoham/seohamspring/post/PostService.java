@@ -19,9 +19,7 @@ public interface PostService {
     CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException;
     //태그 정보 수정
     PatchTagResponse modifyTag(int userIdx, int tagIdx, PatchTagRequest patchTagRequest) throws BaseException;
-<<<<<<< HEAD
-    //DeleteTagResponse deleteTag(int tagIdx) throws  BaseException;
-=======
+
     //태그 정보 삭제
     DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws  BaseException;
     //보낸이 정보 수정
@@ -40,7 +38,7 @@ public interface PostService {
     List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException;
     //편지 조회
     GetPostContextResponse readPost(int postIdx) throws BaseException;
->>>>>>> aa89a4477bdf53c297e6f7b8251f66d208055235
+
 
 
 

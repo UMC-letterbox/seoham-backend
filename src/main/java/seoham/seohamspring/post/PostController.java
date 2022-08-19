@@ -212,14 +212,11 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-<<<<<<< HEAD
-    /*
-=======
 
     /*
     태그 정보 삭제
      */
->>>>>>> aa89a4477bdf53c297e6f7b8251f66d208055235
+
     @ResponseBody
     @DeleteMapping("/tags/delete/{tagIdx}")
     public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx, @RequestParam int userIdx){
@@ -231,10 +228,7 @@ public class PostController {
         }
     }
 
-<<<<<<< HEAD
-     */
 
-=======
     /*
     보낸이 정보 수정
      */
@@ -266,5 +260,4 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
->>>>>>> aa89a4477bdf53c297e6f7b8251f66d208055235
 }
