@@ -1,5 +1,6 @@
 package seoham.seohamspring.user;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
 
 
 @Controller
+@Api(tags = "user")
 @RequestMapping("/user")
 public class UserController {
 
