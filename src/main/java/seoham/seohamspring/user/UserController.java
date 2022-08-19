@@ -12,8 +12,7 @@ import seoham.seohamspring.user.domain.*;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 import static seoham.seohamspring.util.ValidationRegex.isRegexEmail;
 import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
-
-
+import seoham.seohamspring.util.JwtService;
 @Controller
 @Api(tags = "user")
 @RequestMapping("/user")
@@ -22,9 +21,13 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private final JwtService jwtService;
+
     //@Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @ResponseBody
@@ -57,11 +60,11 @@ public class UserController {
     }
 
 
-     //이메일 중복검사
+     //이메일 중복검사 회원가입용
     // Body
     @ResponseBody
-    @GetMapping("/check-email")
-    public BaseResponse<CheckEmailResponse> checkEmail(@RequestParam String email) {
+    @GetMapping("/check-join")
+    public BaseResponse<CheckJoinResponse> checkJoinEmail(@RequestParam String email) {
         if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
         }
@@ -69,20 +72,19 @@ public class UserController {
             return new BaseResponse<>(CHECK_USER_INVALID_EMAIL);
         }
         try{
-            CheckEmailResponse checkEmailResponse = userService.checkEmail(email);
-            return new BaseResponse<>(checkEmailResponse);
+            boolean vaild = userService.checkEmail(email);
+            CheckJoinResponse checkJoinResponse = new CheckJoinResponse(vaild);
+            return new BaseResponse<>(checkJoinResponse);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }
 
-
-
-    //닉네임 중복검사
+    //닉네임 중복검사 회원가입용
     // Body
     @ResponseBody
-    @GetMapping("/check-nickname")
-    public BaseResponse<CheckNickNameResponse> checkNickName(@RequestParam String nickName) {
+    @GetMapping("/check-join")
+    public BaseResponse<CheckJoinResponse> checkJoinNickName(@RequestParam String nickName) {
         if(nickName == ""){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
         }
@@ -90,8 +92,9 @@ public class UserController {
             return new BaseResponse<>(CHECK_USER_INVALID_NICKNAME);
         }
         try{
-            CheckNickNameResponse checkNickNameResponse = userService.checkNickName(nickName);
-            return new BaseResponse<>(checkNickNameResponse);
+            boolean vaild = userService.checkNickName(nickName);
+            CheckJoinResponse checkJoinResponse = new CheckJoinResponse(vaild);
+            return new BaseResponse<>(checkJoinResponse);
 
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -99,20 +102,42 @@ public class UserController {
     }
 
 
-    // * 로그인 API
+    //이메일 중복검사  비밀번호 찾기용
     // Body
     @ResponseBody
-    @PostMapping("/login")
-    public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
-        if(loginUserRequest.getEmail() == null){
-            return new BaseResponse<>(CREATE_USER_EMPTY_EMAIL);
+    @GetMapping("/check-find")
+    public BaseResponse<CheckFindResponse> checkFindEmail(@RequestParam String email) {
+        if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하
+            return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
         }
-        if(loginUserRequest.getPassWord() == null){
-            return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
+        if(!isRegexEmail(email)){
+            return new BaseResponse<>(CHECK_USER_INVALID_EMAIL);
         }
         try{
-            LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
-            return new BaseResponse<>(loginUserResponse);
+            boolean exist = !userService.checkEmail(email);
+            CheckFindResponse checkFindResponse = new CheckFindResponse(exist);
+            return new BaseResponse<>(checkFindResponse);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    //닉네임 중복검사  아이디찾기용
+    // Body
+    @ResponseBody
+    @GetMapping("/check-find")
+    public BaseResponse<CheckFindResponse> checkFindNickName(@RequestParam String nickName) {
+        if(nickName == ""){
+            return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
+        }
+        if(!isRegexNickName(nickName)){
+            return new BaseResponse<>(CHECK_USER_INVALID_NICKNAME);
+        }
+        try{
+            boolean exist = !userService.checkNickName(nickName);
+            CheckFindResponse checkFindResponse = new CheckFindResponse(exist);
+            return new BaseResponse<>(checkFindResponse);
+
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -120,7 +145,24 @@ public class UserController {
 
 
 
-     //  이메일 찾기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //  이메일 찾기
     // Body
     @ResponseBody
     @GetMapping("/find-email")
@@ -164,4 +206,63 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /*
+    로그인
+     */
+
+    @ResponseBody
+    @PostMapping("/login")
+    public BaseResponse<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest){
+        try{
+            if(loginUserRequest.getEmail() == ""){
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            if(!isRegexEmail(loginUserRequest.getEmail())){
+                return new BaseResponse<>(CREATE_USER_INVALID_EMAIL);
+            }
+
+            if(loginUserRequest.getPassWord()==""){
+                return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
+            }
+            LoginUserResponse loginUserResponse = userService.loginUser(loginUserRequest);
+            return new BaseResponse<>(loginUserResponse);
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+    // 인증코드 확인용
+    // Body
+    @ResponseBody
+    @GetMapping("/check-code")
+    public BaseResponse<CheckCodeResponse> checkFindEmail(@RequestBody CheckCodeRequest checkCodeRequest) {
+        boolean valid = false;
+        if(checkCodeRequest.getNum() == 123456){valid = true;}
+        CheckCodeResponse checkCodeResponse = new CheckCodeResponse(valid);
+        return new BaseResponse<>(checkCodeResponse);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+

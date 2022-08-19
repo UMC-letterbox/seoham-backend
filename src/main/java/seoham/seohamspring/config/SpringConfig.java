@@ -15,6 +15,7 @@ import seoham.seohamspring.user.UserRepository;
 import seoham.seohamspring.user.UserRepositoryImpl;
 import seoham.seohamspring.user.UserService;
 import seoham.seohamspring.user.UserServiceImpl;
+import seoham.seohamspring.util.JwtService;
 
 import javax.sql.DataSource;
 
@@ -31,7 +32,7 @@ public class SpringConfig {
 
     @Bean
     public UserService userService(){
-        return new UserServiceImpl(userRepository());
+        return new UserServiceImpl(userRepository(), new JwtService());
     }
     @Bean
     public UserRepository userRepository(){

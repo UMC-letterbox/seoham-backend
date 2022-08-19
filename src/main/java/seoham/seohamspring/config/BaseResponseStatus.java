@@ -24,7 +24,7 @@ public enum BaseResponseStatus {
     CREATE_USER_EMPTY_EMAIL(false, 2000, "이메일을 입력해주세요."),
     CREATE_USER_EMPTY_NICKNAME(false, 2001, "닉네임을 입력해주세요."),
     CREATE_USER_EMPTY_PASSWORD(false, 2002, "비밀번호를 입력해주세요."),
-    CREATE_USERS_INVALID_EMAIL(false, 2003, "이메일 형식을 확인해주세요."),
+    CREATE_USER_INVALID_EMAIL(false, 2003, "이메일 형식을 확인해주세요."),
 
 
     CHECK_USER_EMPTY_EMAIL(false, 2010, "이메일을 입력해주세요."),
@@ -117,9 +117,10 @@ public enum BaseResponseStatus {
 
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
-
+    INVALID_JWT(false,5000,"jwt 실패"),
+    EMPTY_JWT(false,5001 ,"jwt 비어있습니다." );
 
 
 

@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.user.domain.*;
+import seoham.seohamspring.util.JwtService;
+import seoham.seohamspring.util.SHA256;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
+import seoham.seohamspring.util.JwtService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,14 +20,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository){
+    private final JwtService jwtService;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, JwtService jwtService){
 
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     //회원가입
     @Override
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) throws BaseException {
+/*
         try{
             int userIdx = userRepository.createUser(createUserRequest);
             return new CreateUserResponse(userIdx);
@@ -32,18 +40,39 @@ public class UserServiceImpl implements UserService {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+*/
+
+        String pwd;
+        try{
+            pwd = new SHA256().encrypt(createUserRequest.getPassWord());
+            createUserRequest.setPassWord(pwd);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+        try{
+            int userIdx = userRepository.createUser(createUserRequest);
+            return new CreateUserResponse(userIdx);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
+
+
+
     }
     /*
     이메일 중복검사
      */
-    public CheckEmailResponse checkEmail(String email) throws BaseException{
+    public boolean checkEmail(String email) throws BaseException{
         try{
             boolean valid = true;
             int exist = userRepository.checkEmail(email);
             if (exist != 0){
                 valid = false;
             }
-            return new CheckEmailResponse(valid);
+            return valid;
 
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -52,30 +81,19 @@ public class UserServiceImpl implements UserService {
     /*
     닉네임 중복검사
      */
-    public CheckNickNameResponse checkNickName(String nickName) throws BaseException{
+    public boolean checkNickName(String nickName) throws BaseException{
         try{
             boolean valid  = true;
             int exist = userRepository.checkNickName(nickName);
             if (exist != 0){
                 valid = false;
             }
-            return new CheckNickNameResponse(valid);
+            return valid;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-
-    //로그인
-    public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) throws BaseException {
-        try{
-            int userIdx = userRepository.loginUser(loginUserRequest);
-            return new LoginUserResponse(userIdx);
-        } catch (Exception exception) {
-            //System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     /*
     이메일 찾기
@@ -110,6 +128,30 @@ public class UserServiceImpl implements UserService {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+
+    /*
+    로그인
+     */
+
+    public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) throws BaseException {
+        User user=userRepository.getUser(loginUserRequest);
+        String encryptPwd;
+        try{
+            encryptPwd=new SHA256().encrypt(loginUserRequest.getPassWord());
+        } catch(Exception exception) {
+            System.out.println(exception);
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+        if(user.getPassWord().equals(encryptPwd)){
+            int userIdx=user.getUserIdx();
+            System.out.println(userIdx);
+            String jwt =jwtService.createJwt(userIdx);
+            return new LoginUserResponse(userIdx,jwt);
+        }
+        else
+            throw new BaseException(FAILED_TO_LOGIN);
     }
 
 }

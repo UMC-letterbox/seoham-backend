@@ -12,8 +12,10 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userIdx;
+
+    private int userIdx;
+    private String email;
+    private String passWord;
+    private String nickName;
 
 }

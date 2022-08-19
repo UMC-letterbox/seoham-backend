@@ -10,12 +10,11 @@ public interface UserService {
     //회원가입
     CreateUserResponse createUser(CreateUserRequest createUserRequest) throws BaseException;
 
-    public CheckEmailResponse checkEmail(String email) throws BaseException;
-    public CheckNickNameResponse checkNickName(String nickName)throws BaseException;
+    public boolean checkEmail(String email) throws BaseException;
+    public boolean checkNickName(String nickName)throws BaseException;
 
     // 로그인
-    LoginUserResponse loginUser(LoginUserRequest loginUserRequest) throws BaseException;
-
+    public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) throws BaseException;
 
 
     public FindEmailResponse findEmail(String nickName) throws BaseException;
