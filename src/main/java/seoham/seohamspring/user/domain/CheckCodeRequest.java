@@ -8,4 +8,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CheckCodeRequest {
     private int num;
+    public CheckCodeRequest(){
+
+    }
+
 }

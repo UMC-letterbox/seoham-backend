@@ -237,9 +237,9 @@ public class UserController {
     // Body
     @ResponseBody
     @GetMapping("/check-code")
-    public BaseResponse<CheckCodeResponse> checkFindEmail(@RequestBody CheckCodeRequest checkCodeRequest) {
+    public BaseResponse<CheckCodeResponse> checkCode(@RequestBody CheckCodeRequest checkCodeRequest) {
         boolean valid = false;
-        if(checkCodeRequest.getNum() == 123456){valid = true;}
+        if(checkCodeRequest.getNum() == 123456){valid = true; System.out.println("true");}
         CheckCodeResponse checkCodeResponse = new CheckCodeResponse(valid);
         return new BaseResponse<>(checkCodeResponse);
     }
