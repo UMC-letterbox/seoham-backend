@@ -4,12 +4,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.mypage.domain.PatchNicknameReq;
 import seoham.seohamspring.mypage.domain.PatchPasswordReq;
 import seoham.seohamspring.mypage.domain.PostCheckNicknameReq;
 import seoham.seohamspring.mypage.domain.PostCheckPasswordReq;
 import seoham.seohamspring.util.JwtService;
+
+import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Controller
 @RequestMapping("/mypage")
@@ -21,8 +24,9 @@ public class MypageController {
     private final JwtService jwtService;
 
     @Autowired
-    public MypageController(MypageService mypageService) {
+    public MypageController(MypageService mypageService, JwtService jwtService) {
         this.mypageService = mypageService;
+        this.jwtService = jwtService;
     }
 
     //닉네임 중복검사
@@ -35,24 +39,25 @@ public class MypageController {
 
         try {
             return new BaseResponse<>(mypageService.chekcNickname(postCheckNicknameReq));
-        } catch (Exception e) {
-            throw new BaseResponse<>(e.getStatus());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
         }
+
     }
 
     //비밀번호 확인
     @ResponseBody
     @PostMapping("/")
     public BaseResponse<Integer> checkPassword(@Validated @RequestBody PostCheckPasswordReq postCheckPasswordReq) {
-        if (postCheckPasswordReq.getPassword() == null) {
+        if (postCheckPasswordReq == null) {
             return new BaseResponse<>(POST_MYPAGE_EMPTY_PASSWORD);
         }
 
         try {
             int userIdx = jwtService.getUserIdx();
             return new BaseResponse<>(mypageService.checkPassword(postCheckPasswordReq, userIdx));
-        } catch (Exception e) {
-            throw new BaseResponse<>(e.getStatus());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
         }
     }
 
@@ -68,8 +73,8 @@ public class MypageController {
         try {
             int userIdx = jwtService.getUserIdx();
             return new BaseResponse<>(mypageService.modifyNickname(patchNicknameReq, userIdx));
-        } catch (Exception e) {
-            throw new BaseResponse<>(e.getStatus());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
         }
 
     }
@@ -86,8 +91,8 @@ public class MypageController {
         try {
             int userIdx = jwtService.getUserIdx();
             return new BaseResponse<>(mypageService.modifyPassword(patchPasswordReq, userIdx));
-        } catch (Exception e) {
-            throw new BaseResponse<>(e.getStatus());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
         }
 
     }
@@ -99,8 +104,8 @@ public class MypageController {
         try {
             int userIdx = jwtService.getUserIdx();
             return new BaseResponse<>(mypageService.deleteUser(userIdx));
-        } catch (Exception e) {
-            throw new BaseResponse<>(e.getStatus());
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
         }
     }
 
