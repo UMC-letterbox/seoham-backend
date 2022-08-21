@@ -1,8 +1,9 @@
 package seoham.seohamspring.mypage;
 
+import org.springframework.stereotype.Repository;
 import seoham.seohamspring.mypage.domain.*;
 
-/*
+@Repository
 public interface MypageRepository {
 
     //닉네임 중복검사
@@ -22,6 +23,4 @@ public interface MypageRepository {
 
 
 }
-<<<<<<< HEAD
-*/
 
