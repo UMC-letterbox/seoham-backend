@@ -129,7 +129,7 @@ public enum BaseResponseStatus {
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
-    INVALID_JWT(false,q5000,"jwt 실패"),
+    INVALID_JWT(false,5000,"jwt 실패"),
     EMPTY_JWT(false,5001 ,"jwt 비어있습니다." );
 
 
