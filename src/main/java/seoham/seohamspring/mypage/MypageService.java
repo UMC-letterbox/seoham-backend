@@ -1,6 +1,9 @@
 package seoham.seohamspring.mypage;
+import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.mypage.domain.*;
+
+@Service
 public interface MypageService {
 
     //닉네임 중복검사
