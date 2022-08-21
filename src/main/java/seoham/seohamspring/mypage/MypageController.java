@@ -1,5 +1,4 @@
 package seoham.seohamspring.mypage;
-/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -10,6 +9,7 @@ import seoham.seohamspring.mypage.domain.PatchNicknameReq;
 import seoham.seohamspring.mypage.domain.PatchPasswordReq;
 import seoham.seohamspring.mypage.domain.PostCheckNicknameReq;
 import seoham.seohamspring.mypage.domain.PostCheckPasswordReq;
+import seoham.seohamspring.util.JwtService;
 
 @Controller
 @RequestMapping("/mypage")
@@ -107,5 +107,3 @@ public class MypageController {
 
 
 }
-<<<<<<< HEAD
-*/

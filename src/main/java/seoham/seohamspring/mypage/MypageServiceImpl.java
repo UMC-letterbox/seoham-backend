@@ -1,15 +1,10 @@
 package seoham.seohamspring.mypage;
-/*
 import org.springframework.beans.factory.annotation.Autowired;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.mypage.domain.*;
-<<<<<<< HEAD
-/*
-=======
 
 import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
 
->>>>>>> 51b7e8ddbcedc1b98ea30f4c6aa0354229fd1a97
 public class MypageServiceImpl implements MypageService{
 
     private final MypageRepository mypageRepository;
@@ -24,7 +19,7 @@ public class MypageServiceImpl implements MypageService{
     public int chekcNickname(PostCheckNicknameReq postCheckNicknameReq) throws BaseException{
         int result;
         try {
-            return mypageRepository.checkEmail(postCheckNicknameReq);
+            return mypageRepository.checkNickname(postCheckNicknameReq);
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -74,9 +69,9 @@ public class MypageServiceImpl implements MypageService{
 
     @Override
     public String deleteUser(int userIdx) throws BaseException{
-        int result;
+        int result = 0;
         try {
-            mypageRepository.deleteUser(userIdx);
+            result = mypageRepository.deleteUser(userIdx);
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -88,5 +83,4 @@ public class MypageServiceImpl implements MypageService{
         return "유저 정보가 삭제되었습니다";
     }
 }
-*/
 

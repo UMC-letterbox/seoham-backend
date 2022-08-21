@@ -1,11 +1,9 @@
 package seoham.seohamspring.mypage;
-/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import seoham.seohamspring.mypage.domain.*;
 
 import javax.sql.DataSource;
-/*
 public class MypageRepositoryImpl implements MypageRepository{
 
     private final JdbcTemplate jdbcTemplate;
@@ -75,6 +73,4 @@ public class MypageRepositoryImpl implements MypageRepository{
 
 }
 
-<<<<<<< HEAD
-*/
 
