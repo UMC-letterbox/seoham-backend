@@ -14,5 +14,9 @@ public class LoginUserRequest {
     private String email;
 
     private String passWord;
+    public LoginUserRequest(){
+
+    }
+
 
 }
