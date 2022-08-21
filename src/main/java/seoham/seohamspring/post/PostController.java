@@ -213,6 +213,7 @@ public class PostController {
         }
     }
 
+
     /*
     태그 정보 삭제
      */
@@ -227,7 +228,6 @@ public class PostController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
 
     /*
     보낸이 정보 수정

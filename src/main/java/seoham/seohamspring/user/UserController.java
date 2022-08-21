@@ -63,7 +63,7 @@ public class UserController {
      //이메일 중복검사 회원가입용
     // Body
     @ResponseBody
-    @GetMapping("/check-join")
+    @GetMapping("/check-join-email")
     public BaseResponse<CheckJoinResponse> checkJoinEmail(@RequestParam String email) {
         if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
@@ -83,7 +83,7 @@ public class UserController {
     //닉네임 중복검사 회원가입용
     // Body
     @ResponseBody
-    @GetMapping("/check-join")
+    @GetMapping("/check-join-nickname")
     public BaseResponse<CheckJoinResponse> checkJoinNickName(@RequestParam String nickName) {
         if(nickName == ""){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
@@ -105,7 +105,7 @@ public class UserController {
     //이메일 중복검사  비밀번호 찾기용
     // Body
     @ResponseBody
-    @GetMapping("/check-find")
+    @GetMapping("/check-find-password")
     public BaseResponse<CheckFindResponse> checkFindEmail(@RequestParam String email) {
         if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
@@ -125,7 +125,7 @@ public class UserController {
     //닉네임 중복검사  아이디찾기용
     // Body
     @ResponseBody
-    @GetMapping("/check-find")
+    @GetMapping("/check-find-email")
     public BaseResponse<CheckFindResponse> checkFindNickName(@RequestParam String nickName) {
         if(nickName == ""){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
@@ -237,9 +237,9 @@ public class UserController {
     // Body
     @ResponseBody
     @GetMapping("/check-code")
-    public BaseResponse<CheckCodeResponse> checkFindEmail(@RequestBody CheckCodeRequest checkCodeRequest) {
+    public BaseResponse<CheckCodeResponse> checkCode(@RequestBody CheckCodeRequest checkCodeRequest) {
         boolean valid = false;
-        if(checkCodeRequest.getNum() == 123456){valid = true;}
+        if(checkCodeRequest.getNum() == 123456){valid = true; System.out.println("true");}
         CheckCodeResponse checkCodeResponse = new CheckCodeResponse(valid);
         return new BaseResponse<>(checkCodeResponse);
     }
