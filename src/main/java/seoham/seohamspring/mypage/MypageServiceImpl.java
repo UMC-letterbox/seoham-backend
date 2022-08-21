@@ -1,10 +1,13 @@
 package seoham.seohamspring.mypage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.mypage.domain.*;
+import seoham.seohamspring.config.BaseException;
 
-import static seoham.seohamspring.config.BaseResponseStatus.DATABASE_ERROR;
+import static seoham.seohamspring.config.BaseResponseStatus.*;
 
+@Service
 public class MypageServiceImpl implements MypageService{
 
     private final MypageRepository mypageRepository;
