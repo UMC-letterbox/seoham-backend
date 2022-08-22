@@ -42,14 +42,14 @@ public class MypageRepositoryImpl implements MypageRepository{
     public int modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
         String query = "update user set nickName = ? where userIdx = ?";
         Object[] params = new Object[]{patchNicknameReq.getNewNickname(), userIdx};
-        return jdbcTemplate.update(query);
+        return jdbcTemplate.update(query, int.class, params);
     }
 
     @Override
     public int modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
         String query = "update user set passWord = ? where userIdx = ?";
         Object[] params = new Object[]{patchPasswordReq.getNewPassword(), userIdx};
-        return jdbcTemplate.update(query);
+        return jdbcTemplate.update(query, int.class, params);
 
     }
 
