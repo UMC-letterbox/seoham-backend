@@ -7,15 +7,4 @@ public class PostCheckPasswordReq {
 
     private int password;
 
-    public PostCheckPasswordReq(int password) {
-        this.password = password;
-    }
-
-    public int getPassword() {
-        return password;
-    }
-
-    public void setPassword(int password) {
-        this.password = password;
-    }
 }

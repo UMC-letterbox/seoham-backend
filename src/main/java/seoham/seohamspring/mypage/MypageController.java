@@ -1,6 +1,8 @@
 package seoham.seohamspring.mypage;
+
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +16,7 @@ import seoham.seohamspring.mypage.domain.PostCheckPasswordReq;
 import seoham.seohamspring.util.JwtService;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
+
 
 @Controller
 @Api(tags = "mypage")
@@ -53,13 +56,14 @@ public class MypageController {
 
     }
 
-    //비밀번호 확인
+    //    비밀번호 확인
     @ResponseBody
     @PostMapping("/password/check")
-    public BaseResponse<Integer> checkPassword(@Validated @RequestBody PostCheckPasswordReq postCheckPasswordReq) {
-//        if (postCheckPasswordReq == null) {
-//            return new BaseResponse<>(POST_MYPAGE_EMPTY_PASSWORD);
-//        }
+    public BaseResponse<Integer> checkPassword(@RequestBody PostCheckPasswordReq postCheckPasswordReq) {
+
+        if (postCheckPasswordReq == null) {
+            return new BaseResponse<>(POST_MYPAGE_EMPTY_PASSWORD);
+        }
 
         try {
             int userIdx = jwtService.getUserIdx();
