@@ -114,10 +114,15 @@ public class UserServiceImpl implements UserService {
     비밀번호 찾기
      */
     public FindPassWordResponse findPassWord(FindPassWordRequest findPassWordRequest) throws BaseException{
+
+        String pwd;
+
         if(userRepository.checkEmail(findPassWordRequest.getEmail()) != 1){
             throw new BaseException(FIND_USER_NO_EMAIL);
         }
         try{
+            pwd = SHA256.encrypt(findPassWordRequest.getPassWord());
+            findPassWordRequest.setPassWord(pwd);
             boolean success = true;
             int result = userRepository.findPassWord(findPassWordRequest);
             if(result == 0){
