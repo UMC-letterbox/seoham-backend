@@ -19,19 +19,35 @@ public class MypageServiceImpl implements MypageService{
 
 
     @Override
-    public int chekcNickname(PostCheckNicknameReq postCheckNicknameReq) throws BaseException{
+    public PostCheckValidRes chekcNickname(PostCheckNicknameReq postCheckNicknameReq) throws BaseException{
         int result;
         try {
-            return mypageRepository.checkNickname(postCheckNicknameReq);
+            PostCheckValidRes postCheckValidRes = null;
+
+
+            if (mypageRepository.checkNickname(postCheckNicknameReq) == 0) {
+                postCheckValidRes.setValid(true);
+            } else {
+                postCheckValidRes.setValid(false);
+            }
+
+            return postCheckValidRes;
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     @Override
-    public int checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx) throws BaseException{
+    public PostCheckValidRes checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx) throws BaseException{
         try {
-            return mypageRepository.checkPassword(postCheckPasswordReq, userIdx);
+            PostCheckValidRes postCheckValidRes = null;
+
+            if (mypageRepository.checkPassword(postCheckPasswordReq, userIdx) == 0) {
+                postCheckValidRes.setValid(true);
+            } else {
+                postCheckValidRes.setValid(false);
+            }
+            return postCheckValidRes;
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }

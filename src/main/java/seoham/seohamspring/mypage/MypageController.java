@@ -45,7 +45,7 @@ public class MypageController {
     //닉네임 중복검사
     @ResponseBody
     @PostMapping("/nickname/check")
-    public BaseResponse<Integer> checkNickname(@Validated @RequestBody PostCheckNicknameReq postCheckNicknameReq) {
+    public BaseResponse<PostCheckValidRes> checkNickname(@Validated @RequestBody PostCheckNicknameReq postCheckNicknameReq) {
         if (postCheckNicknameReq.getNewNickname() == null) {
             return new BaseResponse<>(POST_MYPAGE_EMPTY_NICKNAME);
         }
@@ -61,7 +61,7 @@ public class MypageController {
     //    비밀번호 확인
     @ResponseBody
     @PostMapping("/password/check")
-    public BaseResponse<Integer> checkPassword(@RequestBody PostCheckPasswordReq postCheckPasswordReq) {
+    public BaseResponse<PostCheckValidRes> checkPassword(@RequestBody PostCheckPasswordReq postCheckPasswordReq) {
 
         if (postCheckPasswordReq == null) {
             return new BaseResponse<>(POST_MYPAGE_EMPTY_PASSWORD);
