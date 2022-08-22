@@ -13,7 +13,5 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class CreateTagResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tagIdx;
 }

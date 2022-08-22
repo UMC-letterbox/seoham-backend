@@ -154,6 +154,7 @@ public class PostServiceImpl implements PostService {
             }
             return new DeleteSenderResponse(success);
         }catch (Exception exception){
+
             throw new BaseException(DATABASE_ERROR);
         }
     }
