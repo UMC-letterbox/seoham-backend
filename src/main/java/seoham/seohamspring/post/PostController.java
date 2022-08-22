@@ -200,12 +200,12 @@ public class PostController {
      */
     @ResponseBody
     @PostMapping("/tags/new")
-    public BaseResponse<CreateTagResponse> createTag(@RequestBody CreateTagRequest createTagRequest){
+    public BaseResponse<CreateTagResponse> createTag(@RequestParam int userIdx, @RequestBody CreateTagRequest createTagRequest){
         if (createTagRequest.getTagName().length() > 20) {//태그 길이
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            int userIdx = jwtService.getUserIdx();
+            //int userIdx = jwtService.getUserIdx();
             CreateTagResponse createTagResponse = postService.createTag(userIdx, createTagRequest);
             return new BaseResponse<>(createTagResponse);
         }catch (BaseException e){
