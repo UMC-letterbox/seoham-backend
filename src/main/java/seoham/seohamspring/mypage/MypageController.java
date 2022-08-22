@@ -97,7 +97,7 @@ public class MypageController {
     //비밀번호 수정
     @ResponseBody
     @PatchMapping("/password/modify")
-    public BaseResponse<String> modifyPassword(@Validated @RequestBody PatchPasswordReq patchPasswordReq) {
+    public BaseResponse<String> modifyPassword(@RequestBody PatchPasswordReq patchPasswordReq) {
         if (patchPasswordReq.getNewPassword() == null) {
             return new BaseResponse<>(PATCH_MYPAGE_EMPTY_PASSWORD);
         }
@@ -110,6 +110,9 @@ public class MypageController {
         }
 
     }
+
+
+
 
     //회원 탈퇴
     @ResponseBody

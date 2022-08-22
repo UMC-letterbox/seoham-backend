@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatchPostRequest {
 
-    private int userIdx; //jwt구현 후 삭제 예정
     private String sender; //보낸이
     private int date; //날짜
     private int tagIdx; //태그

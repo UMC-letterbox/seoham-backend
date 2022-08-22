@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreatePostRequest {
 
-    private int userIdx; //jwt구현후, 삭제할 예정
     private String sender; //보낸이
     private int date; //날짜
     private int tagIdx; //태그

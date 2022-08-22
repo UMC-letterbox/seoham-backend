@@ -7,26 +7,33 @@ import org.springframework.web.bind.annotation.*;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.post.domain.*;
+import seoham.seohamspring.user.UserService;
+import seoham.seohamspring.util.JwtService;
 
 import java.util.List;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Controller
-@RequestMapping("/posts")
 @Api(tags = "post")
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired
     private final PostService postService;
+    @Autowired
+    private final JwtService jwtService;
 
-    //private final JwtService jwtService;
 
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostController(PostService postService, JwtService jwtService) {
         this.postService = postService;
+        this.jwtService = jwtService;
     }
+
+
+
 
     /*
      * 편지 작성 페이지
@@ -41,7 +48,8 @@ public class PostController {
             return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
         }
         try{
-            CreatePostResponse createPostResponse = postService.createPost(createPostRequest);
+            int userIdx = jwtService.getUserIdx();
+            CreatePostResponse createPostResponse = postService.createPost(userIdx, createPostRequest);
             return new BaseResponse<>(createPostResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -61,12 +69,16 @@ public class PostController {
             return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
         }
         try{
-            PatchPostResponse patchPostResponse = postService.modifyPost(patchPostRequest.getUserIdx(),postIdx,patchPostRequest);
+            int userIdx = jwtService.getUserIdx();
+            PatchPostResponse patchPostResponse = postService.modifyPost(userIdx,postIdx,patchPostRequest);
             return new BaseResponse<>(patchPostResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+
+
 
 
     /*
@@ -104,8 +116,9 @@ public class PostController {
 
     @ResponseBody
     @GetMapping("/tags")
-    public BaseResponse<List<GetTagListResponse>> getTagList(@RequestParam int userIdx) {
+    public BaseResponse<List<GetTagListResponse>> getTagList() {
         try{
+            int userIdx = jwtService.getUserIdx();
             List<GetTagListResponse> getTagListResponse = postService.readTagList(userIdx);
             return new BaseResponse<>(getTagListResponse);
 
@@ -135,8 +148,9 @@ public class PostController {
      */
     @ResponseBody
     @GetMapping("/date")
-    public BaseResponse<List<GetPostResponse>> getPostByDate(@RequestParam int userIdx) {
+    public BaseResponse<List<GetPostResponse>> getPostByDate() {
         try{
+            int userIdx = jwtService.getUserIdx();
             List<GetPostResponse> getPostResponse = postService.readPostByDate(userIdx);
             return new BaseResponse<>(getPostResponse);
 
@@ -151,8 +165,9 @@ public class PostController {
 
     @ResponseBody
     @GetMapping("/senders")
-    public BaseResponse<List<GetSenderListResponse>> getSenderList(@RequestParam int userIdx) {
+    public BaseResponse<List<GetSenderListResponse>> getSenderList() {
         try{
+            int userIdx = jwtService.getUserIdx();
             List<GetSenderListResponse> getSenderListResponse = postService.readSenderList(userIdx);
             return new BaseResponse<>(getSenderListResponse);
 
@@ -169,8 +184,9 @@ public class PostController {
      */
     @ResponseBody
     @GetMapping("/senders/{sender}")
-    public BaseResponse<List<GetPostResponse>> getPostBySender(@PathVariable("sender") String sender, @RequestParam int userIdx) {
+    public BaseResponse<List<GetPostResponse>> getPostBySender(@PathVariable("sender") String sender) {
         try{
+            int userIdx = jwtService.getUserIdx();
             List<GetPostResponse> getPostResponse = postService.readPostBySender(sender, userIdx);
             return new BaseResponse<>(getPostResponse);
 
@@ -189,7 +205,8 @@ public class PostController {
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            CreateTagResponse createTagResponse = postService.createTag(createTagRequest.getUserIdx(), createTagRequest);
+            int userIdx = jwtService.getUserIdx();
+            CreateTagResponse createTagResponse = postService.createTag(userIdx, createTagRequest);
             return new BaseResponse<>(createTagResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -206,7 +223,8 @@ public class PostController {
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            PatchTagResponse patchTagResponse = postService.modifyTag(patchTagRequest.getUserIdx(),tagIdx,patchTagRequest);
+            int userIdx = jwtService.getUserIdx();
+            PatchTagResponse patchTagResponse = postService.modifyTag(userIdx, tagIdx,patchTagRequest);
             return new BaseResponse<>(patchTagResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -217,10 +235,12 @@ public class PostController {
     /*
     태그 정보 삭제
      */
+
     @ResponseBody
     @DeleteMapping("/tags/delete/{tagIdx}")
-    public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx, @RequestParam int userIdx){
+    public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx){
         try{
+            int userIdx = jwtService.getUserIdx();
             DeleteTagResponse deleteTagResponse = postService.deleteTag(userIdx, tagIdx);
             return new BaseResponse<>(deleteTagResponse);
         }catch (BaseException e){
@@ -238,7 +258,8 @@ public class PostController {
             return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
         }
         try{
-            PatchSenderResponse patchSenderResponse = postService.modifySender(patchSenderRequest.getUserIdx(),originalSender,patchSenderRequest);
+            int userIdx = jwtService.getUserIdx();
+            PatchSenderResponse patchSenderResponse = postService.modifySender(userIdx,originalSender,patchSenderRequest);
             return new BaseResponse<>(patchSenderResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -251,9 +272,10 @@ public class PostController {
      */
     @ResponseBody
     @DeleteMapping("/senders/delete/{sender}")
-    public BaseResponse<DeleteSenderResponse> deleteSender(@PathVariable ("sender") String sender, @RequestBody DeleteSenderRequest deleteSenderRequest){
+    public BaseResponse<DeleteSenderResponse> deleteSender(@PathVariable ("sender") String sender){
         try{
-            DeleteSenderResponse deleteSenderResponse = postService.deleteSender(sender, deleteSenderRequest);
+            int userIdx = jwtService.getUserIdx();
+            DeleteSenderResponse deleteSenderResponse = postService.deleteSender(sender, userIdx);
             return new BaseResponse<>(deleteSenderResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());

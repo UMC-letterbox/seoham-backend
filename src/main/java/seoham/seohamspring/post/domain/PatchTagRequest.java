@@ -12,7 +12,6 @@ public class PatchTagRequest {
 
     private String tagName;
     private String tagColor;
-    private int userIdx;
 
     public PatchTagRequest() {
 

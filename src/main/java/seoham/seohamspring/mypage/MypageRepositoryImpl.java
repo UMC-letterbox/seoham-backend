@@ -53,6 +53,9 @@ public class MypageRepositoryImpl implements MypageRepository{
 
     }
 
+
+
+
     @Override
     public int deleteUser(int userIdx) {
         String query = "delete u, p from user as u\n" +

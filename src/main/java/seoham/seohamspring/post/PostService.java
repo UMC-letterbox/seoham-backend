@@ -10,7 +10,7 @@ import java.util.List;
 public interface PostService {
 
     //게시물 작성
-    CreatePostResponse createPost(CreatePostRequest createPostRequest) throws BaseException;
+    CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException;
     //게시물 수정
     PatchPostResponse modifyPost(int userIdx,int postIdx,  PatchPostRequest patchPostRequest) throws BaseException;
     //게시물 삭제
@@ -25,7 +25,7 @@ public interface PostService {
     //보낸이 정보 수정
     PatchSenderResponse modifySender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) throws BaseException;
     //보낸이 정보 삭제
-    DeleteSenderResponse deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) throws BaseException;
+    DeleteSenderResponse deleteSender(String sender, int userIdx) throws BaseException;
     //태그 목록 조회
     List<GetTagListResponse> readTagList(int userIdx) throws BaseException;
     //태그별 편지 조회
@@ -38,6 +38,7 @@ public interface PostService {
     List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException;
     //편지 조회
     GetPostContextResponse readPost(int postIdx) throws BaseException;
+
 
 
 

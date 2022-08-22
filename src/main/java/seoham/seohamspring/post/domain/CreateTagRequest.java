@@ -11,7 +11,6 @@ public class CreateTagRequest {
 
     private String tagName;
     private String tagColor;
-    private int userIdx;
 
     public CreateTagRequest() {
 
