@@ -26,9 +26,9 @@ public class PostRepositoryImpl implements PostRepository {
      * 편지 저장, 수정, 삭제
      */
     @Override
-    public int savePost(CreatePostRequest createPostRequest) {
+    public int savePost(int userIdx, CreatePostRequest createPostRequest) {
         String savePostQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
-        Object[] savePostParams = new Object[]{createPostRequest.getUserIdx(), createPostRequest.getSender(), createPostRequest.getDate(),
+        Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getDate(),
                 createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
         this.jdbcTemplate.update(savePostQuery, savePostParams);
 
@@ -40,7 +40,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int updatePost(int userIdx, int postIdx, PatchPostRequest patchPostRequest) {
         String updatePostQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
-        Object[] updatePostParams = new Object[]{patchPostRequest.getUserIdx(), patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
+        Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
 
         return this.jdbcTemplate.update(updatePostQuery, updatePostParams);
@@ -59,9 +59,9 @@ public class PostRepositoryImpl implements PostRepository {
 
     //태그 정보 저장, 수정, 삭제
     @Override
-    public int saveTag(CreateTagRequest createTagRequest) {
+    public int saveTag(int userIdx, CreateTagRequest createTagRequest) {
         String saveTagQuery = "INSERT INTO tag(tagName, tagColor,userIdx) VALUES (?,?,?)";
-        Object[] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor(), createTagRequest.getUserIdx()};
+        Object[] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor(), userIdx};
         this.jdbcTemplate.update(saveTagQuery, saveTagParams);
 
         String lastSaveTagIdxQuery = "select last_insert_id()";
@@ -96,9 +96,9 @@ public class PostRepositoryImpl implements PostRepository {
     보낸이 정보 수정, 삭제
      */
     @Override
-    public int updateSender(String originalSender, PatchSenderRequest patchSenderRequest) {
+    public int updateSender(int userIdx, String originalSender, PatchSenderRequest patchSenderRequest) {
         String updateSenderQuery = "UPDATE post SET sender = ? where userIdx = ? AND sender =?";
-        Object[] updateSenderParams = new Object[]{patchSenderRequest.getChangedSender(), patchSenderRequest.getUserIdx(), originalSender};
+        Object[] updateSenderParams = new Object[]{patchSenderRequest.getChangedSender(), userIdx, originalSender};
 
         return this.jdbcTemplate.update(updateSenderQuery, updateSenderParams);
 
@@ -107,10 +107,10 @@ public class PostRepositoryImpl implements PostRepository {
 
 
     @Override
-    public int deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) {
+    public int deleteSender(String sender, int userIdx) {
         //기존 post 테이블에서 tagIdx = 0으로 update
         String changeSenderQuery = "UPDATE post SET sender= \"someone\" where userIdx= ? AND sender = ?";
-        Object[] changeSenderParmas = new Object[]{deleteSenderRequest.getUserIdx(), sender};
+        Object[] changeSenderParmas = new Object[]{userIdx, sender};
         return this.jdbcTemplate.update(changeSenderQuery, changeSenderParmas);
     }
 

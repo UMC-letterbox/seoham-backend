@@ -10,7 +10,6 @@ import lombok.Setter;
 public class PatchSenderRequest {
 
     private String changedSender;
-    private int userIdx;
 
     public PatchSenderRequest(){}
 }

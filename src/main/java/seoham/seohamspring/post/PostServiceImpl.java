@@ -24,12 +24,12 @@ public class PostServiceImpl implements PostService {
 
     //게시물 작성
     @Override
-    public CreatePostResponse createPost(CreatePostRequest createPostRequest) throws BaseException {
-        if(postRepository.checkTagNotExist(createPostRequest.getUserIdx(),createPostRequest.getTagIdx())==0){
+    public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
+        if(postRepository.checkTagNotExist(userIdx,createPostRequest.getTagIdx())==0){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         try{
-            int postIdx = postRepository.savePost(createPostRequest);
+            int postIdx = postRepository.savePost(userIdx, createPostRequest);
             return new CreatePostResponse(postIdx);
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
-        if(postRepository.checkTagNotExist(patchPostRequest.getUserIdx(),patchPostRequest.getTagIdx())==0){
+        if(postRepository.checkTagNotExist(userIdx,patchPostRequest.getTagIdx())==0){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
 
@@ -86,7 +86,7 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(POST_TAGS_EXIST);
         }
         try{
-            int tagIdx = postRepository.saveTag(createTagRequest);
+            int tagIdx = postRepository.saveTag(userIdx, createTagRequest);
             return new CreateTagResponse(tagIdx);
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -132,7 +132,7 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(POST_EMPTY_SENDER);
         }
         try{
-            int success = postRepository.updateSender(originalSender, patchSenderRequest);
+            int success = postRepository.updateSender(userIdx, originalSender, patchSenderRequest);
             if(success == 0){
                 throw new BaseException(MODIFY_FAIL_SENDER);
             }
@@ -143,12 +143,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public DeleteSenderResponse deleteSender(String sender, DeleteSenderRequest deleteSenderRequest) throws BaseException {
-        if(postRepository.checkSenderExist(deleteSenderRequest.getUserIdx(), sender)==0){
+    public DeleteSenderResponse deleteSender(String sender, int userIdx) throws BaseException {
+        if(postRepository.checkSenderExist(userIdx, sender)==0){
             throw new BaseException(POST_EMPTY_SENDER);
         }
         try{
-            int success = postRepository.deleteSender(sender, deleteSenderRequest);
+            int success = postRepository.deleteSender(sender, userIdx);
             if(success == 0){
                 throw new BaseException(DELETE_FAIL_SENDER);
             }
