@@ -58,6 +58,7 @@ public class JwtService {
                     .setSigningKey(Secret.JWT_SECRET_KEY)
                     .parseClaimsJws(accessToken);
         } catch (Exception ignored) {
+            System.out.println(ignored);
             throw new BaseException(INVALID_JWT);
         }
 
