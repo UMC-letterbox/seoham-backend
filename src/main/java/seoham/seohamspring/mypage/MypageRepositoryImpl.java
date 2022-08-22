@@ -75,6 +75,21 @@ public class MypageRepositoryImpl implements MypageRepository{
         return result;
     }
 
+    @Override
+    public GetCountInfoRes userInfo(int userIdx) {
+        String letterQuery = "select count(postIdx) from post where userIdx = ?";
+        String emailQuery = "select email from user where userIdx = ?";
+        String nicknameQuery = "select nickName from user where userIdx = ?";
+
+        String letter = jdbcTemplate.queryForObject(letterQuery, String.class, userIdx);
+        String email = jdbcTemplate.queryForObject(emailQuery, String.class, userIdx);
+        String nickname = jdbcTemplate.queryForObject(nicknameQuery, String.class, userIdx);
+
+        int letterInt = Integer.parseInt(letter);
+
+        return new GetCountInfoRes(letterInt, email, nickname);
+    }
+
 
 }
 

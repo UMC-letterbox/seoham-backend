@@ -21,6 +21,8 @@ public interface MypageRepository {
     //회원 탈퇴
     int deleteUser(int userIdx);
 
+    GetCountInfoRes userInfo(int userIdx);
+
 
 }
 

@@ -21,4 +21,6 @@ public interface MypageService {
     //회원 탈퇴
     String deleteUser(int userIdx) throws BaseException;
 
+    GetCountInfoRes userInfo(int userIdx) throws BaseException;
+
 }
