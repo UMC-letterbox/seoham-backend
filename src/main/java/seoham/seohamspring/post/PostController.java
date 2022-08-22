@@ -206,6 +206,7 @@ public class PostController {
         }
         try{
             //int userIdx = jwtService.getUserIdx();
+
             CreateTagResponse createTagResponse = postService.createTag(userIdx, createTagRequest);
             return new BaseResponse<>(createTagResponse);
         }catch (BaseException e){
