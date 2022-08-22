@@ -80,6 +80,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUser(LoginUserRequest loginUserRequest){
         String getPwdQuery = "SELECT userIdx,email , passWord,nickName FROM user WHERE email=?";
         String getPwdParam = loginUserRequest.getEmail();
+
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs,rowNum) -> new User(
                         rs.getInt("userIdx"),

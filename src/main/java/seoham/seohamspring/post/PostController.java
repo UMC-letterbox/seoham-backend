@@ -78,6 +78,9 @@ public class PostController {
     }
 
 
+
+
+
     /*
      * 편지 삭제 페이지
      */
