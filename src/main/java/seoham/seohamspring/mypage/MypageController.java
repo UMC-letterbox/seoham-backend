@@ -16,8 +16,8 @@ import seoham.seohamspring.util.JwtService;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Controller
-@RequestMapping("/mypage")
 @Api(tags = "mypage")
+@RequestMapping("/mypage")
 public class MypageController {
 
     @Autowired
@@ -25,10 +25,14 @@ public class MypageController {
 
     private final JwtService jwtService;
 
-    @Autowired
     public MypageController(MypageService mypageService, JwtService jwtService) {
         this.mypageService = mypageService;
         this.jwtService = jwtService;
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
     }
 
     //닉네임 중복검사
@@ -66,7 +70,7 @@ public class MypageController {
 
     //닉네임 수정
     @ResponseBody
-    @PatchMapping("/nickname/modify")
+    @PatchMapping(value = "/nickname/modify")
     public BaseResponse<String> modifyNickname(@Validated @RequestBody PatchNicknameReq patchNicknameReq) {
         if (patchNicknameReq.getNewNickname() == null) {
             return new BaseResponse<>(PATCH_MYPAGE_EMPTY_NICKNAME);
