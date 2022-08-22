@@ -79,6 +79,12 @@ public enum BaseResponseStatus {
     POST_SENDER_INVALID_CONTENT(false, 2023,"보낸이 글자수를 확인해주세요"),
     POST_EMPTY_SENDER(false,2024,"보낸이 아이디 값을 확인해주세요."),
 
+    //mypage
+    POST_MYPAGE_EMPTY_NICKNAME(false, 2030, "닉네임을 입력해주세요"),
+    POST_MYPAGE_EMPTY_PASSWORD(false, 2031, "패스워드를 입력해주세요"),
+
+    PATCH_MYPAGE_EMPTY_NICKNAME(false, 2032, "수정할 닉네임을 입력해주세요"),
+    PATCH_MYPAGE_EMPTY_PASSWORD(false, 2033, "수정할 패스워드를 입력해주세요"),
 
 
 
@@ -102,6 +108,10 @@ public enum BaseResponseStatus {
     DELETE_FAIL_SENDER(false,3025,"보낸이 정보 삭제를 실패하였습니다."),
     SELECT_FAIL_TAG_LIST(false,3026,"태그 목록이 존재하지 않습니다."),
 
+    //mypage
+    FAIL_MODIFY_NICKNAME(false, 3030, "닉네임 수정에 실패했습니다"),
+    FAIL_MODIFY_PASSWORD(false, 3031, "비밀번호 수정에 실패했습니다"),
+    FAIL_DELETE_USER(false, 3032, "유저 삭제에 실패했습니다"),
 
 
 
