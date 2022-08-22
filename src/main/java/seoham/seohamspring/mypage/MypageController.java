@@ -23,6 +23,7 @@ public class MypageController {
     @Autowired
     private final MypageService mypageService;
 
+    @Autowired
     private final JwtService jwtService;
 
     public MypageController(MypageService mypageService, JwtService jwtService) {
@@ -30,6 +31,7 @@ public class MypageController {
         this.jwtService = jwtService;
     }
 
+    @ResponseBody
     @GetMapping("/hello")
     public String hello() {
         return "hello";
@@ -55,9 +57,9 @@ public class MypageController {
     @ResponseBody
     @PostMapping("/password/check")
     public BaseResponse<Integer> checkPassword(@Validated @RequestBody PostCheckPasswordReq postCheckPasswordReq) {
-        if (postCheckPasswordReq == null) {
-            return new BaseResponse<>(POST_MYPAGE_EMPTY_PASSWORD);
-        }
+//        if (postCheckPasswordReq == null) {
+//            return new BaseResponse<>(POST_MYPAGE_EMPTY_PASSWORD);
+//        }
 
         try {
             int userIdx = jwtService.getUserIdx();
