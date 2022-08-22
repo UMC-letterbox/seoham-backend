@@ -143,25 +143,6 @@ public class UserController {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //  이메일 찾기
     // Body
     @ResponseBody
@@ -181,12 +162,6 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-
-
-
-
-
 
      // 비밀번호 수정
     // Body

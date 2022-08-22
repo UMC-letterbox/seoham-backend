@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class PostCheckPasswordReq {
 
-    private int password;
+    private String password;
 
 }

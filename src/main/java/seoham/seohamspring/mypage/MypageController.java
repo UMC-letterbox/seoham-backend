@@ -37,12 +37,13 @@ public class MypageController {
 
     @ResponseBody
     @GetMapping("/jwt/user")
-    public String jwtToUser() throws BaseException {
-        return jwtService.getJwt();
+    public int jwtToUser() throws BaseException {
+        return jwtService.getUserIdx();
 
     }
 
-    //닉네임 중복검사
+    // 닉네임 중복검사
+    // OK
     @ResponseBody
     @PostMapping("/nickname/check")
     public BaseResponse<PostCheckValidRes> checkNickname(@Validated @RequestBody PostCheckNicknameReq postCheckNicknameReq) {
@@ -58,7 +59,8 @@ public class MypageController {
 
     }
 
-    //    비밀번호 확인
+    // 비밀번호 확인
+    // OK
     @ResponseBody
     @PostMapping("/password/check")
     public BaseResponse<PostCheckValidRes> checkPassword(@RequestBody PostCheckPasswordReq postCheckPasswordReq) {
@@ -77,6 +79,7 @@ public class MypageController {
 
 
     //닉네임 수정
+    // OK
     @ResponseBody
     @PatchMapping(value = "/nickname/modify")
     public BaseResponse<String> modifyNickname(@Validated @RequestBody PatchNicknameReq patchNicknameReq) {
@@ -95,6 +98,7 @@ public class MypageController {
 
 
     //비밀번호 수정
+    // OK
     @ResponseBody
     @PatchMapping("/password/modify")
     public BaseResponse<String> modifyPassword(@RequestBody PatchPasswordReq patchPasswordReq) {
@@ -112,8 +116,6 @@ public class MypageController {
     }
 
 
-
-
     //회원 탈퇴
     @ResponseBody
     @DeleteMapping("/delete")
@@ -125,7 +127,4 @@ public class MypageController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
-
-
 }

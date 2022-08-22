@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.mypage.domain.*;
 import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.util.SHA256;
 
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
@@ -18,40 +19,46 @@ public class MypageServiceImpl implements MypageService{
     }
 
 
+    // 닉네임 중복검사
+    // 완료
     @Override
     public PostCheckValidRes chekcNickname(PostCheckNicknameReq postCheckNicknameReq) throws BaseException{
-        int result;
         try {
-            PostCheckValidRes postCheckValidRes = null;
+            int check = mypageRepository.checkNickname(postCheckNicknameReq);
 
-
-            if (mypageRepository.checkNickname(postCheckNicknameReq) == 0) {
-                postCheckValidRes.setValid(true);
+            if (check == 0) {
+                return new PostCheckValidRes(true);
             } else {
-                postCheckValidRes.setValid(false);
+                return new PostCheckValidRes(false);
             }
 
-            return postCheckValidRes;
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+
+    // 패스워드 확인
     @Override
     public PostCheckValidRes checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx) throws BaseException{
+        String pwd;
         try {
-            PostCheckValidRes postCheckValidRes = null;
 
-            if (mypageRepository.checkPassword(postCheckPasswordReq, userIdx) == 0) {
-                postCheckValidRes.setValid(true);
+            pwd = SHA256.encrypt(postCheckPasswordReq.getPassword());
+            postCheckPasswordReq.setPassword(pwd);
+
+            int check = mypageRepository.checkPassword(postCheckPasswordReq, userIdx);
+
+            if (check == 0) {
+                return new PostCheckValidRes(true);
             } else {
-                postCheckValidRes.setValid(false);
+                return new PostCheckValidRes(false);
             }
-            return postCheckValidRes;
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
     @Override
     public String modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) throws BaseException{
@@ -73,7 +80,10 @@ public class MypageServiceImpl implements MypageService{
     @Override
     public String modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) throws BaseException{
         int result;
+        String pwd;
         try {
+            pwd = SHA256.encrypt(patchPasswordReq.getNewPassword());
+            patchPasswordReq.setNewPassword(pwd);
             result = mypageRepository.modifyPassword(patchPasswordReq, userIdx);
         } catch (Exception e) {
             throw new BaseException(DATABASE_ERROR);
