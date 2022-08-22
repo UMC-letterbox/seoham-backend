@@ -200,12 +200,12 @@ public class PostController {
      */
     @ResponseBody
     @PostMapping("/tags/new")
-    public BaseResponse<CreateTagResponse> createTag(@RequestParam int userIdx, @RequestBody CreateTagRequest createTagRequest){
+    public BaseResponse<CreateTagResponse> createTag(@RequestBody CreateTagRequest createTagRequest){
         if (createTagRequest.getTagName().length() > 20) {//태그 길이
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            //int userIdx = jwtService.getUserIdx();
+            int userIdx = jwtService.getUserIdx();
 
             CreateTagResponse createTagResponse = postService.createTag(userIdx, createTagRequest);
             return new BaseResponse<>(createTagResponse);
@@ -219,12 +219,12 @@ public class PostController {
      */
     @ResponseBody
     @PatchMapping("/tags/edit/{tagIdx}")
-    public BaseResponse<PatchTagResponse> modifyTag(@RequestParam int userIdx, @PathVariable ("tagIdx") int tagIdx, @RequestBody PatchTagRequest patchTagRequest){
+    public BaseResponse<PatchTagResponse> modifyTag(@PathVariable ("tagIdx") int tagIdx, @RequestBody PatchTagRequest patchTagRequest){
         if (patchTagRequest.getTagName().length() >20) {//게시물 길이
             return new BaseResponse<>(POST_TAGS_INVALID_CONTENT);
         }
         try{
-            //int userIdx = jwtService.getUserIdx();
+            int userIdx = jwtService.getUserIdx();
             PatchTagResponse patchTagResponse = postService.modifyTag(userIdx, tagIdx,patchTagRequest);
             return new BaseResponse<>(patchTagResponse);
         }catch (BaseException e){
@@ -239,9 +239,9 @@ public class PostController {
 
     @ResponseBody
     @DeleteMapping("/tags/delete/{tagIdx}")
-    public BaseResponse<DeleteTagResponse> deleteTag(@RequestParam int userIdx, @PathVariable ("tagIdx") int tagIdx){
+    public BaseResponse<DeleteTagResponse> deleteTag(@PathVariable ("tagIdx") int tagIdx){
         try{
-            //int userIdx = jwtService.getUserIdx();
+            int userIdx = jwtService.getUserIdx();
             DeleteTagResponse deleteTagResponse = postService.deleteTag(userIdx, tagIdx);
             return new BaseResponse<>(deleteTagResponse);
         }catch (BaseException e){

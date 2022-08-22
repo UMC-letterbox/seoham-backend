@@ -68,6 +68,8 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.queryForObject(lastSaveTagIdxQuery, int.class);
     }
 
+
+
     @Override
     public int updateTag(int tagIdx, PatchTagRequest patchTagRequest) {
         String updateTagQuery = "UPDATE tag SET tagName = ?, tagColor = ? where tagIdx = ?";
