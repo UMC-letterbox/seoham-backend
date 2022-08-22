@@ -49,7 +49,7 @@ public class MypageServiceImpl implements MypageService{
 
             int check = mypageRepository.checkPassword(postCheckPasswordReq, userIdx);
 
-            if (check == 0) {
+            if (check == 1) {
                 return new PostCheckValidRes(true);
             } else {
                 return new PostCheckValidRes(false);
@@ -111,5 +111,17 @@ public class MypageServiceImpl implements MypageService{
 
         return "유저 정보가 삭제되었습니다";
     }
+
+    @Override
+    public GetCountInfoRes userInfo(int userIdx) throws BaseException {
+        try {
+            return mypageRepository.userInfo(userIdx);
+        } catch (Exception e) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
 }
 

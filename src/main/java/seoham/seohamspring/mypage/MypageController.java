@@ -127,4 +127,16 @@ public class MypageController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/info")
+    public BaseResponse<GetCountInfoRes> userInfo() {
+        try {
+            int userIdx = jwtService.getUserIdx();
+            return new BaseResponse<>(mypageService.userInfo(userIdx));
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+
+    }
 }
