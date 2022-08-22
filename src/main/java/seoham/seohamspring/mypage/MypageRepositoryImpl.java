@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import seoham.seohamspring.mypage.domain.*;
+import seoham.seohamspring.util.SHA256;
 
 import javax.sql.DataSource;
 
@@ -31,6 +32,7 @@ public class MypageRepositoryImpl implements MypageRepository{
 //    비밀번호 확인
     @Override
     public int checkPassword(PostCheckPasswordReq postCheckPasswordReq, int userIdx) {
+
         String query = "select exists(select userIdx, passWord from user\n" +
                 "where userIdx = ? and passWord = ?)";
         Object[] params = new Object[]{userIdx, postCheckPasswordReq.getPassword()};
@@ -42,19 +44,16 @@ public class MypageRepositoryImpl implements MypageRepository{
     public int modifyNickname(PatchNicknameReq patchNicknameReq, int userIdx) {
         String query = "update user set nickName = ? where userIdx = ?";
         Object[] params = new Object[]{patchNicknameReq.getNewNickname(), userIdx};
-        return jdbcTemplate.update(query, int.class, params);
+        return jdbcTemplate.update(query, params);
     }
 
     @Override
     public int modifyPassword(PatchPasswordReq patchPasswordReq, int userIdx) {
         String query = "update user set passWord = ? where userIdx = ?";
         Object[] params = new Object[]{patchPasswordReq.getNewPassword(), userIdx};
-        return jdbcTemplate.update(query, int.class, params);
+        return jdbcTemplate.update(query, params);
 
     }
-
-
-
 
     @Override
     public int deleteUser(int userIdx) {
@@ -67,9 +66,9 @@ public class MypageRepositoryImpl implements MypageRepository{
         String ex_query = "select exists(select userIdx from user where userIdx = ?)";
         Object[] params = new Object[]{userIdx};
 
-        jdbcTemplate.queryForObject(fkCheck0, int.class);
-        jdbcTemplate.queryForObject(query, int.class, params);
-        jdbcTemplate.queryForObject(fkCheck1, int.class);
+//        jdbcTemplate.queryForObject(fkCheck0, int.class);
+        jdbcTemplate.update(query, params);
+//        jdbcTemplate.queryForObject(fkCheck1, int.class);
         Integer result = jdbcTemplate.queryForObject(ex_query, int.class, params);
 
 
