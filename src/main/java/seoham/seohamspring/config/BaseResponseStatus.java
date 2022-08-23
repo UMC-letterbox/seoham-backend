@@ -78,6 +78,7 @@ public enum BaseResponseStatus {
     POST_EMPTY_TAG_IDX(false,2022,"태그 아이디 값을 확인해주세요."),
     POST_SENDER_INVALID_CONTENT(false, 2023,"보낸이 글자수를 확인해주세요"),
     POST_EMPTY_SENDER(false,2024,"보낸이 아이디 값을 확인해주세요."),
+    POST_NOT_EQUAL_USER(false,2025,"수정하려는 권한이 없습니다"),
 
     //mypage
     POST_MYPAGE_EMPTY_NICKNAME(false, 2030, "닉네임을 입력해주세요"),
@@ -106,8 +107,7 @@ public enum BaseResponseStatus {
     DELETE_FAIL_TAG(false,3023,"태그 정보 삭제를 실패하였습니다."),
     MODIFY_FAIL_SENDER(false, 3024,"보낸이 정보 수정을 실패하였습니다."),
     DELETE_FAIL_SENDER(false,3025,"보낸이 정보 삭제를 실패하였습니다."),
-    SELECT_FAIL_TAG_LIST(false,3026,"태그 목록이 존재하지 않습니다."),
-
+    SELECT_FAIL_TAG(false,3026,"해당하는 태그가 없습니다."),
     //mypage
     FAIL_MODIFY_NICKNAME(false, 3030, "닉네임 수정에 실패했습니다"),
     FAIL_MODIFY_PASSWORD(false, 3031, "비밀번호 수정에 실패했습니다"),

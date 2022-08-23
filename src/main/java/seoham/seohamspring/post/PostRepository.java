@@ -26,6 +26,7 @@ public interface PostRepository {
     //조건별(태그, 날짜, 보낸이) 편지 조회
     List<GetTagListResponse> selectTagList(int userIdx);
     List<GetPostResponse> selectPostByTag(int tagIdx);
+    List<GetPostResponse> selectPostByTagName(int userIdx,String tagName);
     List<GetPostResponse> selectPostByDate(int userIdx);
     List<GetSenderListResponse> selectSenderList(int userIdx);
     List<GetPostResponse> selectPostBySender(String sender, int userIdx);
@@ -39,5 +40,6 @@ public interface PostRepository {
     int checkTagExist(int userIdx, String tagName);
     int checkTagNotExist(int userIdx,int tagIdx);
     int checkSenderExist(int userIdx, String sender);
+    int checkPostUser(int userIdx, int postIdx);
 
 }
