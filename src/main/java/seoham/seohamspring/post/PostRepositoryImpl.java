@@ -2,6 +2,7 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
@@ -9,6 +10,8 @@ import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 import java.util.List;
+
+import static seoham.seohamspring.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -215,6 +218,8 @@ public class PostRepositoryImpl implements PostRepository {
                 "      where sender=? AND userIdx= ?) as a\n" +
                 "left join tag as b\n" +
                 "on a.tagIdx = b.tagIdx";
+
+
         return this.jdbcTemplate.query(selectPostBySenderQuery,
                 (rs, rowNum) -> new GetPostResponse(
                         rs.getInt("postIdx"),
@@ -298,7 +303,6 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int checkPostUser(int userIdx, int postIdx) {
-        System.out.println("postIdx" + postIdx + "userIdx" + userIdx);
         String checkPostUserQuery = "select exists(select postIdx from post where userIdx = ? AND postIdx = ?)";
         Object[] checkPostUserParams = new Object[]{userIdx, postIdx};
         System.out.println(this.jdbcTemplate.queryForObject(checkPostUserQuery, int.class, checkPostUserParams));

@@ -14,6 +14,9 @@ public interface PostRepository {
     int updatePost(int userIdx, int postIdx, PatchPostRequest patchPostRequest);
     int deletePost(int postIdx);
 
+    //편지 조회
+    GetPostContextResponse selectPost(int postIdx);
+
     //태그 정보 저장, 수정, 삭제
     int saveTag(int userIdx, CreateTagRequest createTagRequest);
     int updateTag(int tagIdx, PatchTagRequest patchTagRequest);
@@ -31,8 +34,7 @@ public interface PostRepository {
     List<GetSenderListResponse> selectSenderList(int userIdx);
     List<GetPostResponse> selectPostBySender(String sender, int userIdx);
 
-    //편지 조회
-    GetPostContextResponse selectPost(int postIdx);
+
 
 
     //데이터 유무 확인
