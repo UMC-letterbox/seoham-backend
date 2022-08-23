@@ -87,6 +87,8 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+
+
     /*
     편지조회
     */
@@ -103,6 +105,9 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+
+
 
     /*
     태그 목록 조회
@@ -154,7 +159,7 @@ public class PostServiceImpl implements PostService {
 
 
     /*
-    태그 검색
+    날짜별 편지 조회
      */
     @Override
     public List<GetPostResponse> readPostByDate(int userIdx) throws BaseException {
@@ -169,6 +174,9 @@ public class PostServiceImpl implements PostService {
 
 
 
+    /*
+    보낸이 목록 조회
+     */
     @Override
     public List<GetSenderListResponse> readSenderList(int userIdx) throws BaseException {
         try{
@@ -182,8 +190,14 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    /*
+    보낸이 별 편지 조회
+     */
     @Override
     public List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException {
+        if(postRepository.checkSenderExist(userIdx, sender) == 0){
+            throw new BaseException(INVALID_USER_JWT);
+        }
         try {
             List<GetPostResponse> getPostResponse = postRepository.selectPostBySender(sender, userIdx);
             return getPostResponse;

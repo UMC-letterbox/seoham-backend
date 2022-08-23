@@ -178,6 +178,9 @@ public class PostController {
         }
     }
 
+
+
+
     /*
     게시물 보낸이 목록 조회 페이지
      */
@@ -194,9 +197,6 @@ public class PostController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-
-
 
     /*
     보낸이별 편지 조회
