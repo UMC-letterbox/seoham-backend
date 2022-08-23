@@ -88,7 +88,8 @@ public class PostController {
     @DeleteMapping("/delete/{postIdx}")
     public BaseResponse<DeletePostResponse> deletePost(@PathVariable ("postIdx") int postIdx){
         try{
-            DeletePostResponse deletePostResponse = postService.deletePost(postIdx);
+            int userIdx = jwtService.getUserIdx();
+            DeletePostResponse deletePostResponse = postService.deletePost(userIdx, postIdx);
             return new BaseResponse<>(deletePostResponse);
         }catch (BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -102,7 +103,8 @@ public class PostController {
     @GetMapping("/{postIdx}")
     public BaseResponse<GetPostContextResponse> getPost(@PathVariable("postIdx") int postIdx) {
         try{
-            GetPostContextResponse getPostContextResponse = postService.readPost(postIdx);
+            int userIdx = jwtService.getUserIdx();
+            GetPostContextResponse getPostContextResponse = postService.readPost(userIdx, postIdx);
             return new BaseResponse<>(getPostContextResponse);
 
         } catch(BaseException exception){
@@ -134,7 +136,24 @@ public class PostController {
     @GetMapping("/tags/{tagIdx}")
     public BaseResponse<List<GetPostResponse>> getPostByTag(@PathVariable("tagIdx") int tagIdx) {
         try{
-            List<GetPostResponse> getPostResponse = postService.readPostByTag(tagIdx);
+            int userIdx = jwtService.getUserIdx();
+            List<GetPostResponse> getPostResponse = postService.readPostByTag(userIdx, tagIdx);
+            return new BaseResponse<>(getPostResponse);
+
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /*
+    태그 검색
+     */
+    @ResponseBody
+    @GetMapping("/tags/search/{tagName}")
+    public BaseResponse<List<GetPostResponse>> getPostByTagName(@PathVariable("tagName") String tagName) {
+        try{
+            int userIdx = jwtService.getUserIdx();
+            List<GetPostResponse> getPostResponse = postService.readPostByTagName(userIdx, tagName);
             return new BaseResponse<>(getPostResponse);
 
         } catch(BaseException exception){

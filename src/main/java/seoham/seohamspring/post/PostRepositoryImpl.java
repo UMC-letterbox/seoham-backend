@@ -152,6 +152,24 @@ public class PostRepositoryImpl implements PostRepository {
                 ), tagIdx);
     }
 
+    @Override
+    public List<GetPostResponse> selectPostByTagName(int userIdx, String tagName) {
+        String selectPostByTagNameQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
+                "from post as a\n" +
+                "inner join (select * from tag where tagName = ? and userIdx = ?) as b\n" +
+                "on a.tagIdx = b.tagIdx";
+        return this.jdbcTemplate.query(selectPostByTagNameQuery,
+                (rs, rowNum) -> new GetPostResponse(
+                        rs.getInt("postIdx"),
+                        rs.getString("sender"),
+                        rs.getTimestamp("date"),
+                        rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor"),
+                        rs.getInt("letterIdx")
+                ), tagName, userIdx);
+    }
+
 
     @Override
     public List<GetPostResponse> selectPostByDate(int userIdx) {
@@ -277,6 +295,17 @@ public class PostRepositoryImpl implements PostRepository {
 
         return this.jdbcTemplate.queryForObject(checkSenderExistQuery, int.class, checkSenderExistParams);
     }
+
+    @Override
+    public int checkPostUser(int userIdx, int postIdx) {
+        System.out.println("postIdx" + postIdx + "userIdx" + userIdx);
+        String checkPostUserQuery = "select exists(select postIdx from post where userIdx = ? AND postIdx = ?)";
+        Object[] checkPostUserParams = new Object[]{userIdx, postIdx};
+        System.out.println(this.jdbcTemplate.queryForObject(checkPostUserQuery, int.class, checkPostUserParams));
+
+        return this.jdbcTemplate.queryForObject(checkPostUserQuery, int.class, checkPostUserParams);
+    }
+
 }
 
 
