@@ -11,7 +11,7 @@ public class ValidationRegex {
         return matcher.find();
     }
     public static boolean isRegexNickName(String target) {
-        String regex = "^[A-Z0-9]{1,8}$";
+        String regex = "^[A-Z0-9가-힣]{2,8}$";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(target);
         return matcher.find();
