@@ -215,7 +215,7 @@ public class UserController {
     // 인증코드 확인용
     // Body
     @ResponseBody
-    @GetMapping("/check-code")
+    @PostMapping("/check-code")
     public BaseResponse<CheckCodeResponse> checkCode(@RequestBody CheckCodeRequest checkCodeRequest) {
         boolean valid = false;
         if(checkCodeRequest.getNum() == 123456){valid = true; System.out.println("true");}
