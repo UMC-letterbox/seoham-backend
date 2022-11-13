@@ -18,16 +18,25 @@ import java.io.UnsupportedEncodingException;
 @Api(tags = "mail")
 @RequestMapping("/mail")
 public class MailController {
-
-
     private final MailServcie mailServcie;
-
+    private final RedisUtil redisUtil;
     @ResponseBody
     @PostMapping("/send")
     public String mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
         String authCode = mailServcie.sendEmail(emailDto.getEmail());
+        redisUtil.setDataExpire(authCode, emailDto.getEmail(), 60 * 5L);
         return authCode;
     }
+
+    @ResponseBody
+    @PostMapping("/check")
+    public String CheckAuth(@RequestBody PostCheckAuthReq postCheckAuthReq) {
+
+        String value = redisUtil.getData(postCheckAuthReq.getAuthCode());
+
+        return value;
+    }
+
 
 }
