@@ -6,6 +6,7 @@ import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.HTML;
 
 
 import org.springframework.stereotype.Repository;
@@ -30,25 +31,25 @@ public class PostRepositoryImpl implements PostRepository {
      */
     @Override
     public int savePost(int userIdx, CreatePostRequest createPostRequest) {
+        String tagIdx = createPostRequest.getTagIdx().toString();
         String savePostQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
         Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getDate(),
-                createPostRequest.getTagIdx(), createPostRequest.getContent(), createPostRequest.getLetterIdx()};
+                tagIdx, createPostRequest.getContent(), createPostRequest.getLetterIdx()};
         this.jdbcTemplate.update(savePostQuery, savePostParams);
 
         String lastSavePostIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
-
     }
 
     @Override
     public int updatePost(int userIdx, int postIdx, PatchPostRequest patchPostRequest) {
+        String tagIdx = patchPostRequest.getTagIdx().toString();
         String updatePostQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
-        Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getDate(), patchPostRequest.getTagIdx(),
+        Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getDate(), tagIdx,
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
 
         return this.jdbcTemplate.update(updatePostQuery, updatePostParams);
     }
-
 
 
     @Override
@@ -135,8 +136,14 @@ public class PostRepositoryImpl implements PostRepository {
                 ), userIdx);
     }
 
+    /*
+    수정 해야함.
+     */
+
+
     @Override
     public List<GetPostResponse> selectPostByTag(int tagIdx) {
+        String selectPostByTagQeury = "select * from post where t";
         String selectPostByTagQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
                 "from (select *\n" +
                 "      from post\n" +
@@ -148,9 +155,9 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("tagIdx"),
-                        rs.getString("tagName"),
-                        rs.getString("tagColor"),
+                        rs.getString("tagIdx"), //"1,2,3,4,5"
+                        //rs.getString("tagName"),
+                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx")
                 ), tagIdx);
     }
@@ -166,9 +173,9 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("tagIdx"),
-                        rs.getString("tagName"),
-                        rs.getString("tagColor"),
+                        rs.getString("tagIdx"),
+                        //rs.getString("tagName"),
+                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx")
                 ), tagName, userIdx);
     }
@@ -187,9 +194,9 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("tagIdx"),
-                        rs.getString("tagName"),
-                        rs.getString("tagColor"),
+                        rs.getString("tagIdx"),
+                        //rs.getString("tagName"),
+                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx")
                 ), userIdx);
     }
@@ -225,9 +232,9 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("tagIdx"),
-                        rs.getString("tagName"),
-                        rs.getString("tagColor"),
+                        rs.getString("tagIdx"),
+                        //rs.getString("tagName"),
+                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx")
                 ), sender, userIdx);
     }
@@ -249,14 +256,15 @@ public class PostRepositoryImpl implements PostRepository {
         int selectPostParams = postIdx;
 
 
+
         return this.jdbcTemplate.queryForObject(selectPostQuery,
                 (rs, rowNum) -> new GetPostContextResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("tagIdx"),
-                        rs.getString("tagName"),
-                        rs.getString("tagColor"),
+                        rs.getString("tagIdx"),
+                        //rs.getString("tagName"),
+                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx"),
                         rs.getString("content")
                 ),selectPostParams);
@@ -285,12 +293,30 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int checkTagNotExist(int userIdx, int tagIdx) {
+    public boolean checkTagsNotExist(int userIdx, List<Integer> tags) {
+        //List<Integer> tags를 입력받아 하나씩 순회하면서 존재하고 있는지 확인한다.
+        boolean TagsNotExist = false; //없다고 가정
+        for(int i = 0; i < tags.size(); i++) {
+            String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
+            Object[] checkTagNotExistParams = new Object[]{tags.get(i), userIdx};
+            TagsNotExist = this.jdbcTemplate.queryForObject(checkTagNotExistQuery,boolean.class, checkTagNotExistParams);
+            System.out.println(TagsNotExist);
+        }
+        return TagsNotExist;
+    }
+
+    @Override
+    public boolean checkTagNotExist(int userIdx, int tagIdx) {
+        //List<Integer> tags를 입력받아 하나씩 순회하면서 존재하고 있는지 확인한다.
+        boolean TagNotExist = false;
         String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
         Object[] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
+        TagNotExist = this.jdbcTemplate.queryForObject(checkTagNotExistQuery,boolean.class, checkTagNotExistParams);
 
-
-        return this.jdbcTemplate.queryForObject(checkTagNotExistQuery, int.class, checkTagNotExistParams);
+        if(TagNotExist == true){
+            return TagNotExist;
+        }
+        return false;
     }
 
     @Override

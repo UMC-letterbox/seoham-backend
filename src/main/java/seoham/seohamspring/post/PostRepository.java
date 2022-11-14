@@ -40,7 +40,8 @@ public interface PostRepository {
     //데이터 유무 확인
     int checkPostExist(int postIdx);
     int checkTagExist(int userIdx, String tagName);
-    int checkTagNotExist(int userIdx,int tagIdx);
+    boolean checkTagsNotExist(int userIdx,List<Integer> tags);
+    boolean checkTagNotExist(int userIdx,int tagIdx);
     int checkSenderExist(int userIdx, String sender);
     int checkPostUser(int userIdx, int postIdx);
 

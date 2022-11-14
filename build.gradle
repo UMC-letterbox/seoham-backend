@@ -34,6 +34,11 @@ dependencies {
 	//swagger 기능 및 ui 추가
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
+	//이메일 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	//인증 번호 유효시간동안 저장
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 tasks.named('test') {

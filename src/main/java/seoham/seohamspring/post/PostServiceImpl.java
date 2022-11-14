@@ -27,7 +27,8 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
-        if(postRepository.checkTagNotExist(userIdx,createPostRequest.getTagIdx())==0){
+        if(!(postRepository.checkTagsNotExist(userIdx, createPostRequest.getTagIdx()))){
+            //false 일경우, tag가 없음. true 일경우, tag가 있음.
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         try{
@@ -46,7 +47,7 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
-        if(postRepository.checkTagNotExist(userIdx,patchPostRequest.getTagIdx())==0){
+        if(!(postRepository.checkTagsNotExist(userIdx,patchPostRequest.getTagIdx()))){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         if(postRepository.checkPostUser(userIdx, postIdx) == 0){
@@ -129,7 +130,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<GetPostResponse> readPostByTag(int userIdx, int tagIdx) throws BaseException {
-        if(postRepository.checkTagNotExist(userIdx, tagIdx) == 0){
+        if(postRepository.checkTagNotExist(userIdx, tagIdx)){
             throw new BaseException(INVALID_USER_JWT);
         }
         try{
@@ -240,7 +241,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws BaseException {
-        if(postRepository.checkTagNotExist(userIdx, tagIdx)==0){
+        if(postRepository.checkTagNotExist(userIdx, tagIdx)==false){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         try{
