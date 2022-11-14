@@ -15,9 +15,9 @@ public class GetPostResponse {
     private int postIdx;
     private String sender; //보낸이
     private Timestamp date; //날짜
-    private int tagIdx; //태그
-    private String tagName;
-    private String tagColor;
+    private String tagIdx; //태그 => list 형태로 변환
+    //private String tagName;
+    //private String tagColor;
     private int letterIdx; //편지지 번호
 
 }
