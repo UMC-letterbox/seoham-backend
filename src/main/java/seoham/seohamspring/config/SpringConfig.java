@@ -55,7 +55,4 @@ public class SpringConfig {
     @Bean
     public MypageRepository mypageRepository() { return new MypageRepositoryImpl(dataSource); }
 
-
-
-
 }
