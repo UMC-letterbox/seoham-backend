@@ -5,11 +5,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import seoham.seohamspring.config.BaseException;
+import seoham.seohamspring.mail.domain.PostCheckAuthReq;
+import seoham.seohamspring.mail.domain.PostCheckAuthRes;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
+
+import static seoham.seohamspring.config.BaseResponseStatus.FAIL_CHECKAUTH;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,9 @@ public class MailServcie {
     private final JavaMailSender emailSender;
     // 타임리프를사용하기 위한 객체를 의존성 주입으로 가져온다
     private final SpringTemplateEngine templateEngine;
+
+    private final RedisUtil redisUtil;
+
     private String authNum; //랜덤 인증 코드
 
     //랜덤 인증 코드 생성
@@ -77,6 +85,25 @@ public class MailServcie {
         Context context = new Context();
         context.setVariable("code", code);
         return templateEngine.process("mail", context); //mail.html
+    }
+
+    public Boolean checkAuth(PostCheckAuthReq postCheckAuthReq) throws BaseException {
+
+        PostCheckAuthRes postCheckAuthRes = null;
+
+        try {
+            String email = redisUtil.getData(postCheckAuthReq.getAuthCode());
+
+            boolean result = email.equals(postCheckAuthReq.getEmail());
+
+            return result;
+
+
+        } catch (Exception e) {
+            throw new BaseException(FAIL_CHECKAUTH);
+        }
+
+
     }
 
 }

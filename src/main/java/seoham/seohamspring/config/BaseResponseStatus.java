@@ -130,7 +130,9 @@ public enum BaseResponseStatus {
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
     INVALID_JWT(false,5000,"jwt 실패"),
-    EMPTY_JWT(false,5001 ,"jwt 비어있습니다." );
+    EMPTY_JWT(false,5001 ,"jwt 비어있습니다." ),
+
+    FAIL_CHECKAUTH(false, 6000, "authCode 확인 실패");
 
 
 
