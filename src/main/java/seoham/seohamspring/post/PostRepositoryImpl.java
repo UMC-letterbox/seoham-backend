@@ -2,17 +2,18 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
-import javax.swing.text.html.HTML;
 
 
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
-import static seoham.seohamspring.config.BaseResponseStatus.INVALID_USER_JWT;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -31,7 +32,9 @@ public class PostRepositoryImpl implements PostRepository {
      */
     @Override
     public int savePost(int userIdx, CreatePostRequest createPostRequest) {
-        String tagIdx = createPostRequest.getTagIdx().toString();
+        String tagIdx = createPostRequest.getTagIdx().stream()
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining(" "));
         String savePostQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
         Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getDate(),
                 tagIdx, createPostRequest.getContent(), createPostRequest.getLetterIdx()};
@@ -43,7 +46,9 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int updatePost(int userIdx, int postIdx, PatchPostRequest patchPostRequest) {
-        String tagIdx = patchPostRequest.getTagIdx().toString();
+        String tagIdx = patchPostRequest.getTagIdx().stream()
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining(" "));
         String updatePostQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
         Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getDate(), tagIdx,
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
@@ -137,66 +142,76 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     /*
-    수정 해야함.
+    태그별 편지 조회
      */
-
-
     @Override
-    public List<GetPostResponse> selectPostByTag(int tagIdx) {
-        String selectPostByTagQeury = "select * from post where t";
-        String selectPostByTagQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
-                "from (select *\n" +
-                "      from post\n" +
-                "      where tagIdx=?) as a\n" +
-                "left join tag as b\n" +
-                "on a.tagIdx = b.tagIdx";
-        return this.jdbcTemplate.query(selectPostByTagQuery,
-                (rs, rowNum) -> new GetPostResponse(
+    public List<GetPostByTagResponse> selectPostByTag(int userIdx, int tagIdx) {
+
+        List<GetTagResponse> tagList= jdbcTemplate.query("select * from post where userIdx = ?",
+                (rs, rowNum) -> new GetTagResponse(
+                        rs.getInt("postIdx"),
+                        rs.getString("tagIdx")
+                ), userIdx);
+
+
+        List<Integer> postIdxList = new ArrayList<>();
+        for(GetTagResponse getTagResponse : tagList){
+            String[] tags = getTagResponse.getTagIdx().split(" ");
+            if(Arrays.asList(tags).contains(String.valueOf(tagIdx))){
+                postIdxList.add(getTagResponse.getPostIdx());
+            }
+        }
+
+        System.out.println(postIdxList.toString());
+        if(postIdxList.isEmpty()) return null;
+
+        String inSql = String.join(",", Collections.nCopies(postIdxList.size(), "?"));
+        return jdbcTemplate.query(String.format("SELECT * FROM post WHERE postIdx IN (%s)", inSql),
+                postIdxList.toArray(),
+                (rs, rowNum) -> new GetPostByTagResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getString("tagIdx"), //"1,2,3,4,5"
-                        //rs.getString("tagName"),
-                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx")
-                ), tagIdx);
+                ));
     }
 
+
+    /*
+    태그 검색
+     */
     @Override
-    public List<GetPostResponse> selectPostByTagName(int userIdx, String tagName) {
-        String selectPostByTagNameQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
-                "from post as a\n" +
-                "inner join (select * from tag where tagName = ? and userIdx = ?) as b\n" +
-                "on a.tagIdx = b.tagIdx";
-        return this.jdbcTemplate.query(selectPostByTagNameQuery,
-                (rs, rowNum) -> new GetPostResponse(
-                        rs.getInt("postIdx"),
-                        rs.getString("sender"),
-                        rs.getTimestamp("date"),
-                        rs.getString("tagIdx"),
-                        //rs.getString("tagName"),
-                        //rs.getString("tagColor"),
-                        rs.getInt("letterIdx")
-                ), tagName, userIdx);
+    public List<GetPostByTagNameResponse> selectPostByTagName(int userIdx, String tagName) {
+        GetTagListResponse tag = jdbcTemplate.queryForObject("select * from tag where tagName = ? and userIdx = ?",
+                (rs,rowNum) -> new GetTagListResponse(
+                        rs.getInt("tagIdx"),
+                        rs.getString("tagName"),
+                        rs.getString("tagColor")
+                ),tagName, userIdx);
+
+        List<GetPostByTagResponse> list = selectPostByTag(userIdx,tag.getTagIdx());
+
+
+        List<GetPostByTagNameResponse> result = new ArrayList<>();
+        for(GetPostByTagResponse e : list){
+            GetPostByTagNameResponse e2 = new GetPostByTagNameResponse(e.getPostIdx(),
+                    e.getSender(), e.getDate(), tag.getTagIdx(), tagName, tag.getTagColor(),
+                    e.getLetterIdx());
+            result.add(e2);
+        }
+        return result;
+
     }
 
 
     @Override
     public List<GetPostResponse> selectPostByDate(int userIdx) {
-        String selectPostBySenderQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
-                "from (select *\n" +
-                "      from post\n" +
-                "      where userIdx=?) as a\n" +
-                "left join tag as b\n" +
-                "on a.tagIdx = b.tagIdx;\n";
+        String selectPostBySenderQuery = "select * from post where userIdx = ?";
         return this.jdbcTemplate.query(selectPostBySenderQuery,
                 (rs, rowNum) -> new GetPostResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getString("tagIdx"),
-                        //rs.getString("tagName"),
-                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx")
                 ), userIdx);
     }
@@ -217,26 +232,28 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
 
+    /*
+    수정
+     */
     @Override
-    public List<GetPostResponse> selectPostBySender(String sender, int userIdx) {
-        String selectPostBySenderQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx\n" +
-                "from (select *\n" +
-                "      from post\n" +
-                "      where sender=? AND userIdx= ?) as a\n" +
-                "left join tag as b\n" +
-                "on a.tagIdx = b.tagIdx";
+    public List<GetPostContextResponse> selectPostBySender(String sender, int userIdx) {
 
-
-        return this.jdbcTemplate.query(selectPostBySenderQuery,
-                (rs, rowNum) -> new GetPostResponse(
+        List<GetPostInfoResponse> List= jdbcTemplate.query("select * from post where userIdx = ? AND sender = ?",
+                (rs, rowNum) -> new GetPostInfoResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
                         rs.getString("tagIdx"),
-                        //rs.getString("tagName"),
-                        //rs.getString("tagColor"),
-                        rs.getInt("letterIdx")
-                ), sender, userIdx);
+                        rs.getInt("letterIdx"),
+                        rs.getString("content")
+                ), userIdx, sender);
+
+        List<GetPostContextResponse> result = new ArrayList<>();
+        for(GetPostInfoResponse e : List){
+            result.add(selectPost(e.getPostIdx()));
+        }
+
+        return result;
     }
 
 
@@ -246,29 +263,38 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public GetPostContextResponse selectPost(int postIdx) {
 
-        String selectPostQuery = "select a.postIdx, a.sender, a.date, a.tagIdx, b.tagName, b.tagColor, a.letterIdx, a.content\n" +
-                "from (select *\n" +
-                "      from post\n" +
-                "      where postIdx = ?) as a\n" +
-                "left join tag as b\n" +
-                "on a.tagIdx = b.tagIdx";
-
-        int selectPostParams = postIdx;
-
-
-
-        return this.jdbcTemplate.queryForObject(selectPostQuery,
-                (rs, rowNum) -> new GetPostContextResponse(
+        String selectPostInfoQuery = "select * from post where postIdx = ?";
+        GetPostInfoResponse getPostInfoResponse = jdbcTemplate.queryForObject(selectPostInfoQuery,
+                (rs, rowNum) -> new GetPostInfoResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
                         rs.getString("tagIdx"),
-                        //rs.getString("tagName"),
-                        //rs.getString("tagColor"),
                         rs.getInt("letterIdx"),
                         rs.getString("content")
-                ),selectPostParams);
+                ),postIdx);
 
+
+        //postIdx에 해당하는 tagIdx 추출
+        List<String> tagIdx = List.of(getPostInfoResponse.getTagIdx().split(" "));
+        List<String> tagName = new ArrayList<>();
+        List<String> tagColor = new ArrayList<>();
+        for(String tag : tagIdx){
+            TagInfoResponse tagInfoResponse = jdbcTemplate.queryForObject("select * from tag where tagIdx = ?",
+                    (rs, rowNum) -> new TagInfoResponse(
+                            rs.getString("tagName"),
+                            rs.getString("tagColor")
+                    ),Integer.parseInt(tag));
+            tagName.add(tagInfoResponse.getTagName());
+            tagColor.add(tagInfoResponse.getTagColor());
+        }
+
+
+        return new GetPostContextResponse(
+                getPostInfoResponse.getPostIdx(), getPostInfoResponse.getSender(), getPostInfoResponse.getDate(),
+                tagIdx, tagName, tagColor,
+                getPostInfoResponse.getLetterIdx(), getPostInfoResponse.getContent()
+        );
     }
 
 
@@ -293,30 +319,25 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public boolean checkTagsNotExist(int userIdx, List<Integer> tags) {
+    public boolean checkTagsExist(int userIdx, List<String> tags) {
         //List<Integer> tags를 입력받아 하나씩 순회하면서 존재하고 있는지 확인한다.
-        boolean TagsNotExist = false; //없다고 가정
+        boolean TagsExist = true; //있다고 가정
         for(int i = 0; i < tags.size(); i++) {
-            String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
-            Object[] checkTagNotExistParams = new Object[]{tags.get(i), userIdx};
-            TagsNotExist = this.jdbcTemplate.queryForObject(checkTagNotExistQuery,boolean.class, checkTagNotExistParams);
-            System.out.println(TagsNotExist);
+            String checkTagsExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
+            Object[] checkTagsExistParams = new Object[]{Integer.parseInt(tags.get(i)), userIdx};
+            TagsExist = this.jdbcTemplate.queryForObject(checkTagsExistQuery,boolean.class, checkTagsExistParams);
+            if(TagsExist = false) return false;
         }
-        return TagsNotExist;
+        return TagsExist;
     }
 
     @Override
-    public boolean checkTagNotExist(int userIdx, int tagIdx) {
+    public boolean checkTagExistById(int userIdx, int tagIdx) {
         //List<Integer> tags를 입력받아 하나씩 순회하면서 존재하고 있는지 확인한다.
         boolean TagNotExist = false;
-        String checkTagNotExistQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
-        Object[] checkTagNotExistParams = new Object[]{tagIdx, userIdx};
-        TagNotExist = this.jdbcTemplate.queryForObject(checkTagNotExistQuery,boolean.class, checkTagNotExistParams);
-
-        if(TagNotExist == true){
-            return TagNotExist;
-        }
-        return false;
+        String checkTagExistByIdQuery = "select exists(select tagIdx from tag where tagIdx =? AND userIdx= ?)";
+        Object[] checkTagExistByIdParams = new Object[]{tagIdx, userIdx};
+        return this.jdbcTemplate.queryForObject(checkTagExistByIdQuery,boolean.class, checkTagExistByIdParams);
     }
 
     @Override
