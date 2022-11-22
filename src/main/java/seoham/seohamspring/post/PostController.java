@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.post.domain.*;
-import seoham.seohamspring.user.UserService;
 import seoham.seohamspring.util.JwtService;
 
 import java.util.List;
@@ -131,10 +130,10 @@ public class PostController {
      */
     @ResponseBody
     @GetMapping("/tags/{tagIdx}")
-    public BaseResponse<List<GetPostResponse>> getPostByTag(@PathVariable("tagIdx") int tagIdx) {
+    public BaseResponse<List<GetPostByTagResponse>> getPostByTag(@PathVariable("tagIdx") int tagIdx) {
         try{
             int userIdx = jwtService.getUserIdx();
-            List<GetPostResponse> getPostResponse = postService.readPostByTag(userIdx, tagIdx);
+            List<GetPostByTagResponse> getPostResponse = postService.readPostByTag(userIdx, tagIdx);
             return new BaseResponse<>(getPostResponse);
 
         } catch(BaseException exception){
@@ -147,10 +146,10 @@ public class PostController {
      */
     @ResponseBody
     @GetMapping("/tags/search/{tagName}")
-    public BaseResponse<List<GetPostResponse>> getPostByTagName(@PathVariable("tagName") String tagName) {
+    public BaseResponse<List<GetPostByTagNameResponse>> getPostByTagName(@PathVariable("tagName") String tagName) {
         try{
             int userIdx = jwtService.getUserIdx();
-            List<GetPostResponse> getPostResponse = postService.readPostByTagName(userIdx, tagName);
+            List<GetPostByTagNameResponse> getPostResponse = postService.readPostByTagName(userIdx, tagName);
             return new BaseResponse<>(getPostResponse);
 
         } catch(BaseException exception){
@@ -200,10 +199,10 @@ public class PostController {
      */
     @ResponseBody
     @GetMapping("/senders/{sender}")
-    public BaseResponse<List<GetPostResponse>> getPostBySender(@PathVariable("sender") String sender) {
+    public BaseResponse<List<GetPostContextResponse>> getPostBySender(@PathVariable("sender") String sender) {
         try{
             int userIdx = jwtService.getUserIdx();
-            List<GetPostResponse> getPostResponse = postService.readPostBySender(sender, userIdx);
+            List<GetPostContextResponse> getPostResponse = postService.readPostBySender(sender, userIdx);
             return new BaseResponse<>(getPostResponse);
 
         } catch(BaseException exception){

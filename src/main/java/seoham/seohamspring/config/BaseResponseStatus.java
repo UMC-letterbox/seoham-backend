@@ -108,6 +108,7 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_SENDER(false, 3024,"보낸이 정보 수정을 실패하였습니다."),
     DELETE_FAIL_SENDER(false,3025,"보낸이 정보 삭제를 실패하였습니다."),
     SELECT_FAIL_TAG(false,3026,"해당하는 태그가 없습니다."),
+    SELECT_FAIL_POST_BY_TAG(false,3027,"태그에 해당하는 게시글이 없습니다."),
     //mypage
     FAIL_MODIFY_NICKNAME(false, 3030, "닉네임 수정에 실패했습니다"),
     FAIL_MODIFY_PASSWORD(false, 3031, "비밀번호 수정에 실패했습니다"),

@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
-        if(!(postRepository.checkTagsNotExist(userIdx, createPostRequest.getTagIdx()))){
+        if(!(postRepository.checkTagsExist(userIdx, createPostRequest.getTagIdx()))){
             //false 일경우, tag가 없음. true 일경우, tag가 있음.
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
         if(postRepository.checkPostExist(postIdx) == 0){
             throw new BaseException(POST_EMPTY_POST_IDX);
         }
-        if(!(postRepository.checkTagsNotExist(userIdx,patchPostRequest.getTagIdx()))){
+        if(!(postRepository.checkTagsExist(userIdx,patchPostRequest.getTagIdx()))){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         if(postRepository.checkPostUser(userIdx, postIdx) == 0){
@@ -100,9 +100,9 @@ public class PostServiceImpl implements PostService {
         }
         try {
             GetPostContextResponse getPostContextResponse = postRepository.selectPost(postIdx);
+
             return getPostContextResponse;
         } catch (Exception exception) {
-            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -129,13 +129,13 @@ public class PostServiceImpl implements PostService {
     태그별 편지 조회
      */
     @Override
-    public List<GetPostResponse> readPostByTag(int userIdx, int tagIdx) throws BaseException {
-        if(postRepository.checkTagNotExist(userIdx, tagIdx)){
+    public List<GetPostByTagResponse> readPostByTag(int userIdx, int tagIdx) throws BaseException {
+        if(!(postRepository.checkTagExistById(userIdx, tagIdx))){
             throw new BaseException(INVALID_USER_JWT);
         }
         try{
-            List<GetPostResponse> getPostResponse = postRepository.selectPostByTag(tagIdx);
-            return getPostResponse;
+            List<GetPostByTagResponse> getPostByTagResponse = postRepository.selectPostByTag(userIdx, tagIdx);
+            return getPostByTagResponse;
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -145,14 +145,17 @@ public class PostServiceImpl implements PostService {
     태그 검색
      */
     @Override
-    public List<GetPostResponse> readPostByTagName(int userIdx, String tagName) throws BaseException {
+    public List<GetPostByTagNameResponse> readPostByTagName(int userIdx, String tagName) throws BaseException {
         if(postRepository.checkTagExist(userIdx, tagName) == 0){
             throw new BaseException(SELECT_FAIL_TAG);
         }
+
         try{
-            List<GetPostResponse> getPostResponse = postRepository.selectPostByTagName(userIdx, tagName);
+            List<GetPostByTagNameResponse> getPostResponse = postRepository.selectPostByTagName(userIdx, tagName);
             return getPostResponse;
-        }catch (Exception exception){
+        } catch (NullPointerException nullPointerException){
+            throw new BaseException(SELECT_FAIL_POST_BY_TAG);
+        } catch (Exception exception){
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
@@ -195,12 +198,12 @@ public class PostServiceImpl implements PostService {
     보낸이 별 편지 조회
      */
     @Override
-    public List<GetPostResponse> readPostBySender(String sender, int userIdx) throws BaseException {
+    public List<GetPostContextResponse> readPostBySender(String sender, int userIdx) throws BaseException {
         if(postRepository.checkSenderExist(userIdx, sender) == 0){
             throw new BaseException(INVALID_USER_JWT);
         }
         try {
-            List<GetPostResponse> getPostResponse = postRepository.selectPostBySender(sender, userIdx);
+            List<GetPostContextResponse> getPostResponse = postRepository.selectPostBySender(sender, userIdx);
             return getPostResponse;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -241,7 +244,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public DeleteTagResponse deleteTag(int userIdx, int tagIdx) throws BaseException {
-        if(postRepository.checkTagNotExist(userIdx, tagIdx)==false){
+        if(postRepository.checkTagExistById(userIdx, tagIdx)==false){
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         try{
