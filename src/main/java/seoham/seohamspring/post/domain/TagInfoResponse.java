@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TagInfoResponse {
 
+    private int tagIdx;
     private String tagName;
     private String tagColor;
+
 }
