@@ -18,9 +18,7 @@ import static seoham.seohamspring.config.BaseResponseStatus.*;
 @RequestMapping("/posts")
 public class PostController {
 
-    @Autowired
     private final PostService postService;
-    @Autowired
     private final JwtService jwtService;
 
 

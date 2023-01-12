@@ -11,7 +11,6 @@ import java.util.List;
 import static seoham.seohamspring.config.BaseResponseStatus.*;
 
 @Service
-
 public class PostServiceImpl implements PostService {
 
 
