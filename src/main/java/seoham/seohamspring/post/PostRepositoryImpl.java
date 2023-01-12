@@ -203,14 +203,44 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<GetPostResponse> selectPostByDate(int userIdx) {
-        String selectPostBySenderQuery = "select * from post where userIdx = ?";
-        return this.jdbcTemplate.query(selectPostBySenderQuery,
-                (rs, rowNum) -> new GetPostResponse(
+
+        List<GetPostInfoResponse> getPostInfoResponseList  = jdbcTemplate.query("select * from post where userIdx = ?",
+                (rs, rowNum) -> new GetPostInfoResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("letterIdx")
+                        rs.getString("tagIdx"),
+                        rs.getInt("letterIdx"),
+                        rs.getString("content")
                 ), userIdx);
+
+        List<GetPostResponse> getPostResponseList = new ArrayList<>();
+
+        //postIdx에 해당하는 tagIdx 추출
+        for(GetPostInfoResponse postInfoResponse : getPostInfoResponseList){
+            List<String> tagIdx = List.of(postInfoResponse.getTagIdx().split(" "));
+            List<String> tagName = new ArrayList<>();
+            List<String> tagColor = new ArrayList<>();
+            List<Integer> tagList = new ArrayList<>();
+            for(String tag : tagIdx){
+                TagInfoResponse tagInfoResponse = jdbcTemplate.queryForObject("select * from tag where tagIdx = ?",
+                        (rs, rowNum) -> new TagInfoResponse(
+                                rs.getInt("tagIdx"),
+                                rs.getString("tagName"),
+                                rs.getString("tagColor")
+                        ),Integer.parseInt(tag));
+                tagList.add(tagInfoResponse.getTagIdx());
+                tagName.add(tagInfoResponse.getTagName());
+                tagColor.add(tagInfoResponse.getTagColor());
+            }
+            GetPostResponse getPostResponse = new GetPostResponse(postInfoResponse.getPostIdx(), postInfoResponse.getSender(), postInfoResponse.getDate(),
+                    tagList, tagName, tagColor, postInfoResponse.getLetterIdx());
+
+            getPostResponseList.add(getPostResponse);
+
+        }
+
+        return getPostResponseList;
     }
 
 

@@ -23,4 +23,5 @@ public class GetPostContextResponse {
     private int letterIdx; //편지지 번호
     private String content;
 
+
 }
