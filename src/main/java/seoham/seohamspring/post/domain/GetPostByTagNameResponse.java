@@ -20,5 +20,7 @@ public class GetPostByTagNameResponse {
     private String tagName; //태그 이름 리스트
     private String tagColor; //태그 색상 리스트
     private int letterIdx; //편지지 번호
+    private String image;
+
 
 }

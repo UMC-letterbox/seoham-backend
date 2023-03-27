@@ -16,6 +16,7 @@ public class CreatePostRequest {
     private int date; //날짜
     private List<Integer> tagIdx; //태그
     private String content; //편지 내용
+    private String image;
     private int letterIdx; //편지지 번호
 
 

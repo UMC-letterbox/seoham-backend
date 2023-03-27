@@ -18,5 +18,6 @@ public class GetPostInfoResponse {
     private Timestamp date; //날짜
     private String tagIdx; //태그 번호 리스트
     private int letterIdx; //편지지 번호
+    private String image;
     private String content;
 }
