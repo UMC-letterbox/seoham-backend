@@ -35,8 +35,8 @@ public class PostRepositoryImpl implements PostRepository {
         String tagIdx = createPostRequest.getTagIdx().stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(" "));
-        String savePostQuery = "INSERT INTO post(userIdx, sender, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
-        Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getDate(),
+        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
+        Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getImage(), createPostRequest.getDate(),
                 tagIdx, createPostRequest.getContent(), createPostRequest.getLetterIdx()};
         this.jdbcTemplate.update(savePostQuery, savePostParams);
 
@@ -49,8 +49,8 @@ public class PostRepositoryImpl implements PostRepository {
         String tagIdx = patchPostRequest.getTagIdx().stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(" "));
-        String updatePostQuery = "UPDATE post SET userIdx=?, sender=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
-        Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getDate(), tagIdx,
+        String updatePostQuery = "UPDATE post SET userIdx=?, sender=?,iamge=? date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
+        Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getImage(), patchPostRequest.getDate(), tagIdx,
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
 
         return this.jdbcTemplate.update(updatePostQuery, updatePostParams);
@@ -169,7 +169,8 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
                         rs.getTimestamp("date"),
-                        rs.getInt("letterIdx")
+                        rs.getInt("letterIdx"),
+                        rs.getString("image")
                 ));
     }
 
@@ -193,7 +194,7 @@ public class PostRepositoryImpl implements PostRepository {
         for(GetPostByTagResponse e : list){
             GetPostByTagNameResponse e2 = new GetPostByTagNameResponse(e.getPostIdx(),
                     e.getSender(), e.getDate(), tag.getTagIdx(), tagName, tag.getTagColor(),
-                    e.getLetterIdx());
+                    e.getLetterIdx(),e.getImage());
             result.add(e2);
         }
         return result;
@@ -211,6 +212,7 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getTimestamp("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
+                        rs.getString("image"),
                         rs.getString("content")
                 ), userIdx);
 
@@ -234,7 +236,7 @@ public class PostRepositoryImpl implements PostRepository {
                 tagColor.add(tagInfoResponse.getTagColor());
             }
             GetPostResponse getPostResponse = new GetPostResponse(postInfoResponse.getPostIdx(), postInfoResponse.getSender(), postInfoResponse.getDate(),
-                    tagList, tagName, tagColor, postInfoResponse.getLetterIdx());
+                    tagList, tagName, tagColor, postInfoResponse.getImage(), postInfoResponse.getLetterIdx());
 
             getPostResponseList.add(getPostResponse);
 
@@ -272,6 +274,7 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getTimestamp("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
+                        rs.getString("image"),
                         rs.getString("content")
                 ), userIdx, sender);
 
@@ -298,7 +301,8 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getTimestamp("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
-                        rs.getString("content")
+                        rs.getString("content"),
+                        rs.getString("image")
                 ),postIdx);
 
 
@@ -323,7 +327,7 @@ public class PostRepositoryImpl implements PostRepository {
         return new GetPostContextResponse(
                 getPostInfoResponse.getPostIdx(), getPostInfoResponse.getSender(), getPostInfoResponse.getDate(),
                 tagList, tagName, tagColor,
-                getPostInfoResponse.getLetterIdx(), getPostInfoResponse.getContent()
+                getPostInfoResponse.getLetterIdx(), getPostInfoResponse.getImage(), getPostInfoResponse.getContent()
         );
     }
 

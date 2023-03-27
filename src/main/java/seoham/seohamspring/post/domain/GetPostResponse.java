@@ -19,6 +19,7 @@ public class GetPostResponse {
     private List<Integer> tagIdx; //태그 번호 리스트
     private List<String> tagName; //태그 이름 리스트
     private List<String> tagColor; //태그 색상 리스트
+    private String image;
     private int letterIdx; //편지지 번호
 
 }

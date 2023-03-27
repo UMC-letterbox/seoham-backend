@@ -16,6 +16,7 @@ public class PatchPostRequest {
     private List<Integer> tagIdx; //태그
     private String content; //편지 내용
     private int letterIdx; //편지지 번호
+    private String image;
 
     public PatchPostRequest(){
 
