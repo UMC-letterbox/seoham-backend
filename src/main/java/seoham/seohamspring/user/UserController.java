@@ -13,6 +13,9 @@ import static seoham.seohamspring.config.BaseResponseStatus.*;
 import static seoham.seohamspring.util.ValidationRegex.isRegexEmail;
 import static seoham.seohamspring.util.ValidationRegex.isRegexNickName;
 import seoham.seohamspring.util.JwtService;
+
+import java.util.Objects;
+
 @Controller
 @Api(tags = "user")
 @RequestMapping("/user")
@@ -30,25 +33,18 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    @ResponseBody
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
-    }
-
 
     // 회원가입 API
-    // Body
     @ResponseBody
     @PostMapping("/join")
     public BaseResponse<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
-        if(createUserRequest.getEmail() == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
+        if(Objects.equals(createUserRequest.getEmail(), "")){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
             return new BaseResponse<>(CREATE_USER_EMPTY_EMAIL);
         }
-        if(createUserRequest.getPassWord() == ""){
+        if(Objects.equals(createUserRequest.getPassWord(), "")){
             return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
         }
-        if(createUserRequest.getNickName() == ""){
+        if(Objects.equals(createUserRequest.getNickName(), "")){
             return new BaseResponse<>(CREATE_USER_EMPTY_NICKNAME);
         }
         try {
@@ -61,11 +57,10 @@ public class UserController {
 
 
      //이메일 중복검사 회원가입용
-    // Body
     @ResponseBody
     @GetMapping("/check-join-email")
     public BaseResponse<CheckJoinResponse> checkJoinEmail(@RequestParam String email) {
-        if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
+        if(Objects.equals(email, "")){
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
         }
         if(!isRegexEmail(email)){
@@ -81,11 +76,10 @@ public class UserController {
     }
 
     //닉네임 중복검사 회원가입용
-    // Body
     @ResponseBody
     @GetMapping("/check-join-nickname")
     public BaseResponse<CheckJoinResponse> checkJoinNickName(@RequestParam String nickName) {
-        if(nickName == ""){
+        if(Objects.equals(nickName, "")){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
         }
         if(!isRegexNickName(nickName)){
@@ -107,7 +101,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-find-password")
     public BaseResponse<CheckFindResponse> checkFindEmail(@RequestParam String email) {
-        if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하
+        if(Objects.equals(email, "")){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
         }
         if(!isRegexEmail(email)){
@@ -127,7 +121,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-find-email")
     public BaseResponse<CheckFindResponse> checkFindNickName(@RequestParam String nickName) {
-        if(nickName == ""){
+        if(Objects.equals(nickName, "")){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
         }
         if(!isRegexNickName(nickName)){

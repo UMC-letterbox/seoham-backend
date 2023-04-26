@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import seoham.seohamspring.config.BaseException;
 import seoham.seohamspring.config.BaseResponse;
 import seoham.seohamspring.mail.domain.PostCheckAuthReq;
-import seoham.seohamspring.mail.domain.PostCheckAuthRes;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -20,13 +19,13 @@ import java.io.UnsupportedEncodingException;
 @Api(tags = "mail")
 @RequestMapping("/mail")
 public class MailController {
-    private final MailServcie mailServcie;
+    private final MailService mailService;
     private final RedisUtil redisUtil;
     @ResponseBody
     @PostMapping("/send")
     public void mailConfirm(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = mailServcie.sendEmail(emailDto.getEmail());
+        String authCode = mailService.sendEmail(emailDto.getEmail());
         redisUtil.setDataExpire(authCode, emailDto.getEmail(), 60 * 5L);
 //        return authCode;
     }
@@ -36,7 +35,7 @@ public class MailController {
     public BaseResponse<Boolean> CheckAuth(@RequestBody PostCheckAuthReq postCheckAuthReq) {
 
         try {
-            return new BaseResponse<>(mailServcie.checkAuth(postCheckAuthReq));
+            return new BaseResponse<>(mailService.checkAuth(postCheckAuthReq));
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

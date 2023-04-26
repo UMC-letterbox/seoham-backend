@@ -71,8 +71,6 @@ public class UserRepositoryImpl implements UserRepository {
     public int findPassWord(FindPassWordRequest findPassWordRequest){
         String findPassWordQuery = "UPDATE user set passWord = ? where email = ?;";
         Object[] findPassWordParams = new Object[]{findPassWordRequest.getPassWord(), findPassWordRequest.getEmail()};
-        //System.out.println(findPassWordParams[0]);
-        //System.out.println(findPassWordParams[1]);
         return this.jdbcTemplate.update(findPassWordQuery,findPassWordParams);
     }
 
