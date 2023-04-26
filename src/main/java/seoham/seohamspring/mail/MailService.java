@@ -1,6 +1,7 @@
 package seoham.seohamspring.mail;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -18,10 +19,10 @@ import static seoham.seohamspring.config.BaseResponseStatus.FAIL_CHECKAUTH;
 
 @Service
 @RequiredArgsConstructor
-public class MailServcie {
+public class MailService {
 
     //의존성 주입을 통해서 필요한 객체를 가져온다.
-    private final JavaMailSender emailSender;
+    private JavaMailSender javaMailSender;
     // 타임리프를사용하기 위한 객체를 의존성 주입으로 가져온다
     private final SpringTemplateEngine templateEngine;
 
@@ -60,7 +61,7 @@ public class MailServcie {
         String toEmail = email; //받는 사람
         String title = "서함 서비스 인증번호"; //제목
 
-        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessage message = javaMailSender.createMimeMessage();
         message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
         message.setSubject(title); //제목 설정
         message.setFrom(setFrom); //보내는 이메일
@@ -75,7 +76,7 @@ public class MailServcie {
         //메일전송에 필요한 정보 설정
         MimeMessage emailForm = createEmailForm(toEmail);
         //실제 메일 전송
-        emailSender.send(emailForm);
+        javaMailSender.send(emailForm);
 
         return authNum; //인증 코드 반환
     }
