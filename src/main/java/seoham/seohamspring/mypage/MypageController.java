@@ -30,12 +30,6 @@ public class MypageController {
     }
 
     @ResponseBody
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
-    }
-
-    @ResponseBody
     @GetMapping("/jwt/user")
     public int jwtToUser() throws BaseException {
         return jwtService.getUserIdx();

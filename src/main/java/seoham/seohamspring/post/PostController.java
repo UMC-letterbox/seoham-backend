@@ -38,7 +38,7 @@ public class PostController {
     @ResponseBody
     @PostMapping("/new")
     public BaseResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
-        if (createPostRequest.getContent().length() >450) {//게시물 길이
+        if (createPostRequest.getContent().length() >450) {
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENT);
         }
         if (createPostRequest.getSender().length() >20) {//보낸이 길이
@@ -247,7 +247,7 @@ public class PostController {
 
 
     /*
-    태그 정보 삭제
+    태그 정보 삭제정 - 추후에 수정
      */
 
     @ResponseBody

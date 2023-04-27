@@ -32,16 +32,22 @@ public class PostRepositoryImpl implements PostRepository {
      */
     @Override
     public int savePost(int userIdx, CreatePostRequest createPostRequest) {
-        String tagIdx = createPostRequest.getTagIdx().stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(" "));
-        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
+        List<Integer> tagList = createPostRequest.getTagIdx();
+
+        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, content, letterIdx) VALUES (?,?,?,?,?,?)";
         Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getImage(), createPostRequest.getDate(),
-                tagIdx, createPostRequest.getContent(), createPostRequest.getLetterIdx()};
+                createPostRequest.getContent(), createPostRequest.getLetterIdx()};
         this.jdbcTemplate.update(savePostQuery, savePostParams);
 
-        String lastSavePostIdxQuery = "select last_insert_id()";
-        return jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
+
+
+        int postIdx = jdbcTemplate.queryForObject("select last_insert_id()", Integer.class);
+        for(Integer tagIdx : tagList){
+            String savePostTagQuery = "INSERT INTO post_tag(postIdx, tagIdx) VALUES (?, ?)";
+            this.jdbcTemplate.update(savePostTagQuery, postIdx, tagIdx);
+        }
+
+        return postIdx;
     }
 
     @Override
@@ -87,6 +93,9 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.update(updateTagQuery, updateTagParams);
     }
 
+    /*
+    추후에 수정
+     */
     @Override
     public int deleteTag(int tagIdx) {
         //기존 post 테이블에서 tagIdx = 0으로 update
