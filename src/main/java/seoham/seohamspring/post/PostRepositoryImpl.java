@@ -44,7 +44,8 @@ public class PostRepositoryImpl implements PostRepository {
         int postIdx = jdbcTemplate.queryForObject("select last_insert_id()", Integer.class);
         for(Integer tagIdx : tagList){
             String savePostTagQuery = "INSERT INTO post_tag(postIdx, tagIdx) VALUES (?, ?)";
-            this.jdbcTemplate.update(savePostTagQuery, postIdx, tagIdx);
+            Object[] savePostTagParams = new Object[]{postIdx, tagIdx};
+            this.jdbcTemplate.update(savePostTagQuery, savePostTagParams);
         }
 
         return postIdx;
