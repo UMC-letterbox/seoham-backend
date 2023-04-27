@@ -209,9 +209,11 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    /*
+    태그 생성
+     */
     @Override
     public CreateTagResponse createTag(int userIdx, CreateTagRequest createTagRequest) throws BaseException {
-        //태그 정보 추가시, 태그 중복 확인함.
         if(postRepository.checkTagExist(userIdx, createTagRequest.getTagName()) == 1){
             throw new BaseException(POST_TAGS_EXIST);
         }
