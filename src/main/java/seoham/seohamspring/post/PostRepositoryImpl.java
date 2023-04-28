@@ -39,32 +39,18 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public int savePost(int userIdx, CreatePostRequest createPostRequest) {
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO post(userIdx, sender,image, date, content, letterIdx) VALUES (?,?,?,?,?,?)", new String[] {"id"});
+        String tagIdx = createPostRequest.getTagIdx().stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(" "));
+        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
+        Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getImage(), createPostRequest.getDate(),
+                tagIdx, createPostRequest.getContent(), createPostRequest.getLetterIdx()};
 
-                pstmt.setInt(1, userIdx);
-                pstmt.setString(2, createPostRequest.getSender());
-                pstmt.setString(3,createPostRequest.getImage());
-                pstmt.setInt(4,createPostRequest.getDate());
-                pstmt.setString(5,createPostRequest.getContent());
-                pstmt.setInt(6,createPostRequest.getLetterIdx());
+        this.jdbcTemplate.update(savePostQuery, savePostParams);
 
-                return pstmt;
-            }
-        }, keyHolder);
 
-        int postIdx = (int) keyHolder.getKey();
-        List<Integer> tagList = createPostRequest.getTagIdx();
-        for(Integer tagIdx : tagList){
-            String savePostTagQuery = "INSERT INTO post_tag(postIdx, tagIdx) VALUES (?, ?)";
-            Object[] savePostTagParams = new Object[]{postIdx, tagIdx};
-            this.jdbcTemplate.update(savePostTagQuery, savePostTagParams);
-        }
-
-        return postIdx;
+        String lastSavePostIdxQuery = "select last_insert_id()";
+        return jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
     }
 
     @Override
