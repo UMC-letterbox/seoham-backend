@@ -176,7 +176,7 @@ public class PostRepositoryImpl implements PostRepository {
                 (rs, rowNum) -> new GetPostByTagResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
-                        rs.getTimestamp("date"),
+                        rs.getInt("date"),
                         rs.getInt("letterIdx"),
                         rs.getString("image")
                 ));
