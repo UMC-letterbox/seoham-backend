@@ -16,7 +16,7 @@ public class GetPostContextResponse {
 
     private int postIdx;
     private String sender; //보낸이
-    private Timestamp date; //날짜
+    private int date; //날짜
     private List<Integer> tagIdx; //태그 번호 리스트
     private List<String> tagName; //태그 이름 리스트
     private List<String> tagColor; //태그 색상 리스트

@@ -27,7 +27,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public CreatePostResponse createPost(int userIdx, CreatePostRequest createPostRequest) throws BaseException {
         if(!(postRepository.checkTagsExist(userIdx, createPostRequest.getTagIdx()))){
-            //false 일경우, tag가 없음. true 일경우, tag가 있음.
             throw new BaseException(POST_EMPTY_TAG_IDX);
         }
         try{
@@ -102,7 +101,8 @@ public class PostServiceImpl implements PostService {
 
             return getPostContextResponse;
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -136,7 +136,8 @@ public class PostServiceImpl implements PostService {
             List<GetPostByTagResponse> getPostByTagResponse = postRepository.selectPostByTag(userIdx, tagIdx);
             return getPostByTagResponse;
         }catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -156,7 +157,8 @@ public class PostServiceImpl implements PostService {
             throw new BaseException(SELECT_FAIL_POST_BY_TAG);
         } catch (Exception exception){
             System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -170,8 +172,8 @@ public class PostServiceImpl implements PostService {
             List<GetPostResponse> getPostResponse = postRepository.selectPostByDate(userIdx);
             return getPostResponse;
         }catch (Exception exception){
-            System.out.println(exception);
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -187,8 +189,8 @@ public class PostServiceImpl implements PostService {
 
             return getSenderList;
         }catch (Exception exception){
-
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -205,7 +207,8 @@ public class PostServiceImpl implements PostService {
             List<GetPostContextResponse> getPostResponse = postRepository.selectPostBySender(sender, userIdx);
             return getPostResponse;
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -222,7 +225,7 @@ public class PostServiceImpl implements PostService {
             int tagIdx = postRepository.saveTag(userIdx, createTagRequest);
             return new CreateTagResponse(tagIdx);
         }catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
         }
     }
 
@@ -255,7 +258,8 @@ public class PostServiceImpl implements PostService {
             }
             return new DeleteTagResponse(success);
         }catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -271,7 +275,8 @@ public class PostServiceImpl implements PostService {
             }
             return new PatchSenderResponse(success);
         }catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
@@ -287,8 +292,8 @@ public class PostServiceImpl implements PostService {
             }
             return new DeleteSenderResponse(success);
         }catch (Exception exception){
-
-            throw new BaseException(DATABASE_ERROR);
+            throw new RuntimeException(exception.getMessage());
+            //throw new BaseException(DATABASE_ERROR);
         }
     }
 
