@@ -42,6 +42,9 @@ public class UserServiceImpl implements UserService {
         }
 */
 
+        if(!checkEmail(createUserRequest.getEmail())){
+            throw new BaseException(EXIST_EMAIL);
+        }
         String pwd;
         try{
             pwd = new SHA256().encrypt(createUserRequest.getPassWord());

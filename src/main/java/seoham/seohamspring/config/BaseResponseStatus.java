@@ -25,6 +25,7 @@ public enum BaseResponseStatus {
     CREATE_USER_EMPTY_NICKNAME(false, 2001, "닉네임을 입력해주세요."),
     CREATE_USER_EMPTY_PASSWORD(false, 2002, "비밀번호를 입력해주세요."),
     CREATE_USER_INVALID_EMAIL(false, 2003, "이메일 형식을 확인해주세요."),
+    EXIST_EMAIL(false, 2004, "존재하는 이메일입니다."),
 
 
     CHECK_USER_EMPTY_EMAIL(false, 2010, "이메일을 입력해주세요."),
