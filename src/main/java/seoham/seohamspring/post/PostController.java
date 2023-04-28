@@ -38,6 +38,7 @@ public class PostController {
     @ResponseBody
     @PostMapping("/new")
     public BaseResponse<CreatePostResponse> createPost(@RequestBody CreatePostRequest createPostRequest){
+        int userIdx = 0;
         if (createPostRequest.getContent().length() >450) {
             return new BaseResponse<>(POST_POSTS_INVALID_CONTENT);
         }
@@ -45,10 +46,11 @@ public class PostController {
             return new BaseResponse<>(POST_SENDER_INVALID_CONTENT);
         }
         try{
-            int userIdx = jwtService.getUserIdx();
+            userIdx = jwtService.getUserIdx();
             CreatePostResponse createPostResponse = postService.createPost(userIdx, createPostRequest);
             return new BaseResponse<>(createPostResponse);
         }catch (BaseException e){
+            System.out.println("userIdx: " + userIdx);
             return new BaseResponse<>(e.getStatus());
         }
     }
