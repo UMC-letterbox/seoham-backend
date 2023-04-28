@@ -42,23 +42,21 @@ public class PostRepositoryImpl implements PostRepository {
         String tagIdx = createPostRequest.getTagIdx().stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(" "));
-        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?)";
+        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, tagIdx, content, letterIdx) VALUES (?,?,?,?,?,?,?)";
         Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getImage(), createPostRequest.getDate(),
                 tagIdx, createPostRequest.getContent(), createPostRequest.getLetterIdx()};
 
-        this.jdbcTemplate.update(savePostQuery, savePostParams);
-
-
-        String lastSavePostIdxQuery = "select last_insert_id()";
-        return jdbcTemplate.queryForObject(lastSavePostIdxQuery, int.class);
+        return this.jdbcTemplate.update(savePostQuery, savePostParams);
     }
+
+
 
     @Override
     public int updatePost(int userIdx, int postIdx, PatchPostRequest patchPostRequest) {
         String tagIdx = patchPostRequest.getTagIdx().stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(" "));
-        String updatePostQuery = "UPDATE post SET userIdx=?, sender=?,iamge=? date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
+        String updatePostQuery = "UPDATE post SET userIdx=?, sender=?,image=?, date=?, tagIdx=?, content=?, letterIdx=? WHERE postIdx = ?";
         Object[] updatePostParams = new Object[]{userIdx, patchPostRequest.getSender(), patchPostRequest.getImage(), patchPostRequest.getDate(), tagIdx,
                 patchPostRequest.getContent(), patchPostRequest.getLetterIdx(), postIdx};
 
@@ -78,6 +76,7 @@ public class PostRepositoryImpl implements PostRepository {
     //태그 정보 저장, 수정, 삭제
     @Override
     public int saveTag(int userIdx, CreateTagRequest createTagRequest) {
+        System.out.println("userIdx :" + userIdx);
         String saveTagQuery = "INSERT INTO tag(tagName, tagColor,userIdx) VALUES (?,?,?)";
         Object[] saveTagParams = new Object[]{createTagRequest.getTagName(), createTagRequest.getTagColor(), userIdx};
         this.jdbcTemplate.update(saveTagQuery, saveTagParams);
@@ -96,9 +95,6 @@ public class PostRepositoryImpl implements PostRepository {
         return this.jdbcTemplate.update(updateTagQuery, updateTagParams);
     }
 
-    /*
-    추후에 수정
-     */
     @Override
     public int deleteTag(int tagIdx) {
         //기존 post 테이블에서 tagIdx = 0으로 update
@@ -221,7 +217,7 @@ public class PostRepositoryImpl implements PostRepository {
                 (rs, rowNum) -> new GetPostInfoResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
-                        rs.getTimestamp("date"),
+                        rs.getInt("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
                         rs.getString("image"),
@@ -283,7 +279,7 @@ public class PostRepositoryImpl implements PostRepository {
                 (rs, rowNum) -> new GetPostInfoResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
-                        rs.getTimestamp("date"),
+                        rs.getInt("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
                         rs.getString("image"),
@@ -310,7 +306,7 @@ public class PostRepositoryImpl implements PostRepository {
                 (rs, rowNum) -> new GetPostInfoResponse(
                         rs.getInt("postIdx"),
                         rs.getString("sender"),
-                        rs.getTimestamp("date"),
+                        rs.getInt("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
                         rs.getString("content"),
