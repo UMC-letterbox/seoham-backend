@@ -14,7 +14,7 @@ public class GetPostByTagResponse {
 
     private int postIdx;
     private String sender; //보낸이
-    private Timestamp date; //날짜
+    private int date; //날짜
     private int letterIdx; //편지지 번호
     private String image;
 
