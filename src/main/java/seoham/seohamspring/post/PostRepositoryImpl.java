@@ -2,6 +2,9 @@ package seoham.seohamspring.post;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import seoham.seohamspring.post.domain.*;
 
 import javax.sql.DataSource;
@@ -9,6 +12,9 @@ import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,16 +38,26 @@ public class PostRepositoryImpl implements PostRepository {
      */
     @Override
     public int savePost(int userIdx, CreatePostRequest createPostRequest) {
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO post(userIdx, sender,image, date, content, letterIdx) VALUES (?,?,?,?,?,?)", new String[] {"id"});
+
+                pstmt.setInt(1, userIdx);
+                pstmt.setString(2, createPostRequest.getSender());
+                pstmt.setString(3,createPostRequest.getImage());
+                pstmt.setInt(4,createPostRequest.getDate());
+                pstmt.setString(5,createPostRequest.getContent());
+                pstmt.setInt(6,createPostRequest.getLetterIdx());
+
+                return pstmt;
+            }
+        }, keyHolder);
+
+        int postIdx = (int) keyHolder.getKey();
         List<Integer> tagList = createPostRequest.getTagIdx();
-
-        String savePostQuery = "INSERT INTO post(userIdx, sender,image, date, content, letterIdx) VALUES (?,?,?,?,?,?)";
-        Object[] savePostParams = new Object[]{userIdx, createPostRequest.getSender(), createPostRequest.getImage(), createPostRequest.getDate(),
-                createPostRequest.getContent(), createPostRequest.getLetterIdx()};
-        this.jdbcTemplate.update(savePostQuery, savePostParams);
-
-
-
-        int postIdx = jdbcTemplate.queryForObject("select last_insert_id()", Integer.class);
         for(Integer tagIdx : tagList){
             String savePostTagQuery = "INSERT INTO post_tag(postIdx, tagIdx) VALUES (?, ?)";
             Object[] savePostTagParams = new Object[]{postIdx, tagIdx};

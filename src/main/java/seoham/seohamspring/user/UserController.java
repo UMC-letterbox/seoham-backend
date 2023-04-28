@@ -38,13 +38,13 @@ public class UserController {
     @ResponseBody
     @PostMapping("/join")
     public BaseResponse<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
-        if(Objects.equals(createUserRequest.getEmail(), "")){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
+        if(createUserRequest.getEmail() == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
             return new BaseResponse<>(CREATE_USER_EMPTY_EMAIL);
         }
-        if(Objects.equals(createUserRequest.getPassWord(), "")){
+        if(createUserRequest.getPassWord() == ""){
             return new BaseResponse<>(CREATE_USER_EMPTY_PASSWORD);
         }
-        if(Objects.equals(createUserRequest.getNickName(), "")){
+        if(createUserRequest.getNickName() == ""){
             return new BaseResponse<>(CREATE_USER_EMPTY_NICKNAME);
         }
         try {
@@ -60,7 +60,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-join-email")
     public BaseResponse<CheckJoinResponse> checkJoinEmail(@RequestParam String email) {
-        if(Objects.equals(email, "")){
+        if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하기
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
         }
         if(!isRegexEmail(email)){
@@ -79,7 +79,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-join-nickname")
     public BaseResponse<CheckJoinResponse> checkJoinNickName(@RequestParam String nickName) {
-        if(Objects.equals(nickName, "")){
+        if(nickName == ""){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
         }
         if(!isRegexNickName(nickName)){
@@ -101,7 +101,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-find-password")
     public BaseResponse<CheckFindResponse> checkFindEmail(@RequestParam String email) {
-        if(Objects.equals(email, "")){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하
+        if(email == ""){    // 입력 안했을때도 email 컬럼을 넘겨줄지 프론트와 이야기  넘겨준다면 ""로 변경하
             return new BaseResponse<>(CHECK_USER_EMPTY_EMAIL);
         }
         if(!isRegexEmail(email)){
@@ -121,7 +121,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check-find-email")
     public BaseResponse<CheckFindResponse> checkFindNickName(@RequestParam String nickName) {
-        if(Objects.equals(nickName, "")){
+        if(nickName == ""){
             return new BaseResponse<>(CHECK_USER_EMPTY_NICKNAME);
         }
         if(!isRegexNickName(nickName)){
