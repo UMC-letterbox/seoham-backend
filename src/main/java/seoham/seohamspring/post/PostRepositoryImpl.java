@@ -178,7 +178,8 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getString("sender"),
                         rs.getInt("date"),
                         rs.getInt("letterIdx"),
-                        rs.getString("image")
+                        rs.getString("image"),
+                        rs.getString("content")
                 ));
     }
 
@@ -309,8 +310,8 @@ public class PostRepositoryImpl implements PostRepository {
                         rs.getInt("date"),
                         rs.getString("tagIdx"),
                         rs.getInt("letterIdx"),
-                        rs.getString("content"),
-                        rs.getString("image")
+                        rs.getString("image"),
+                        rs.getString("content")
                 ),postIdx);
 
 
