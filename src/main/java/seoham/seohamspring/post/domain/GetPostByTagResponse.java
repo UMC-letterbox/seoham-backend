@@ -17,6 +17,7 @@ public class GetPostByTagResponse {
     private int date; //날짜
     private int letterIdx; //편지지 번호
     private String image;
+    private String content;
 
 
 }
